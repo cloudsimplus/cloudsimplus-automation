@@ -1,0 +1,49 @@
+datacenterRegistries:
+  - !datacenter
+    amount: 1
+    allocationPolicyAlias: Simple
+    vmMigration: enabled
+    costPerSec: 0.1
+    costPerMem: 0.05
+    costPerStorage: 0.001
+    costPerBw: 0.1
+    sanList:
+      - !san
+        capacity: 10000
+        bandwidth: 10000
+        networkLatency: 5
+    hostList:
+      - !host
+        amount: 4
+        ram: 1000000
+        bw: 100000
+        storage: 40000
+        numOfPes: 4
+        mipsPerPe: 50000
+        schedulingPolicyAlias: TimeShared
+        ramProvisionerAlias: Simple
+        bwProvisionerAlias: Simple
+        peProvisionerAlias: Simple
+customerRegistries:
+  - !customer
+    amount: 2
+    vmList:
+      - !vm
+        amount: 2
+        size: 500
+        pesNumber: 4
+        mips: 1000
+        ram: 2000
+        bw: 1000
+        schedulingPolicyAlias: SpaceShared
+        vmm: Xen
+    utilizationProfile:
+      - !profile
+        numOfCloudlets: 6
+        cloudletsPesNumber: 2
+        length: 100
+        fileSize: 50
+        outputSize: 70
+        utilizationModelCpuAlias: Full
+        utilizationModelRamAlias: Full
+        utilizationModelBwAlias: Full      

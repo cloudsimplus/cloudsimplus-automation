@@ -1,0 +1,91 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>com.manoelcampos</groupId>
+  <artifactId>CloudSimAutomation</artifactId>
+  <version>1.0</version>
+  <packaging>jar</packaging>
+
+  <name>CloudSimAutomation</name>
+  <url>http://maven.apache.org</url>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>2.3.2</version>
+                <configuration>
+                    <showDeprecation>true</showDeprecation>
+                    <source>1.7</source>
+                    <target>1.7</target>
+
+                    <archive>
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                            <classpathPrefix></classpathPrefix>
+                            <mainClass>org.cloudbus.cloudsim.examples.Automation</mainClass>
+                        </manifest>
+                    </archive>                                        
+                </configuration>
+            </plugin>
+            
+            <plugin>
+              <artifactId>maven-assembly-plugin</artifactId>
+              <executions>
+                <execution>
+                  <phase>package</phase>
+                  <goals>
+                    <goal>attached</goal>
+                  </goals>
+                </execution>
+              </executions>
+              <configuration>
+                <archive>
+                    <manifest>
+                        <addClasspath>true</addClasspath>
+                        <classpathPrefix></classpathPrefix>
+                        <mainClass>org.cloudbus.cloudsim.examples.Automation</mainClass>
+                    </manifest>
+                </archive>
+                <descriptorRefs>
+                  <descriptorRef>jar-with-dependencies</descriptorRef>
+                </descriptorRefs>
+              </configuration>
+            </plugin>            
+        </plugins>
+    </build>
+    <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+  
+
+  <repositories>
+      <repository>
+           <id>repo1.maven</id>
+           <url>http://repo1.maven.org/maven2/</url>
+       </repository>
+    </repositories>
+  
+  <dependencies>
+        <dependency>
+          <groupId>junit</groupId>
+          <artifactId>junit</artifactId>
+          <version>3.8.1</version>
+          <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.esotericsoftware.yamlbeans</groupId>
+            <artifactId>yamlbeans</artifactId>
+            <version>1.06</version>
+            <scope>compile</scope>
+        </dependency>    
+        <dependency>
+            <groupId>org.cloudbus</groupId>
+            <artifactId>cloudsim</artifactId>
+            <version>3.0</version>
+            <scope>compile</scope>
+        </dependency>
+  </dependencies>
+  <description>Autonousmly generate CloudSim simulation scenarios from a YAML file.</description>
+</project>
