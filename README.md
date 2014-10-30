@@ -12,4 +12,4 @@ creates and runs it on CloudSim.
 1. java com.manoelcampos.cloudsim.automation.YamlScenario NameOfYamlSimulationScenarioFile
 2. java -jar CloudSimAutomation-1.0-jar-with-dependencies.jar NameOfYamlSimulationScenarioFile
 
-For more information, read the paper at [a relative link](paper_cloudsim_automation.pdf)
+For more information, read [this paper](paper_cloudsim_automation.pdf).
