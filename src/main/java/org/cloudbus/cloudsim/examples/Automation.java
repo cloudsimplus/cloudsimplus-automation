@@ -48,6 +48,7 @@ import org.cloudbus.cloudsim.provisioners.RamProvisionerSimple;
 public class Automation {
         /** Abstract information about data centers. */
         private List<DatacenterRegistry> datacenterRegistries = new ArrayList<>();
+        
         /** Abstract information about customers (brokers). */
         private List<CustomerRegistry> customerRegistries = new ArrayList<>();
         
