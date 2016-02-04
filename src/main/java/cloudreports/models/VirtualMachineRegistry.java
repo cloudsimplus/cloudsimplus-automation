@@ -28,7 +28,7 @@ import java.io.Serializable;
  * @author      Thiago T. Sá
  * @since       1.0
  */
-public class VirtualMachineRegistry implements Serializable{
+public final class VirtualMachineRegistry implements Serializable{
 
     /** The id of the virtual machine. */
     private long id;
@@ -60,6 +60,15 @@ public class VirtualMachineRegistry implements Serializable{
     /** The amount of virtual machines with this registry's specification
      * owned by the customer. */
     private int amount;
+    
+    /**
+     * VM inter arrival time mean following the exponential distribution
+     * that activate dynamic VM arrival.
+     * When defined, the amount attribute is ignored
+     * and it will be created VM during all the simulation time,
+     * following the VM inter arrival time defined here.
+     */
+    private double interArrivalTimeMean = 0.0;
 
     /** The default constructor. */
     public VirtualMachineRegistry() {
@@ -283,5 +292,19 @@ public class VirtualMachineRegistry implements Serializable{
         else s.append("Hypervisor=kvm\n");
 
         return s.toString();
+    }
+
+    /**
+     * @return the interArrivalTimeMean
+     */
+    public double getInterArrivalTimeMean() {
+        return interArrivalTimeMean;
+    }
+
+    /**
+     * @param interArrivalTimeMean the interArrivalTimeMean to set
+     */
+    public void setInterArrivalTimeMean(double interArrivalTimeMean) {
+        this.interArrivalTimeMean = interArrivalTimeMean;
     }
 }

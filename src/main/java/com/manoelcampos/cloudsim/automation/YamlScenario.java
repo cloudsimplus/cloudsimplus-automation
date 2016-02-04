@@ -29,18 +29,12 @@ import org.cloudbus.cloudsim.DatacenterCharacteristics;
 import org.cloudbus.cloudsim.Host;
 import org.cloudbus.cloudsim.Log;
 import org.cloudbus.cloudsim.ParameterException;
-import org.cloudbus.cloudsim.Pe;
-import org.cloudbus.cloudsim.SanStorage;
-import org.cloudbus.cloudsim.Storage;
-import org.cloudbus.cloudsim.UtilizationModel;
-import org.cloudbus.cloudsim.UtilizationModelFull;
+import org.cloudbus.cloudsim.resources.Pe;
+import org.cloudbus.cloudsim.resources.SanStorage;
+import org.cloudbus.cloudsim.resources.StorageSystem;
 import org.cloudbus.cloudsim.Vm;
 import org.cloudbus.cloudsim.core.CloudSim;
-import org.cloudbus.cloudsim.examples.LogUtils;
-import org.cloudbus.cloudsim.examples.PolicyLoader;
-import org.cloudbus.cloudsim.provisioners.BwProvisionerSimple;
-import org.cloudbus.cloudsim.provisioners.PeProvisionerSimple;
-import org.cloudbus.cloudsim.provisioners.RamProvisionerSimple;
+import org.cloudbus.cloudsim.provisioners.VmResourceProvisioner;
 
 /**
  * Creates a cloud environment autonomously from a YAML file.
@@ -111,11 +105,21 @@ public class YamlScenario {
      * @throws YamlException  Throws when there is any
      * error parsing the YAML file.
      */
-    public static List<YamlScenario> loadScenarioFile(String yamlFileName) throws FileNotFoundException, YamlException{
+    public static List<YamlScenario> loadScenarioFile(final String yamlFileName) 
+            throws FileNotFoundException, YamlException{
+        final List<YamlScenario> envs = new ArrayList<>();
+        final YamlReader reader = new YamlReader(new FileReader(yamlFileName));
+        configureYamlAliasesReferencesForJavaClasses(reader);
+
         YamlScenario env;
-        List<YamlScenario> envs = new ArrayList<>();
-        YamlReader reader = new YamlReader(new FileReader(yamlFileName));
-        YamlConfig cfg = reader.getConfig();
+        do {
+            env = reader.read(YamlScenario.class);
+        } while (env!=null ? envs.add(env) : false);
+        return envs;
+    }
+
+    public static void configureYamlAliasesReferencesForJavaClasses(final YamlReader reader) {
+        final YamlConfig cfg = reader.getConfig();
         //Defines the aliases in the YAML file that refers to specific java Classes.
         cfg.setClassTag("datacenter", DatacenterRegistry.class);
         cfg.setClassTag("customer", CustomerRegistry.class);
@@ -123,11 +127,6 @@ public class YamlScenario {
         cfg.setClassTag("host", HostRegistry.class);
         cfg.setClassTag("profile", UtilizationProfile.class);
         cfg.setClassTag("vm", VirtualMachineRegistry.class);
-
-        do {
-            env = reader.read(YamlScenario.class);
-        } while (env!=null ? envs.add(env) : false);
-        return envs;
     }
 
     /**
@@ -140,7 +139,7 @@ public class YamlScenario {
     /**
      * @param datacenterRegistries the datacenterRegistries to set
      */
-    public void setDatacenterRegistries(List<DatacenterRegistry> datacenterRegistries) {
+    public void setDatacenterRegistries(final List<DatacenterRegistry> datacenterRegistries) {
         this.datacenterRegistries = datacenterRegistries;
     }
 
@@ -154,7 +153,7 @@ public class YamlScenario {
     /**
      * @param customerRegistries the customerRegistries to set
      */
-    public void setCustomerRegistries(List<CustomerRegistry> customerRegistries) {
+    public void setCustomerRegistries(final List<CustomerRegistry> customerRegistries) {
         this.customerRegistries = customerRegistries;
     }
 
@@ -168,56 +167,58 @@ public class YamlScenario {
      * sets invalid parameters for CloudSim Datacenter objects
      * to be created.
      */
-    private List<Datacenter> createDatacenters() throws ParameterException {
-        for (DatacenterRegistry datacenterRegistrie : datacenterRegistries) {
-            System.out.println(datacenterRegistrie.getArchitecture());
-        }
-            String datacenterName;
-            int datacenterCount=0;
-            List<Datacenter> list = new ArrayList<>();
-            for(DatacenterRegistry dcr: datacenterRegistries){
-                if(dcr.getAmount()==0) {
-                    dcr.setAmount(1);
-                }
+    private List<Datacenter> createConcreteDatacentersFromAbstractDatacenterRegistries() 
+            throws ParameterException {
+        String datacenterName;
+        int datacenterCount=0;
+        final List<Datacenter> list = new ArrayList<>();
+        for(DatacenterRegistry dcr: datacenterRegistries){
+            int hostCount=0;
+            for(int i = 0; i < dcr.getAmount(); i++){
+                datacenterName = generateDataCenterName(dcr, ++datacenterCount);
 
-                int hostCount=0;
-                for(int i = 0; i < dcr.getAmount(); i++){
-                    datacenterCount++;
-                    datacenterName = dcr.getName();
-                    if(dcr.getName()==null || dcr.getName().trim().equals("")){
-                        datacenterName=String.format("datacenter%d", datacenterCount);
-                    }
+                List<Host> hostList = createConcreteHostsFromAbstractHostRegistries(dcr, hostCount);
+                hostCount+=hostList.size();
 
-                    List<Host> hostList = createHosts(dcr, hostCount);
-                    hostCount+=hostList.size();
-
-
-                    // 5. Create a DatacenterCharacteristics object that stores the
-                    //    properties of a data center: architecture, OS, list of
-                    //    Machines, allocation policy: time- or space-shared, time zone
-                    //    and its price (G$/Pe time unit).
-                    double time_zone = 10.0;         // time zone this resource located
-                    LinkedList<Storage> storageList = createSan(dcr);
-
-                    DatacenterCharacteristics characteristics = 
-                        createDatacenterCharacteristics(dcr, hostList, time_zone);
-
-
-                    // 6. Finally, we need to create a PowerDatacenter object.
-                    try {
-                            Datacenter datacenter = 
-                                  new Datacenter(
-                                    datacenterName, characteristics, 
-                                    PolicyLoader.vmAllocationPolicy(dcr.getAllocationPolicyAlias(), hostList), 
-                                    storageList, dcr.getSchedulingInterval());
-                            list.add(datacenter);
-                    } catch (Exception e) {
-                            e.printStackTrace(System.out);
-                    }
+                try {
+                    Datacenter datacenter = 
+                        createDataCenter(datacenterName, dcr, hostList);
+                    list.add(datacenter);
+                } catch (Exception e) {
+                    e.printStackTrace(System.out);
                 }
             }
+        }
 
-            return list;
+        return list;
+    }
+
+    public Datacenter createDataCenter(
+            final String datacenterName, final DatacenterRegistry dcr, 
+            final List<Host> hostList) throws Exception {
+        // 5. Create a DatacenterCharacteristics object that stores the
+        //    properties of a data center: architecture, OS, list of
+        //    Machines, allocation policy: time- or space-shared, time zone
+        //    and its price (G$/Pe time unit).
+        final double time_zone = 10.0;  // time zone this resource is located
+        final DatacenterCharacteristics characteristics = 
+                    createDatacenterCharacteristics(dcr, hostList, time_zone);  
+        
+        final LinkedList<StorageSystem> storageList = createSan(dcr);
+
+        return
+            new Datacenter(
+                    datacenterName, characteristics,
+                    PolicyLoader.vmAllocationPolicy(dcr.getAllocationPolicyAlias(), hostList),
+                    storageList, dcr.getSchedulingInterval());
+    }
+
+    public String generateDataCenterName(final DatacenterRegistry dcr, final int datacenterCount) {
+        String datacenterName = dcr.getName();
+        if(dcr.getName()==null || dcr.getName().trim().equals("")){
+            datacenterName=String.format("datacenter%d", datacenterCount);
+        }
+        return datacenterName;
     }
 
     /**
@@ -226,28 +227,18 @@ public class YamlScenario {
      * @see YamlScenario#customerRegistries
      * @return Returns the map created.
      */
-    private Map<DatacenterBroker, CustomerRegistry> createUserBrokers(){
-            Map<DatacenterBroker, CustomerRegistry> list = new HashMap<>();
+    private Map<DatacenterBroker, CustomerRegistry> createConcreteDatacenterBrokersFromAbstractCustomerRegistries(){
+            final Map<DatacenterBroker, CustomerRegistry> list = new HashMap<>();
             int brokerCount = 0;
             String brokerName;
             for(CustomerRegistry cr: customerRegistries){
-                if(cr.getAmount()==0) {
-                    cr.setAmount(1);
-                }
                 for(int i = 0; i < cr.getAmount(); i++){
-                    brokerCount++;
-                    brokerName = cr.getName();
-                    if(brokerName==null || brokerName.trim().equals("")){
-                        brokerName = String.format("broker%d", brokerCount);
-                    }
-
-                    DatacenterBroker broker;
+                    brokerName = generateBrokerName(cr, ++brokerCount);
                     try {
-                            broker = new DatacenterBroker(brokerName);
-                            list.put(broker, cr);
+                        list.put(new DatacenterBroker(brokerName), cr);
                     } catch (Exception e) {
-                            e.printStackTrace(System.out);
-                            return null;
+                        e.printStackTrace(System.out);
+                        return null;
                     }
                 }
 
@@ -255,36 +246,57 @@ public class YamlScenario {
             return list;
     }
 
+    public String generateBrokerName(final CustomerRegistry cr, final int brokerCount) {
+        String brokerName = cr.getName();
+        if(brokerName==null || brokerName.trim().equals("")){
+            brokerName = String.format("broker%d", brokerCount);
+        }
+        return brokerName;
+    }
+
     /** 
      * Create the VM list for each customer represented by the brokers list.
      * 
-     * @see YamlScenario#createUserBrokers() 
+     * @see YamlScenario#createConcreteDatacenterBrokersFromAbstractCustomerRegistries() 
      * @return Returns the a map containing the list of created VMs
      * for each customer (DatacenterBroker).
     */
-    private Map<DatacenterBroker, List<Vm>> createVMs(Map<DatacenterBroker, CustomerRegistry> brokers) {
-            Map<DatacenterBroker, List<Vm>> list = new HashMap<>();
+    private Map<DatacenterBroker, List<Vm>> createConcreteVmListForAllBrokers(
+            final Map<DatacenterBroker, CustomerRegistry> brokers) {
+        final Map<DatacenterBroker, List<Vm>> list = new HashMap<>();
 
-            int vmCount = 0;
-            for(DatacenterBroker broker: brokers.keySet()){
-                LinkedList<Vm> vms = new LinkedList<>();
-                for(VirtualMachineRegistry vmr:  brokers.get(broker).getVmList()){
-                    if(vmr.getAmount()==0){
-                        vmr.setAmount(1);                            
-                    }
-                    for(int i=0; i < vmr.getAmount(); i++){
-                        Vm vm = new Vm(
-                                ++vmCount, broker.getId(), vmr.getMips(), vmr.getPesNumber(), 
-                                vmr.getRam(), vmr.getBw(), vmr.getSize(), 
-                                vmr.getVmm(), 
-                                PolicyLoader.cloudletScheduler(vmr.getSchedulingPolicyAlias()));
-                        vms.add(vm);
-                    }
-                }
-                list.put(broker, vms);
+        int vmCount = 0;
+        for(DatacenterBroker broker: brokers.keySet()){
+            LinkedList<Vm> vms = 
+                createConcreteVmListForOneBroker(
+                        broker, brokers.get(broker), ++vmCount);
+            list.put(broker, vms);
+        }
+
+        return list;
+    }
+
+    public LinkedList<Vm> createConcreteVmListForOneBroker(
+            final DatacenterBroker broker, 
+            final CustomerRegistry customerRegistry, 
+            final int vmCount) throws RuntimeException {
+        final LinkedList<Vm> list = new LinkedList<>();
+        for(VirtualMachineRegistry vmr:  customerRegistry.getVmList()){
+            for(int i=0; i < vmr.getAmount(); i++){
+                list.add(createVm(vmCount, broker, vmr));
             }
+        }
+        return list;
+    }
 
-            return list;
+    public Vm createVm(final int vmCount, 
+            final DatacenterBroker broker, 
+            final VirtualMachineRegistry vmr) throws RuntimeException {
+        return new Vm(
+                vmCount, broker.getId(), vmr.getMips(), vmr.getPesNumber(),
+                vmr.getRam(), vmr.getBw(), vmr.getSize(),
+                vmr.getVmm(),
+                PolicyLoader.cloudletScheduler(vmr.getSchedulingPolicyAlias()));
     }
 
     /** 
@@ -295,30 +307,16 @@ public class YamlScenario {
      * concrete customer created (DatacenterBroker).
      * @return Returns the list of Cloudlets created.
      */
-    private Map<DatacenterBroker, List<Cloudlet>> createCloudlets(Map<DatacenterBroker, CustomerRegistry> brokers){
+    private Map<DatacenterBroker, List<Cloudlet>> createConcreteCloudletsFromAbstractUtilizationProfiles(final Map<DatacenterBroker, CustomerRegistry> brokers){
             // Creates a container to store Cloudlets
-            Map<DatacenterBroker, List<Cloudlet>> list = new HashMap<>();
+            final Map<DatacenterBroker, List<Cloudlet>> list = new HashMap<>();
 
-            UtilizationModel utilizationModelFull = new UtilizationModelFull();
             int cloudletCount=0;
             for(DatacenterBroker broker: brokers.keySet()){
                 List<Cloudlet> cloudlets = new ArrayList<>();
                 for(UtilizationProfile up: brokers.get(broker).getUtilizationProfile()){
-                    if(up.getNumOfCloudlets()==0){
-                        up.setNumOfCloudlets(1);
-                    }
                     for(int i=0;i<up.getNumOfCloudlets();i++){
-                            Cloudlet cloudlet = 
-                               new Cloudlet(++cloudletCount, up.getLength(), 
-                                    up.getCloudletsPesNumber(), 
-                                    up.getFileSize(), up.getOutputSize(), 
-                                    PolicyLoader.utilizationModel(up.getUtilizationModelCpuAlias()), 
-                                    PolicyLoader.utilizationModel(up.getUtilizationModelRamAlias()),
-                                    PolicyLoader.utilizationModel(up.getUtilizationModelBwAlias())
-                                    );
-                            // setting the owner of these Cloudlets
-                            cloudlet.setUserId(broker.getId());
-                            cloudlets.add(cloudlet);
+                        cloudlets.add(createCloudlet(++cloudletCount, up, broker));
                     }
                 }
                 list.put(broker, cloudlets);
@@ -327,6 +325,22 @@ public class YamlScenario {
             return list;
     }        
 
+    public Cloudlet createCloudlet(
+            final int cloudletCount, 
+            final UtilizationProfile up, final DatacenterBroker broker) throws RuntimeException {
+        final Cloudlet cloudlet =
+            new Cloudlet(cloudletCount, up.getLength(),
+                    up.getCloudletsPesNumber(),
+                    up.getFileSize(), up.getOutputSize(),
+                    PolicyLoader.utilizationModel(up.getUtilizationModelCpuAlias()),
+                    PolicyLoader.utilizationModel(up.getUtilizationModelRamAlias()),
+                    PolicyLoader.utilizationModel(up.getUtilizationModelBwAlias())
+            );
+        // setting the owner of the Cloudlet
+        cloudlet.setUserId(broker.getId());
+        return cloudlet;
+    }
+    
     /**
      * Prints, at the standard output, the Cloudlet list for the specified 
      * customer (DatacenterBroker).
@@ -334,43 +348,46 @@ public class YamlScenario {
      * @param broker Customer owning the VMs
      * @param list list of Cloudlets to be printed. 
      */
-    private void printCloudletList(DatacenterBroker broker, List<Cloudlet> list) {
-            int size = list.size();
-            Cloudlet cloudlet;
+    private void printCloudletList(final DatacenterBroker broker, final List<Cloudlet> list) {
+        final int size = list.size();
+        Cloudlet cloudlet;
 
-            Log.printLine();
-            Log.printLine("Broker: name " + broker.getName() +  " id "+broker.getId()+" cloudlets executed: "+
-                    broker.getCloudletReceivedList().size()+"========================================================");
-            String[] captions = {"###","CloudletID", "STATUS  ",
-                            "DataCenterID", "VmID", "HostID", "ExecTime",
-                            "Start Time", "Finish Time"};
-            LogUtils.printCaptions(captions);
-            LogUtils.printLine(captions, new String[]{"int","int","string","int","int","int","secs","secs", "secs"});
+        Log.printLine();
+        Log.printLine(
+            "Broker: name " + broker.getName() +  " id "+broker.getId()+" cloudlets executed: "+
+            broker.getCloudletReceivedList().size()+
+            "========================================================");
+        final String[] captions = {
+            "###","CloudletID", "STATUS  ",
+            "DataCenterID", "VmID", "HostID", "ExecTime",
+            "Start Time", "Finish Time"};
+        LogUtils.printCaptions(captions);
+        LogUtils.printLine(captions, new String[]{"int","int","string","int","int","int","secs","secs", "secs"});
 
-            DecimalFormat dft = new DecimalFormat("###.##");
+        final DecimalFormat dft = new DecimalFormat("###.##");
 
-            for (int i = 0; i < size; i++) {
-                    cloudlet = list.get(i);
-                    if (cloudlet.getCloudletStatus() == Cloudlet.SUCCESS) {
-                            String hostId="";
-                            Vm vm = getVm(broker, cloudlet.getVmId());
-                            if(vm!=null){
-                                if(vm.getHost()!=null) {
-                                    hostId = String.valueOf(vm.getHost().getId());
-                                }
-                            }
-                            Object[] data = {
-                                String.format("%3d", i+1),
-                                cloudlet.getCloudletId(), "SUCCESS", cloudlet.getResourceId(), 
-                                cloudlet.getVmId(), hostId,
-                                dft.format(cloudlet.getActualCPUTime()), 
-                                dft.format(cloudlet.getExecStartTime()), 
-                                dft.format(cloudlet.getFinishTime())};
+        for (int i = 0; i < size; i++) {
+            cloudlet = list.get(i);
+            if (cloudlet.getCloudletStatus() == Cloudlet.SUCCESS) {
+                Vm vm = findVm(broker, cloudlet.getVmId());
+                final Object[] data = {
+                    String.format("%3d", i+1),
+                    cloudlet.getCloudletId(), "SUCCESS", cloudlet.getResourceId(), 
+                    cloudlet.getVmId(), getHostIdOfVm(vm),
+                    dft.format(cloudlet.getActualCPUTime()), 
+                    dft.format(cloudlet.getExecStartTime()), 
+                    dft.format(cloudlet.getFinishTime())};
 
-                            LogUtils.printLine(captions, data);
-                    }
+                LogUtils.printLine(captions, data);
             }
+        }
+    }
 
+    public String getHostIdOfVm(final Vm vm) {
+        if(vm!=null && vm.getHost()!=null){
+            return String.valueOf(vm.getHost().getId());
+        }
+        return "";
     }
        
     /**
@@ -387,40 +404,42 @@ public class YamlScenario {
      * @throws RuntimeException 
      * @see YamlScenario#datacenterRegistries
      */
-    private List<Host> createHosts(DatacenterRegistry datacenterRegistry, int hostCount) throws RuntimeException {
+    private List<Host> createConcreteHostsFromAbstractHostRegistries(
+            final DatacenterRegistry datacenterRegistry, int hostCount) throws RuntimeException {
         int hostId;
-        // Here are the steps needed to create a PowerDatacenter:
-        // 1. We need to create a list to store one or more
-        //    Machines
-        List<Host> hostList = new ArrayList<>();
+        final List<Host> hostList = new ArrayList<>();
         for(HostRegistry hr: datacenterRegistry.getHostList()){
             for(int i=0; i < hr.getAmount(); i++){
                 List<Pe> peList = createHostProcessingElements(hr); 
-
-                hostCount++;
-                hostId = (int)hr.getId();
-                if(hostId==0){
-                    hostId=hostCount;
-                }
-
-                //4. Create Hosts with its id and list of PEs and add them to the list of machines
-                hostList.add(
-                        new Host(
-                                hostId,
-                                new RamProvisionerSimple(hr.getRam()),
-                                new BwProvisionerSimple(hr.getBw()),
-                                hr.getStorage(), peList,
-                                PolicyLoader.vmScheduler(hr.getSchedulingPolicyAlias(), peList)
-                        )
-                ); 
+                hostId = generateHostId(hr, ++hostCount);
+                hostList.add(createHost(hostId, hr, peList)); 
             }
         }
         return hostList;
     }
 
+    public static Host createHost(final int hostId, final HostRegistry hr, 
+            final List<Pe> peList) 
+            throws RuntimeException {
+        return new Host(
+                hostId,
+                PolicyLoader.<Integer>resourceProvisioner(hr.getRamProvisionerAlias(), hr.getRam(), Integer.class, "Ram"),
+                PolicyLoader.<Long>resourceProvisioner(hr.getBwProvisionerAlias(), hr.getBw(), Long.class, "Bw"),
+                hr.getStorage(), peList,
+                PolicyLoader.vmScheduler(hr.getSchedulingPolicyAlias(), peList)
+        );
+    }
+    
+    private int generateHostId(final HostRegistry hr, final int currentHostCount){
+        /*Necessary convertion due to CloudReports' HostRegistry uses long and
+        the value is used in the CloudSim's Host class that uses int.
+        */
+        return (hr.getId()!=0 ? (int)hr.getId() : currentHostCount);
+    }
+
     /**
-     * Creates a CloudSim Storage Area Network (SAN) from an abstract DatacenterRegistry
-     * information, get from a YAML specification file.
+     * Creates a CloudSim StorageSystem Area Network (SAN) from an abstract DatacenterRegistry
+ information, get from a YAML specification file.
      * 
      * @param dcr A specific DatacenterRegistry information
      * to be used to create the SANs.
@@ -431,14 +450,14 @@ public class YamlScenario {
      * to be created.
      * @see YamlScenario#datacenterRegistries
      */
-    private LinkedList<Storage> createSan(DatacenterRegistry dcr) throws ParameterException {
-        LinkedList<Storage> storageList = new LinkedList<>();	
+    private LinkedList<StorageSystem> createSan(final DatacenterRegistry dcr) throws ParameterException {
+        final LinkedList<StorageSystem> list = new LinkedList<>();	
         for(SanStorageRegistry sr: dcr.getSanList()){
-            storageList.add(
+            list.add(
                  new SanStorage(
                    sr.getCapacity(), sr.getBandwidth(), sr.getNetworkLatency()));
         }
-        return storageList;
+        return list;
     }
 
     /**
@@ -453,14 +472,14 @@ public class YamlScenario {
      * @return Returns the DatacenterCharacteristics object created.
      * @see YamlScenario#createDatacenterCharacteristics(cloudreports.models.DatacenterRegistry, java.util.List, double) 
      */
-    private DatacenterCharacteristics createDatacenterCharacteristics(DatacenterRegistry dcr, List<Host> hostList, double time_zone) {
-        DatacenterCharacteristics characteristics = 
+    private DatacenterCharacteristics createDatacenterCharacteristics(
+            final DatacenterRegistry dcr, List<Host> hostList, final double time_zone) {
+        return
             new DatacenterCharacteristics(
                 dcr.getArchitecture(), dcr.getOs(), dcr.getVmm(), 
                 hostList, time_zone, 
                 dcr.getCostPerSec(), dcr.getCostPerMem(), 
                 dcr.getCostPerStorage(), dcr.getCostPerBw());
-        return characteristics;
     }
 
     /** 
@@ -470,10 +489,13 @@ public class YamlScenario {
      * @param hr The abstract Host information obtained from the YAML file.
      * @return Returns the list of PEs created.
      */
-    private List<Pe> createHostProcessingElements(HostRegistry hr) {
-        List<Pe> list = new ArrayList<>();
+    private List<Pe> createHostProcessingElements(final HostRegistry hr) {
+        final List<Pe> list = new ArrayList<>();
         for(int j=0; j < hr.getNumOfPes() ; j++) {
-            list.add(new Pe(j, new PeProvisionerSimple(hr.getMipsPerPe())));
+            VmResourceProvisioner<Double> peProvisioner = 
+                    PolicyLoader.<Double>resourceProvisioner(
+                            hr.getPeProvisionerAlias(), hr.getMipsPerPe(), Double.class, "Pe");
+            list.add(new Pe(j, peProvisioner));
         }
         return list;
     }
@@ -485,7 +507,7 @@ public class YamlScenario {
      * @param vmId The desired VM to be located.
      * @return If the VM is found, returns it, otherwise, returns null.
      */
-    private Vm getVm(DatacenterBroker broker, int vmId) {
+    private Vm findVm(final DatacenterBroker broker, final int vmId) {
         for (Vm vm : brokerVms.get(broker)) {
             if(vm.getId()==vmId){
                 return vm;
@@ -507,28 +529,28 @@ public class YamlScenario {
      * sets invalid parameters for CloudSim objects
      * to be created.
      */
-    public void run(String simulationLabel) throws ParameterException{
+    public void run(final String simulationLabel) throws ParameterException{
         // First step: Initialize the CloudSim package. It should be called
         // before creating any entities.
         int num_user = 1;   // number of grid users 
-        Calendar calendar = Calendar.getInstance(Locale.getDefault());
+        final Calendar calendar = Calendar.getInstance(Locale.getDefault());
         boolean trace_flag = false;  // mean trace events
 
         // Initialize the CloudSim library
         CloudSim.init(num_user, calendar, trace_flag);
         System.out.println("Hosts========================");
-        this.datacenters = createDatacenters();
+        this.datacenters = createConcreteDatacentersFromAbstractDatacenterRegistries();
         for(Datacenter datacenter: datacenters){
             System.out.println(datacenter.getName() +": "+ datacenter.getHostList().size() +" hosts");
         }
         System.out.println("=============================");
 
         //Third step: Create Brokers
-        Map<DatacenterBroker, CustomerRegistry> brokers = createUserBrokers();
+        final Map<DatacenterBroker, CustomerRegistry> brokers = createConcreteDatacenterBrokersFromAbstractCustomerRegistries();
 
         //Fourth step: Create VMs and Cloudlets and send them to broker
-        this.brokerVms = createVMs(brokers); 
-        this.brokerCloudlets = createCloudlets(brokers);
+        this.brokerVms = createConcreteVmListForAllBrokers(brokers); 
+        this.brokerCloudlets = createConcreteCloudletsFromAbstractUtilizationProfiles(brokers);
 
         for(DatacenterBroker broker: brokers.keySet()){
             broker.submitVmList(brokerVms.get(broker));
@@ -538,7 +560,7 @@ public class YamlScenario {
         // Fifth step: Starts the simulation
         CloudSim.startSimulation();
 
-        Map<DatacenterBroker, List<Cloudlet>> receivedCloudletList = new HashMap<>();
+        final Map<DatacenterBroker, List<Cloudlet>> receivedCloudletList = new HashMap<>();
         // Final step: Print results when simulation is over
         for(DatacenterBroker broker: brokers.keySet()){
             receivedCloudletList.put(broker, broker.getCloudletReceivedList());
@@ -551,7 +573,6 @@ public class YamlScenario {
             printCloudletList(broker, receivedCloudletList.get(broker));
         }
         Log.printLine("\nCloudEnvironment Simulation finished!");
-
     }
 
 
@@ -564,15 +585,17 @@ public class YamlScenario {
      * This is made only adding a --- separator between each scenario.
     */
     public static void main(String[] args) {
-        String fileName;
+        String fileName="/Users/manoelcampos/Documents/UBI/disciplinas/2013-2/NextGenerationNetworks/CloudSimAutomation/ecoCloudPaper6681861.yml";
         if(args.length>0){
             fileName = args[0];
         } else {
-            System.err.println("\n\nERROR: You must specify a YAML file, containing the CloudSim simulation scenario, as command line parameter.\n");
-            return;
+            if(!new File(fileName).exists()){
+                System.err.println("\n\nERROR: You must specify a YAML file, containing the CloudSim simulation scenario, as command line parameter.\n");
+                return;
+            }
         }
 
-        List<YamlScenario> envs;
+        final List<YamlScenario> envs;
         try {
             envs = loadScenarioFile(fileName);
             //envs = null;
@@ -588,10 +611,10 @@ public class YamlScenario {
 
         Log.printLine("Starting " + YamlScenario.class.getSimpleName());
         try {
-            String scenarioLabel = new File(fileName).getName();
+            final String scenarioName = new File(fileName).getName();
             int i = 0;
             for (YamlScenario env : envs) {
-                env.run(++i + " - " + scenarioLabel);
+                env.run(++i + " - " + scenarioName);
             }
         }
         catch (Exception e)

@@ -20,6 +20,7 @@
 package cloudreports.models;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -31,7 +32,7 @@ import java.util.List;
  * @author      Thiago T. Sá
  * @since       1.0
  */
-public class DatacenterRegistry implements Serializable{
+public final class DatacenterRegistry implements Serializable{
 
     /** The datacenter's id. */
     private long id;
@@ -90,7 +91,11 @@ public class DatacenterRegistry implements Serializable{
     private double monitoringInterval;
 
     /** The default constructor. */
-    public DatacenterRegistry() {}
+    public DatacenterRegistry() {
+        setAmount(1);
+        sanList = new ArrayList<>();
+        hostList = new ArrayList<>();
+    }
     
     /** 
      * Creates a new datacenter registry with the given name. 
@@ -99,6 +104,7 @@ public class DatacenterRegistry implements Serializable{
      * @since           1.0
      */    
     public DatacenterRegistry(String name) {
+        this();
         setName(name);
         setArchitecture("x86");
         setOs("Linux");
@@ -470,29 +476,29 @@ public class DatacenterRegistry implements Serializable{
     @Override
     public String toString() {
         StringBuilder s = new StringBuilder("Name="+getName()+"\n");
-        s.append("Architecture="+getArchitecture()+"\n");
-        s.append("Operating System="+getOs()+"\n");
-        s.append("Hypervisor="+getVmm()+"\n");
-        s.append("Allocation Policy ID="+ getAllocationPolicyAlias()+"\n");
-        s.append("Time Zone (GMT)="+getTimeZone()+"\n");
-        s.append("VM Migrations="+isVmMigration()+"\n");
-        s.append("Upper Utilization threshold="+getUpperUtilizationThreshold()+"\n");
-        s.append("Lower Utilization threshold="+getLowerUtilizationThreshold()+"\n");
-        s.append("Scheduling interval="+getSchedulingInterval()+"\n");
-        s.append("Processing Cost="+getCostPerSec()+"\n");
-        s.append("Memory Cost="+getCostPerMem()+"\n");
-        s.append("Storage Cost="+getCostPerStorage()+"\n");
-        s.append("Bandwidth Cost="+getCostPerBw()+"\n");
+        s.append("Architecture=").append(getArchitecture()).append("\n");
+        s.append("Operating System=").append(getOs()).append("\n");
+        s.append("Hypervisor=").append(getVmm()).append("\n");
+        s.append("Allocation Policy ID=").append(getAllocationPolicyAlias()).append("\n");
+        s.append("Time Zone (GMT)=").append(getTimeZone()).append("\n");
+        s.append("VM Migrations=").append(isVmMigration()).append("\n");
+        s.append("Upper Utilization threshold=").append(getUpperUtilizationThreshold()).append("\n");
+        s.append("Lower Utilization threshold=").append(getLowerUtilizationThreshold()).append("\n");
+        s.append("Scheduling interval=").append(getSchedulingInterval()).append("\n");
+        s.append("Processing Cost=").append(getCostPerSec()).append("\n");
+        s.append("Memory Cost=").append(getCostPerMem()).append("\n");
+        s.append("Storage Cost=").append(getCostPerStorage()).append("\n");
+        s.append("Bandwidth Cost=").append(getCostPerBw()).append("\n");
 
         s.append("\n++Beginning of hosts list++\n");
         for(HostRegistry hr : getHostList()) {
-            s.append("\n"+hr.toString());
+            s.append("\n").append(hr.toString());
         }
         s.append("\n++End of hosts list++\n");
 
         s.append("\n++Beginning of SAN list++\n");
         for(SanStorageRegistry sr : getSanList()) {
-            s.append("\n"+sr.toString());
+            s.append("\n").append(sr.toString());
         }
         s.append("\n++End of SAN list++\n");
 

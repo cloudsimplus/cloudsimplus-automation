@@ -28,7 +28,7 @@ import java.io.Serializable;
  * @author      Thiago T. Sá
  * @since       1.0
  */
-public class SanStorageRegistry implements Serializable{
+public final class SanStorageRegistry implements Serializable{
 
     /** The SAN's id. */
     private long id;
@@ -55,6 +55,7 @@ public class SanStorageRegistry implements Serializable{
      * @since           1.0
      */    
     public SanStorageRegistry(String name) {
+        this();
         setName(name);
         setCapacity(10000000);
         setBandwidth(10.0);

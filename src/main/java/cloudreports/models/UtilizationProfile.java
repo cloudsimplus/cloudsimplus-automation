@@ -29,7 +29,7 @@ import java.io.Serializable;
  * @author      Thiago T. Sá
  * @since       1.0
  */
-public class UtilizationProfile implements Serializable{
+public final class UtilizationProfile implements Serializable{
 
     /** The profile's id. */
     private long id;

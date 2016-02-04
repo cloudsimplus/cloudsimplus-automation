@@ -29,7 +29,7 @@ import java.io.Serializable;
  * @author      Thiago T. Sá
  * @since       1.0
  */
-public class HostRegistry implements Serializable{
+public final class HostRegistry implements Serializable{
 
     /** The host's id. */
     private long id;
@@ -59,7 +59,7 @@ public class HostRegistry implements Serializable{
     private String ramProvisionerAlias;
     
     /** The amount of bandwidth. */
-    private int bw;
+    private long bw;
     
     /** The host's bandwidth provisioner. */
     private String bwProvisionerAlias;
@@ -80,6 +80,7 @@ public class HostRegistry implements Serializable{
      * @since           1.0
      */    
     public HostRegistry() {
+        setAmount(1);
         setSchedulingPolicyAlias("Time shared");
         setNumOfPes(4);
         setMipsPerPe(2400);
@@ -261,7 +262,7 @@ public class HostRegistry implements Serializable{
      * 
      * @return the host's bandwidth.
      */
-    public int getBw() {
+    public long getBw() {
         return bw;
     }
 
@@ -270,7 +271,7 @@ public class HostRegistry implements Serializable{
      * 
      * @param   bw  the host's bandwidth.
      */
-    public void setBw(int bw) {
+    public void setBw(long bw) {
         this.bw = bw;
     }
 

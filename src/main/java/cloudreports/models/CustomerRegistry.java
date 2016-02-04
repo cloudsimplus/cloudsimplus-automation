@@ -20,6 +20,7 @@
 package cloudreports.models;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -31,7 +32,7 @@ import java.util.List;
  * @author      Thiago T. Sá
  * @since       1.0
  */
-public class CustomerRegistry implements Serializable{
+public final class CustomerRegistry implements Serializable{
 
     /** The customer's id. */
     private long id;
@@ -41,6 +42,21 @@ public class CustomerRegistry implements Serializable{
     
     private Integer amount;
     
+    /**
+     * The multiplicative factor that, if specified,
+     * indicate how:
+     * - the RAM must be defined in terms of CPU, when the RAM is not specified
+     * - the CPU must be defined in terms of RAM, when the CPU is not specified
+     */
+    private double ramCpuFactor;
+    
+    /**
+     * Defines the mean of cloudlet's length (in MIPS).
+     * If specified, the length of each created cloudlet
+     * will be dynamic, defined based on this mean.
+     */
+    private double cloudletLengthMean = 0;
+
     /** The list of virtual machines owned by the customer. */
     private List<VirtualMachineRegistry> vmList;
     
@@ -48,7 +64,11 @@ public class CustomerRegistry implements Serializable{
     private List<UtilizationProfile> utilizationProfile;
 
     /** The default constructor. */
-    public CustomerRegistry() {}
+    public CustomerRegistry() {
+        vmList = new ArrayList<>();
+        utilizationProfile = new ArrayList<>();
+        setAmount(1);
+    }
     
     /** 
      * Creates a new customer registry with the given name. 
@@ -57,6 +77,7 @@ public class CustomerRegistry implements Serializable{
      * @since           1.0
      */
     public CustomerRegistry(String name) {
+        this();
         this.name = name;
         
         //Create VM list
@@ -183,6 +204,34 @@ public class CustomerRegistry implements Serializable{
      */
     public void setAmount(Integer amount) {
         this.amount = amount;
+    }
+
+    /**
+     * @return the ramCpuFactor
+     */
+    public double getRamCpuFactor() {
+        return ramCpuFactor;
+    }
+
+    /**
+     * @param ramCpuFactor the ramCpuFactor to set
+     */
+    public void setRamCpuFactor(double ramCpuFactor) {
+        this.ramCpuFactor = ramCpuFactor;
+    }
+
+    /**
+     * @return the cloudletLengthMean
+     */
+    public double getCloudletLengthMean() {
+        return cloudletLengthMean;
+    }
+
+    /**
+     * @param cloudletLengthMean the cloudletLengthMean to set
+     */
+    public void setCloudletLengthMean(double cloudletLengthMean) {
+        this.cloudletLengthMean = cloudletLengthMean;
     }
 
 }
