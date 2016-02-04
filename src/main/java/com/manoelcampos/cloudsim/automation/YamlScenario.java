@@ -29,12 +29,12 @@ import org.cloudbus.cloudsim.DatacenterCharacteristics;
 import org.cloudbus.cloudsim.Host;
 import org.cloudbus.cloudsim.Log;
 import org.cloudbus.cloudsim.ParameterException;
-import org.cloudbus.cloudsim.resources.Pe;
-import org.cloudbus.cloudsim.resources.SanStorage;
-import org.cloudbus.cloudsim.resources.StorageSystem;
+import org.cloudbus.cloudsim.Pe;
+import org.cloudbus.cloudsim.SanStorage;
+import org.cloudbus.cloudsim.Storage;
 import org.cloudbus.cloudsim.Vm;
 import org.cloudbus.cloudsim.core.CloudSim;
-import org.cloudbus.cloudsim.provisioners.VmResourceProvisioner;
+import org.cloudbus.cloudsim.provisioners.PeProvisioner;
 
 /**
  * Creates a cloud environment autonomously from a YAML file.
@@ -204,7 +204,7 @@ public class YamlScenario {
         final DatacenterCharacteristics characteristics = 
                     createDatacenterCharacteristics(dcr, hostList, time_zone);  
         
-        final LinkedList<StorageSystem> storageList = createSan(dcr);
+        final LinkedList<Storage> storageList = createSan(dcr);
 
         return
             new Datacenter(
@@ -423,8 +423,8 @@ public class YamlScenario {
             throws RuntimeException {
         return new Host(
                 hostId,
-                PolicyLoader.<Integer>resourceProvisioner(hr.getRamProvisionerAlias(), hr.getRam(), Integer.class, "Ram"),
-                PolicyLoader.<Long>resourceProvisioner(hr.getBwProvisionerAlias(), hr.getBw(), Long.class, "Bw"),
+                PolicyLoader.newRamProvisioner("Ram", hr.getRamProvisionerAlias(), hr.getRam()),
+                PolicyLoader.newBwProvisioner("Bw", hr.getBwProvisionerAlias(), hr.getBw()),
                 hr.getStorage(), peList,
                 PolicyLoader.vmScheduler(hr.getSchedulingPolicyAlias(), peList)
         );
@@ -439,7 +439,7 @@ public class YamlScenario {
 
     /**
      * Creates a CloudSim StorageSystem Area Network (SAN) from an abstract DatacenterRegistry
- information, get from a YAML specification file.
+     * information, get from a YAML specification file.
      * 
      * @param dcr A specific DatacenterRegistry information
      * to be used to create the SANs.
@@ -450,8 +450,8 @@ public class YamlScenario {
      * to be created.
      * @see YamlScenario#datacenterRegistries
      */
-    private LinkedList<StorageSystem> createSan(final DatacenterRegistry dcr) throws ParameterException {
-        final LinkedList<StorageSystem> list = new LinkedList<>();	
+    private LinkedList<Storage> createSan(final DatacenterRegistry dcr) throws ParameterException {
+        final LinkedList<Storage> list = new LinkedList<>();	
         for(SanStorageRegistry sr: dcr.getSanList()){
             list.add(
                  new SanStorage(
@@ -492,9 +492,9 @@ public class YamlScenario {
     private List<Pe> createHostProcessingElements(final HostRegistry hr) {
         final List<Pe> list = new ArrayList<>();
         for(int j=0; j < hr.getNumOfPes() ; j++) {
-            VmResourceProvisioner<Double> peProvisioner = 
-                    PolicyLoader.<Double>resourceProvisioner(
-                            hr.getPeProvisionerAlias(), hr.getMipsPerPe(), Double.class, "Pe");
+            PeProvisioner peProvisioner = 
+                    PolicyLoader.newPeProvisioner(
+                            "Pe", hr.getPeProvisionerAlias(), hr.getMipsPerPe());
             list.add(new Pe(j, peProvisioner));
         }
         return list;
