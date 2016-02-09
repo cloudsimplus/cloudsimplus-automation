@@ -15,10 +15,9 @@ The main contributions of this work are:
 
 # How to use the tool 
 
-At a terminal, the application can be run using one of the following methods:
+You can run the application from a terminal using the following command:
 
-1. `java com.manoelcampos.cloudsim.automation.YamlScenario PathToYamlSimulationScenarioFile`
-2. `java -jar CloudSimAutomation-1.0-jar-with-dependencies.jar PathToYamlSimulationScenarioFile`
+`java -jar CloudSimAutomation-VERSION-jar-with-dependencies.jar PathToYamlSimulationScenarioFile`
 
 # Published Paper
 
