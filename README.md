@@ -17,7 +17,7 @@ The main contributions of this work are:
 
 You can run the application from a terminal using the following command:
 
-`java -jar CloudSimAutomation-VERSION-jar-with-dependencies.jar PathToYamlSimulationScenarioFile`
+- java -jar [CloudSimAutomation-VERSION-jar-with-dependencies.jar](https://github.com/manoelcampos/CloudSimAutomation/releases/tag/v1.1) PathToYamlSimulationScenarioFile
 
 # Published Paper
 
