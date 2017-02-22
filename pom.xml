@@ -9,7 +9,7 @@
 
   <name>CloudSimAutomation</name>
   <url>http://maven.apache.org</url>
-    <build>
+  <build>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -54,8 +54,8 @@
               </configuration>
             </plugin>            
         </plugins>
-    </build>
-    <properties>
+  </build>
+  <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
   
