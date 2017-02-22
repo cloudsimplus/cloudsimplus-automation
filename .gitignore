@@ -1,11 +1,26 @@
-*.class
 .DS_Store
-target
+/docs/_build
+/cloudsim-plus/target/
+/cloudsim-plus-examples/target/
+/cloudsim-plus-benchmarks/target/
+/cloudsim-plus-testbeds/target/
+/cloudsim-plus/nbproject/
+/distribution/target/
+/target/
+dependency-reduced-pom.xml
 
-# Package Files #
-*.jar
-*.war
-*.ear
+#Ignore IntelliJ IDEA project files
+.idea/
+*.uml
+*.iml
+*.ipr
+*.iws
 
-# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
-hs_err_pid*
+#Eclipse project files
+.classpath
+.project
+.settings/
+bin/
+
+#NetBeans project files
+nbproject/
