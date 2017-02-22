@@ -22,3 +22,8 @@ You can run the tool from a terminal using the following command (check the corr
 For more information, read [this paper](paper_cloudsim_automation.pdf), that was published on the [Springer Lecture Notes in Computer Science Volume 8662](http://doi.org/10.1007/978-3-319-11167-4_34).
 
 **If you are using this work for publishing a paper, please cite our paper above.**
+
+# Notice
+This is an old version compatible with CloudSim 3 that is not actively maintained anymore. Updates may be performed after you create an [issue ticket](https://github.com/manoelcampos/CloudSimAutomation/issues). Every issue will be assessed and there is no guarantee that it will be fixed. If you would like to contribute to this version, feel free to submit a pull request.
+
+The active developed version compatible with [CloudSim Plus](http://cloudsimplus.org) is available at the [master branch](https://github.com/manoelcampos/CloudSimAutomation).
