@@ -115,10 +115,16 @@
                         <exclude>**/src/test/resources/**</exclude>
                         <exclude>**/src/main/resources/**</exclude>
                         <exclude>**/*.md</exclude>
+                        <exclude>**/*.xml</exclude>
+                        <exclude>**/*.yml</exclude>
                         <exclude>**/LICENSE</exclude>
+                        <exclude>**/COPYRIGHT</exclude>
+                        <exclude>**/*.pdf</exclude>
                         <exclude>**/*.properties</exclude>
                         <exclude>**/*.uml</exclude>
                         <exclude>**/*.iml</exclude>
+                        <exclude>**/.idea/**</exclude>
+                        <exclude>**/.gitignore</exclude>
                     </excludes>
                 </configuration>
                 <executions>

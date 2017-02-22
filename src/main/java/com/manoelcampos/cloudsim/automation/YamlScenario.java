@@ -1,3 +1,25 @@
+/*
+ * CloudSim Automation: A Human Readable Scenario Specification for Automated Creation of Simulations on CloudSim.
+ * https://github.com/manoelcampos/CloudSimAutomation
+ *
+ *     Copyright (C) 2015-2016  Universidade da Beira Interior (UBI, Portugal) and
+ *     the Instituto Federal de Educação Ciência e Tecnologia do Tocantins (IFTO, Brazil).
+ *
+ *     This file is part of CloudSim Automation.
+ *
+ *     CloudSim Automation is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     CloudSim Automation is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with CloudSim Automation. If not, see <http://www.gnu.org/licenses/>.
+ */
 package com.manoelcampos.cloudsim.automation;
 
 import cloudreports.models.*;
@@ -18,7 +40,7 @@ import java.util.*;
  * can be delimited using the line below:
  * --- #Delimits each Cloud Environment
  *
- * @author <a href="http://manoelcampos.com">Manoel Campos da Silva Filho</a>
+ * @author Manoel Campos da Silva Filho
  */
 public class YamlScenario {
     /**
