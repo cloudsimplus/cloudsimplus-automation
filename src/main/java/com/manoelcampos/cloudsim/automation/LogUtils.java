@@ -1,5 +1,5 @@
 /*
- * CloudSim Automation: A Human Readable Scenario Specification for Automated Creation of Simulations on CloudSim.
+ * CloudSim Plus Automation: A Human Readable Scenario Specification for Automated Creation of Simulations on CloudSim Plus.
  * https://github.com/manoelcampos/CloudSimAutomation
  *
  *     Copyright (C) 2015-2016  Universidade da Beira Interior (UBI, Portugal) and
@@ -7,12 +7,12 @@
  *
  *     This file is part of CloudSim Automation.
  *
- *     CloudSim Automation is free software: you can redistribute it and/or modify
+ *     CloudSim Plus Automation is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
  *     the Free Software Foundation, either version 3 of the License, or
  *     (at your option) any later version.
  *
- *     CloudSim Automation is distributed in the hope that it will be useful,
+ *     CloudSim Plus Automation is distributed in the hope that it will be useful,
  *     but WITHOUT ANY WARRANTY; without even the implied warranty of
  *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *     GNU General Public License for more details.
@@ -26,10 +26,11 @@
  */
 package com.manoelcampos.cloudsim.automation;
 
-import org.cloudbus.cloudsim.Log;
+import org.cloudbus.cloudsim.util.Log;
 
 /**
- * Useful methods to print log information to the terminal
+ * Useful methods to print log information to the terminal.
+ *
  * @author Manoel Campos da Silva Filho
  */
 public class LogUtils {
@@ -63,7 +64,6 @@ public class LogUtils {
         printLine(captions, dataArray, colSeparator);
     }
 
-    
     /**
      * Print the captions of a table to be presented at the terminal.
      * @param captions Captions of the table
@@ -93,5 +93,4 @@ public class LogUtils {
     public static void setColSeparator(String aColSeparator) {
         colSeparator = aColSeparator;
     }
-    
 }

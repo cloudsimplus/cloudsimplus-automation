@@ -37,13 +37,13 @@ public final class SanStorageRegistry implements Serializable{
     private String name;
     
     /** The SAN's capacity. */
-    private double capacity;
+    private long capacity;
     
     /** The SAN's bandwidth. */
-    private double bandwidth;
+    private long bandwidth;
     
     /** The SAN's latency. */
-    private double networkLatency;
+    private long networkLatency;
 
     /** The default constructor. */
     public SanStorageRegistry() {}
@@ -58,7 +58,7 @@ public final class SanStorageRegistry implements Serializable{
         this();
         setName(name);
         setCapacity(10000000);
-        setBandwidth(10.0);
+        setBandwidth(10);
         setNetworkLatency(5);
     }
 
@@ -85,7 +85,7 @@ public final class SanStorageRegistry implements Serializable{
      * 
      * @return the SAN's capacity.
      */
-    public double getCapacity() {
+    public long getCapacity() {
         return capacity;
     }
 
@@ -94,7 +94,7 @@ public final class SanStorageRegistry implements Serializable{
      * 
      * @param   capacity    the SAN's capacity.
      */
-    public void setCapacity(double capacity) {
+    public void setCapacity(long capacity) {
         this.capacity = capacity;
     }
 
@@ -112,7 +112,7 @@ public final class SanStorageRegistry implements Serializable{
      * 
      * @param   bandwidth   the SAN's bandwidth.
      */
-    public void setBandwidth(double bandwidth) {
+    public void setBandwidth(long bandwidth) {
         this.bandwidth = bandwidth;
     }
 
@@ -121,7 +121,7 @@ public final class SanStorageRegistry implements Serializable{
      * 
      * @return the SAN's latency.
      */
-    public double getNetworkLatency() {
+    public long getNetworkLatency() {
         return networkLatency;
     }
 
@@ -130,7 +130,7 @@ public final class SanStorageRegistry implements Serializable{
      * 
      * @param   networkLatency  the SAN's latency.
      */
-    public void setNetworkLatency(double networkLatency) {
+    public void setNetworkLatency(long networkLatency) {
         this.networkLatency = networkLatency;
     }
 

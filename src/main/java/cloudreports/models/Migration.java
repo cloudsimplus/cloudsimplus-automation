@@ -19,11 +19,12 @@
 
 package cloudreports.models;
 
+import org.cloudbus.cloudsim.allocationpolicies.VmAllocationPolicy;
+import org.cloudbus.cloudsim.hosts.power.PowerHost;
+import org.cloudbus.cloudsim.vms.Vm;
+
 import java.util.HashMap;
 import java.util.Map;
-import org.cloudbus.cloudsim.Vm;
-import org.cloudbus.cloudsim.VmAllocationPolicy;
-import org.cloudbus.cloudsim.power.PowerHost;
 
 /**
  * A migration represents the act of deallocating a virtual machine from a
@@ -79,7 +80,7 @@ public class Migration {
     private double targetHostPowerConsumption;    
     
     /** The source host. */
-    private PowerHost sourceHost;    
+    private PowerHost sourceHost;
     
     /** The target host. */
     private PowerHost targetHost;

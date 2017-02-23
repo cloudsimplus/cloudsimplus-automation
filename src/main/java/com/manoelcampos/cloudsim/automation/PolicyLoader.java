@@ -1,5 +1,5 @@
 /*
- * CloudSim Automation: A Human Readable Scenario Specification for Automated Creation of Simulations on CloudSim.
+ * CloudSim Plus Automation: A Human Readable Scenario Specification for Automated Creation of Simulations on CloudSim Plus.
  * https://github.com/manoelcampos/CloudSimAutomation
  *
  *     Copyright (C) 2015-2016  Universidade da Beira Interior (UBI, Portugal) and
@@ -7,12 +7,12 @@
  *
  *     This file is part of CloudSim Automation.
  *
- *     CloudSim Automation is free software: you can redistribute it and/or modify
+ *     CloudSim Plus Automation is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
  *     the Free Software Foundation, either version 3 of the License, or
  *     (at your option) any later version.
  *
- *     CloudSim Automation is distributed in the hope that it will be useful,
+ *     CloudSim Plus Automation is distributed in the hope that it will be useful,
  *     but WITHOUT ANY WARRANTY; without even the implied warranty of
  *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *     GNU General Public License for more details.
@@ -31,21 +31,14 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.cloudbus.cloudsim.CloudletScheduler;
-import org.cloudbus.cloudsim.Host;
-import org.cloudbus.cloudsim.Pe;
-import org.cloudbus.cloudsim.UtilizationModel;
-import org.cloudbus.cloudsim.VmAllocationPolicy;
-import org.cloudbus.cloudsim.VmScheduler;
-import org.cloudbus.cloudsim.provisioners.BwProvisioner;
-import org.cloudbus.cloudsim.provisioners.PeProvisioner;
-import org.cloudbus.cloudsim.provisioners.RamProvisioner;
 
-/* @todo Utilizar a classe do CloudReports para carregamento dinâmico de classes de políticas.
- * O grande problema é que as classes do CloudReports tem um alto acoplamento,
- * criando muitas dependências umas das outras, como depender
- * de classes da GUI ou do ORM.
- */
+import org.cloudbus.cloudsim.allocationpolicies.VmAllocationPolicy;
+import org.cloudbus.cloudsim.provisioners.PeProvisioner;
+import org.cloudbus.cloudsim.provisioners.ResourceProvisioner;
+import org.cloudbus.cloudsim.resources.Pe;
+import org.cloudbus.cloudsim.schedulers.cloudlet.CloudletScheduler;
+import org.cloudbus.cloudsim.schedulers.vm.VmScheduler;
+import org.cloudbus.cloudsim.utilizationmodels.UtilizationModel;
 
 /**
  * Dynamically creates instances of classes such as VmScheduler, VmProvisioner, 
@@ -105,20 +98,20 @@ public class PolicyLoader {
         }
     }
 
-    public static BwProvisioner newBwProvisioner(
+    public static ResourceProvisioner newBwProvisioner(
             String classPrefix, String classSufix, long bwCapacity) throws RuntimeException {
         Object obj = resourceProvisioner(classPrefix, classSufix, bwCapacity, long.class);
-        if(obj != null && obj instanceof BwProvisioner)
-            return (BwProvisioner)obj;
+        if(obj != null && obj instanceof ResourceProvisioner)
+            return (ResourceProvisioner)obj;
             
         return null;
     }
     
-    public static RamProvisioner newRamProvisioner(
+    public static ResourceProvisioner newRamProvisioner(
             String classPrefix, String classSufix, int ramCapacity) throws RuntimeException {
         Object obj = resourceProvisioner(classPrefix, classSufix, ramCapacity, int.class);
-        if(obj != null && obj instanceof RamProvisioner)
-            return (RamProvisioner)obj;
+        if(obj != null && obj instanceof ResourceProvisioner)
+            return (ResourceProvisioner)obj;
             
         return null;
     }
@@ -132,12 +125,12 @@ public class PolicyLoader {
         return null;
     }
 
-    public static VmAllocationPolicy vmAllocationPolicy(String classSufix, List<? extends Host> hosts) throws RuntimeException {
+    public static VmAllocationPolicy vmAllocationPolicy(String classSufix) throws RuntimeException {
         try {
             classSufix = generateFullClassName("VmAllocationPolicy", classSufix);
             Class<? extends VmScheduler> klass = (Class<? extends VmScheduler>) Class.forName(classSufix);
-            Constructor cons = klass.getConstructor(new Class[]{List.class});
-            return (VmAllocationPolicy) cons.newInstance(hosts);
+            Constructor cons = klass.getConstructor(new Class[]{});
+            return (VmAllocationPolicy) cons.newInstance();
         } catch (ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
             Logger.getLogger(PolicyLoader.class.getName()).log(Level.SEVERE, null, ex);
             throw new RuntimeException(ex);
