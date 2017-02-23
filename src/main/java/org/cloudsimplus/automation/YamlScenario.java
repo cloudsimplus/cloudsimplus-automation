@@ -35,7 +35,6 @@ import org.cloudbus.cloudsim.datacenters.DatacenterCharacteristicsSimple;
 import org.cloudbus.cloudsim.datacenters.DatacenterSimple;
 import org.cloudbus.cloudsim.hosts.Host;
 import org.cloudbus.cloudsim.hosts.HostSimple;
-import org.cloudbus.cloudsim.provisioners.PeProvisioner;
 import org.cloudbus.cloudsim.provisioners.ResourceProvisioner;
 import org.cloudbus.cloudsim.resources.FileStorage;
 import org.cloudbus.cloudsim.resources.Pe;
@@ -366,7 +365,7 @@ public class YamlScenario {
     public Host createHost(final int hostId, final HostRegistry hr, final List<Pe> peList) throws RuntimeException {
         ResourceProvisioner ramProvisioner = PolicyLoader.newRamProvisioner(hr);
         ResourceProvisioner bwProvisioner = PolicyLoader.newBwProvisioner(hr);
-        VmScheduler vmScheduler = PolicyLoader.vmScheduler(hr.getSchedulingPolicyAlias(), peList);
+        VmScheduler vmScheduler = PolicyLoader.vmScheduler(hr.getSchedulingPolicyAlias());
 
         return new HostSimple(hostId, hr.getStorage(), peList)
             .setRamProvisioner(ramProvisioner)
@@ -434,11 +433,8 @@ public class YamlScenario {
      */
     private List<Pe> createHostProcessingElements(final HostRegistry hr) {
         final List<Pe> list = new ArrayList<>(hr.getNumOfPes());
-        for (int j = 0; j < hr.getNumOfPes(); j++) {
-            PeProvisioner peProvisioner =
-                PolicyLoader.newPeProvisioner(
-                    "Pe", hr.getPeProvisionerAlias(), hr.getMipsPerPe());
-            list.add(new PeSimple(j, peProvisioner));
+        for (int i = 0; i < hr.getNumOfPes(); i++) {
+            list.add(new PeSimple(i, PolicyLoader.newPeProvisioner(hr)));
         }
 
         return list;

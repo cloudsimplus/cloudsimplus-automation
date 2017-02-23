@@ -14,7 +14,7 @@ datacenterRegistries:
         networkLatency: 5
     hostList:
       - !host
-        amount: 4
+        amount: 8
         ram: 1000000
         bw: 100000
         storage: 40000

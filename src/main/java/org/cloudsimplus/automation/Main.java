@@ -53,7 +53,7 @@ public class Main {
      *             This is made only adding a --- separator between each scenario.
      */
     public static void main(String[] args) {
-        String fileName = "ecoCloudPaper6681861.yml"; //a default file to load
+        String fileName = "CloudEnvironment1.yml"; //a default file to load
         if (args.length > 0) {
             fileName = args[0];
         } else if (!new File(fileName).exists()) {

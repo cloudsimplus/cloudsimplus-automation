@@ -1,13 +1,13 @@
-/* 
+/*
  * Copyright (c) 2010-2012 Thiago T. Sá
- * 
+ *
  * This file is part of CloudReports.
  *
  * CloudReports is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * CloudReports is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -24,7 +24,7 @@ import java.io.Serializable;
 /**
  * A SAN registry stores basic information about a storage area network owned
  * by a datacenter.
- * 
+ *
  * @author      Thiago T. Sá
  * @since       1.0
  */
@@ -32,39 +32,39 @@ public final class SanStorageRegistry implements Serializable{
 
     /** The SAN's id. */
     private long id;
-    
+
     /** The SAN's name. */
     private String name;
-    
+
     /** The SAN's capacity. */
     private long capacity;
-    
+
     /** The SAN's bandwidth. */
-    private long bandwidth;
-    
+    private double bandwidth;
+
     /** The SAN's latency. */
-    private long networkLatency;
+    private double networkLatency;
 
     /** The default constructor. */
     public SanStorageRegistry() {}
-    
-    /** 
-     * Creates a new SAN registry with the given name. 
-     * 
+
+    /**
+     * Creates a new SAN registry with the given name.
+     *
      * @param   name    the name of the SAN registry.
      * @since           1.0
-     */    
+     */
     public SanStorageRegistry(String name) {
         this();
         setName(name);
         setCapacity(10000000);
-        setBandwidth(10);
+        setBandwidth(10.0);
         setNetworkLatency(5);
     }
 
     /**
      * Gets the SAN's id.
-     * 
+     *
      * @return the SAN's id.
      */
     public long getId() {
@@ -73,16 +73,16 @@ public final class SanStorageRegistry implements Serializable{
 
     /**
      * Sets the SAN's id.
-     * 
+     *
      * @param   id  the SAN's id.
      */
     public void setId(long id) {
         this.id = id;
-    }    
-    
+    }
+
     /**
      * Gets the SAN's capacity.
-     * 
+     *
      * @return the SAN's capacity.
      */
     public long getCapacity() {
@@ -91,7 +91,7 @@ public final class SanStorageRegistry implements Serializable{
 
     /**
      * Sets the SAN's capacity.
-     * 
+     *
      * @param   capacity    the SAN's capacity.
      */
     public void setCapacity(long capacity) {
@@ -100,7 +100,7 @@ public final class SanStorageRegistry implements Serializable{
 
     /**
      * Gets the SAN's bandwidth.
-     * 
+     *
      * @return the SAN's bandwidth.
      */
     public double getBandwidth() {
@@ -109,34 +109,34 @@ public final class SanStorageRegistry implements Serializable{
 
     /**
      * Sets the SAN's bandwidth.
-     * 
+     *
      * @param   bandwidth   the SAN's bandwidth.
      */
-    public void setBandwidth(long bandwidth) {
+    public void setBandwidth(double bandwidth) {
         this.bandwidth = bandwidth;
     }
 
     /**
      * Gets the SAN's latency.
-     * 
+     *
      * @return the SAN's latency.
      */
-    public long getNetworkLatency() {
+    public double getNetworkLatency() {
         return networkLatency;
     }
 
     /**
      * Sets the SAN's latency.
-     * 
+     *
      * @param   networkLatency  the SAN's latency.
      */
-    public void setNetworkLatency(long networkLatency) {
+    public void setNetworkLatency(double networkLatency) {
         this.networkLatency = networkLatency;
     }
 
     /**
      * Gets the SAN's name.
-     * 
+     *
      * @return the SAN's name.
      */
     public String getName() {
@@ -145,13 +145,13 @@ public final class SanStorageRegistry implements Serializable{
 
     /**
      * Sets the SAN's name.
-     * 
+     *
      * @param   name    the SAN's name.
      */
     public void setName(String name) {
         this.name = name;
     }
-    
+
     @Override
     public boolean equals(Object sanStorage){
       if ( this == sanStorage ) return true;
@@ -165,8 +165,8 @@ public final class SanStorageRegistry implements Serializable{
         int hash = 3;
         hash = 79 * hash + (this.getName() != null ? this.getName().hashCode() : 0);
         return hash;
-    }    
-    
+    }
+
     @Override
     public String toString() {
         StringBuilder s = new StringBuilder("Name="+getName()+"\n");

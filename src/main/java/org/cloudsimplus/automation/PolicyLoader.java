@@ -28,7 +28,6 @@ package org.cloudsimplus.automation;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -38,7 +37,7 @@ import cloudreports.models.VirtualMachineRegistry;
 import org.cloudbus.cloudsim.allocationpolicies.VmAllocationPolicy;
 import org.cloudbus.cloudsim.provisioners.PeProvisioner;
 import org.cloudbus.cloudsim.provisioners.ResourceProvisioner;
-import org.cloudbus.cloudsim.resources.Pe;
+import org.cloudbus.cloudsim.resources.*;
 import org.cloudbus.cloudsim.schedulers.cloudlet.CloudletScheduler;
 import org.cloudbus.cloudsim.schedulers.vm.VmScheduler;
 import org.cloudbus.cloudsim.utilizationmodels.UtilizationModel;
@@ -56,12 +55,12 @@ public class PolicyLoader {
      */
     private static final String PKG = "org.cloudbus.cloudsim";
 
-    public static VmScheduler vmScheduler(String classSufix, List<? extends Pe> pes) throws RuntimeException {
+    public static VmScheduler vmScheduler(String classSufix) throws RuntimeException {
         try {
             classSufix = generateFullClassName(PKG+".schedulers.vm","VmScheduler", classSufix);
             Class<? extends VmScheduler> klass = (Class<? extends VmScheduler>) Class.forName(classSufix);
-            Constructor cons = klass.getConstructor(new Class[]{List.class});
-            return (VmScheduler) cons.newInstance(pes);
+            Constructor cons = klass.getConstructor(new Class[]{});
+            return (VmScheduler) cons.newInstance();
         } catch (ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
             Logger.getLogger(PolicyLoader.class.getName()).log(Level.SEVERE, null, ex);
             throw new RuntimeException(ex);
@@ -78,27 +77,25 @@ public class PolicyLoader {
      * @param classSufix The class suffix of the provisioner.
      * If you want to instantiate the provisioner class BwProvisionerSimple,
      * the provisioner suffix is just "Simple"
-     * @param resourceCapacity The resource capacity the provisioner has available to manage
-     * @param resourceClass The class of the resource capacity property of the provisioner
+     * @param resource The resource the provisioner has available to manage
      * @return A new instance of the provisioner with the given name.
-     * For instance, if the class prefix is "Bw" and class suffix is "Simple",
-     * returns an instance the BwProvisionerSimple class.
+     * For instance, if the class suffix is "Simple",
+     * returns an instance the ResourceProvisionerSimple class.
      * @throws RuntimeException
-     *
-     * @todo When a base interface for all CloudSim provisioners be created
-     * at the package org.cloudbus.cloudsim.provisioners,
-     * it could be used generics in this method instead of dealing
-     * with the raw object class. The other methods that call this one,
-     * such as newBwProvisioner, could be erased.
      */
-    private static Object resourceProvisioner(
-            String classPrefix, String classSufix, Number resourceCapacity,
-            Class<? extends Number> resourceClass) throws RuntimeException {
+    private static <T extends ResourceProvisioner> T resourceProvisioner(
+        String classPrefix, String classSufix, ResourceManageable resource) throws RuntimeException {
         try {
             final String className = generateFullProvisionerClassName(classPrefix, classSufix);
             final Class resourceProvisionerClass = Class.forName(className);
-            Constructor cons = resourceProvisionerClass.getConstructor(new Class[]{resourceClass});
-            return cons.newInstance(resourceCapacity);
+            if(resource == null) {
+                Constructor cons = resourceProvisionerClass.getConstructor(new Class[]{});
+                return (T)cons.newInstance();
+            }
+            else {
+                Constructor cons = resourceProvisionerClass.getConstructor(new Class[]{ResourceManageable.class});
+                return (T)cons.newInstance(resource);
+            }
         } catch (ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
             Logger.getLogger(PolicyLoader.class.getName()).log(Level.SEVERE, null, ex);
             throw new RuntimeException(ex);
@@ -106,28 +103,17 @@ public class PolicyLoader {
     }
 
     public static ResourceProvisioner newBwProvisioner(final HostRegistry hr) throws RuntimeException {
-        Object obj = resourceProvisioner("", hr.getBwProvisionerAlias(), hr.getBw(), long.class);
-        if(obj != null && obj instanceof ResourceProvisioner)
-            return (ResourceProvisioner)obj;
-
-        return null;
+        Bandwidth bw = new Bandwidth(hr.getBw());
+        return resourceProvisioner("", hr.getBwProvisionerAlias(), bw);
     }
 
     public static ResourceProvisioner newRamProvisioner(final HostRegistry hr) throws RuntimeException {
-        Object obj = resourceProvisioner("", hr.getRamProvisionerAlias(), hr.getRam(), int.class);
-        if(obj != null && obj instanceof ResourceProvisioner)
-            return (ResourceProvisioner)obj;
-
-        return null;
+        Ram ram = new Ram(hr.getRam());
+        return resourceProvisioner("", hr.getRamProvisionerAlias(), ram);
     }
 
-    public static PeProvisioner newPeProvisioner(
-            String classPrefix, String classSufix, double peCapacity) throws RuntimeException {
-        Object obj = resourceProvisioner(classPrefix, classSufix, peCapacity, double.class);
-        if(obj != null && obj instanceof PeProvisioner)
-            return (PeProvisioner)obj;
-
-        return null;
+    public static PeProvisioner newPeProvisioner(final HostRegistry hr) throws RuntimeException {
+        return resourceProvisioner("Pe", hr.getPeProvisionerAlias(), null);
     }
 
     public static VmAllocationPolicy vmAllocationPolicy(final DatacenterRegistry dcr) throws RuntimeException {
