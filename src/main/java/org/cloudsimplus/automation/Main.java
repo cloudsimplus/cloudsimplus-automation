@@ -20,7 +20,7 @@
  *     You should have received a copy of the GNU General Public License
  *     along with CloudSim Automation. If not, see <http://www.gnu.org/licenses/>.
  */
-package com.manoelcampos.cloudsim.automation;
+package org.cloudsimplus.automation;
 
 import cloudreports.models.*;
 import com.esotericsoftware.yamlbeans.YamlConfig;

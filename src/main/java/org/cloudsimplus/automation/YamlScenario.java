@@ -20,7 +20,7 @@
  *     You should have received a copy of the GNU General Public License
  *     along with CloudSim Automation. If not, see <http://www.gnu.org/licenses/>.
  */
-package com.manoelcampos.cloudsim.automation;
+package org.cloudsimplus.automation;
 
 import cloudreports.models.*;
 import org.cloudbus.cloudsim.allocationpolicies.VmAllocationPolicy;
@@ -106,7 +106,7 @@ public class YamlScenario {
      * abstract DatacenterRegistry information from the YAML file.
      */
     private List<Datacenter> datacenters = null;
-    
+
     private CloudSim cloudsim;
 
     /**

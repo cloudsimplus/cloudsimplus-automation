@@ -24,7 +24,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.manoelcampos.cloudsim.automation;
+package org.cloudsimplus.automation;
 
 import org.cloudbus.cloudsim.util.Log;
 
