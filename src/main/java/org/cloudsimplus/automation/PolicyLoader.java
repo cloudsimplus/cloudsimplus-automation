@@ -32,6 +32,9 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import cloudreports.models.DatacenterRegistry;
+import cloudreports.models.HostRegistry;
+import cloudreports.models.VirtualMachineRegistry;
 import org.cloudbus.cloudsim.allocationpolicies.VmAllocationPolicy;
 import org.cloudbus.cloudsim.provisioners.PeProvisioner;
 import org.cloudbus.cloudsim.provisioners.ResourceProvisioner;
@@ -41,17 +44,21 @@ import org.cloudbus.cloudsim.schedulers.vm.VmScheduler;
 import org.cloudbus.cloudsim.utilizationmodels.UtilizationModel;
 
 /**
- * Dynamically creates instances of classes such as VmScheduler, VmProvisioner, 
- * resource provisioners and others from the class name of
+ * Dynamically creates instances of classes such as {@link VmScheduler}, {@link VmAllocationPolicy},
+ * {@link CloudletScheduler}, {@link ResourceProvisioner} and others from the class name of
  * the object to be instantiated.
- * 
+ *
  * @author Manoel Campos da Silva Filho
  */
 public class PolicyLoader {
+    /**
+     * The base CloudSim package name.
+     */
     private static final String PKG = "org.cloudbus.cloudsim";
+
     public static VmScheduler vmScheduler(String classSufix, List<? extends Pe> pes) throws RuntimeException {
         try {
-            classSufix = generateFullClassName("VmScheduler", classSufix);
+            classSufix = generateFullClassName(PKG+".schedulers.vm","VmScheduler", classSufix);
             Class<? extends VmScheduler> klass = (Class<? extends VmScheduler>) Class.forName(classSufix);
             Constructor cons = klass.getConstructor(new Class[]{List.class});
             return (VmScheduler) cons.newInstance(pes);
@@ -60,12 +67,12 @@ public class PolicyLoader {
             throw new RuntimeException(ex);
         }
     }
-    
+
     /**
-     * Gets an instance of a resource provisioner with a given 
+     * Gets an instance of a resource provisioner with a given
      * class name information.
-     * 
-     * @param classPrefix The class prefix for the provisioner. 
+     *
+     * @param classPrefix The class prefix for the provisioner.
      * If you want to instantiate the provisioner class BwProvisionerSimple,
      * the provisioner prefix is "Bw"
      * @param classSufix The class suffix of the provisioner.
@@ -74,10 +81,10 @@ public class PolicyLoader {
      * @param resourceCapacity The resource capacity the provisioner has available to manage
      * @param resourceClass The class of the resource capacity property of the provisioner
      * @return A new instance of the provisioner with the given name.
-     * For instance, if the class prefix is "Bw" and class suffix is "Simple", 
+     * For instance, if the class prefix is "Bw" and class suffix is "Simple",
      * returns an instance the BwProvisionerSimple class.
-     * @throws RuntimeException 
-     * 
+     * @throws RuntimeException
+     *
      * @todo When a base interface for all CloudSim provisioners be created
      * at the package org.cloudbus.cloudsim.provisioners,
      * it could be used generics in this method instead of dealing
@@ -85,7 +92,7 @@ public class PolicyLoader {
      * such as newBwProvisioner, could be erased.
      */
     private static Object resourceProvisioner(
-            String classPrefix, String classSufix, Number resourceCapacity, 
+            String classPrefix, String classSufix, Number resourceCapacity,
             Class<? extends Number> resourceClass) throws RuntimeException {
         try {
             final String className = generateFullProvisionerClassName(classPrefix, classSufix);
@@ -98,21 +105,19 @@ public class PolicyLoader {
         }
     }
 
-    public static ResourceProvisioner newBwProvisioner(
-            String classPrefix, String classSufix, long bwCapacity) throws RuntimeException {
-        Object obj = resourceProvisioner(classPrefix, classSufix, bwCapacity, long.class);
+    public static ResourceProvisioner newBwProvisioner(final HostRegistry hr) throws RuntimeException {
+        Object obj = resourceProvisioner("", hr.getBwProvisionerAlias(), hr.getBw(), long.class);
         if(obj != null && obj instanceof ResourceProvisioner)
             return (ResourceProvisioner)obj;
-            
+
         return null;
     }
-    
-    public static ResourceProvisioner newRamProvisioner(
-            String classPrefix, String classSufix, int ramCapacity) throws RuntimeException {
-        Object obj = resourceProvisioner(classPrefix, classSufix, ramCapacity, int.class);
+
+    public static ResourceProvisioner newRamProvisioner(final HostRegistry hr) throws RuntimeException {
+        Object obj = resourceProvisioner("", hr.getRamProvisionerAlias(), hr.getRam(), int.class);
         if(obj != null && obj instanceof ResourceProvisioner)
             return (ResourceProvisioner)obj;
-            
+
         return null;
     }
 
@@ -121,13 +126,13 @@ public class PolicyLoader {
         Object obj = resourceProvisioner(classPrefix, classSufix, peCapacity, double.class);
         if(obj != null && obj instanceof PeProvisioner)
             return (PeProvisioner)obj;
-            
+
         return null;
     }
 
-    public static VmAllocationPolicy vmAllocationPolicy(String classSufix) throws RuntimeException {
+    public static VmAllocationPolicy vmAllocationPolicy(final DatacenterRegistry dcr) throws RuntimeException {
         try {
-            classSufix = generateFullClassName("VmAllocationPolicy", classSufix);
+            String classSufix = generateFullClassName(PKG+".allocationpolicies","VmAllocationPolicy", dcr.getAllocationPolicyAlias());
             Class<? extends VmScheduler> klass = (Class<? extends VmScheduler>) Class.forName(classSufix);
             Constructor cons = klass.getConstructor(new Class[]{});
             return (VmAllocationPolicy) cons.newInstance();
@@ -136,10 +141,10 @@ public class PolicyLoader {
             throw new RuntimeException(ex);
         }
     }
-    
-    public static CloudletScheduler cloudletScheduler(String classSufix) throws RuntimeException {
+
+    public static CloudletScheduler cloudletScheduler(final VirtualMachineRegistry vmr) throws RuntimeException {
         try {
-            classSufix = generateFullClassName("CloudletScheduler", classSufix);
+            String classSufix = generateFullClassName(PKG+".schedulers.cloudlet","CloudletScheduler", vmr.getSchedulingPolicyAlias());
             Class<? extends VmScheduler> klass = (Class<? extends VmScheduler>) Class.forName(classSufix);
             Constructor cons = klass.getConstructor();
             return (CloudletScheduler) cons.newInstance();
@@ -147,26 +152,26 @@ public class PolicyLoader {
             Logger.getLogger(PolicyLoader.class.getName()).log(Level.SEVERE, null, ex);
             throw new RuntimeException(ex);
         }
-    }  
-
-    private static String generateFullClassName(String classPrefix, String classSufix) {
-        return String.format("%s.%s%s", PKG, classPrefix, classSufix);
     }
-    
-    private static String generateFullProvisionerClassName(String classPrefix, String classSufix) {
-        return generateFullClassName(
-                String.format("provisioners.%sProvisioner", classPrefix), classSufix);
+
+    private static String generateFullClassName(String packageName, String classPrefix, String classSuffix) {
+        return String.format("%s.%s%s", packageName, classPrefix, classSuffix);
+    }
+
+    private static String generateFullProvisionerClassName(String classPrefix, String classSuffix) {
+        classPrefix = (classPrefix.isEmpty() ? "ResourceProvisioner" : classPrefix+"Provisioner");
+        return generateFullClassName(PKG+".provisioners", classPrefix, classSuffix);
     }
 
     public static UtilizationModel utilizationModel(String classSufix) throws RuntimeException {
         try {
-            classSufix = PKG+".UtilizationModel" + classSufix;
-            Class<? extends VmScheduler> klass = (Class<? extends VmScheduler>) Class.forName(classSufix);
+            final String className = generateFullClassName(PKG+".utilizationmodels", "UtilizationModel", classSufix);
+            Class<? extends VmScheduler> klass = (Class<? extends VmScheduler>) Class.forName(className);
             Constructor cons = klass.getConstructor();
             return (UtilizationModel) cons.newInstance();
         } catch (ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
             Logger.getLogger(PolicyLoader.class.getName()).log(Level.SEVERE, null, ex);
             throw new RuntimeException(ex);
         }
-    }             
+    }
 }

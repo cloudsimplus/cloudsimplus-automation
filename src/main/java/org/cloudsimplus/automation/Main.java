@@ -48,19 +48,17 @@ public class Main {
      * Execute the command line interface of the applications.
      *
      * @param args Accept the name of YAML file containing
-     * the simulation scenarios to be created.
-     * Each YAML file can contain multiples scenarios to be created together.
-     * This is made only adding a --- separator between each scenario.
+     *             the simulation scenarios to be created.
+     *             Each YAML file can contain multiples scenarios to be created together.
+     *             This is made only adding a --- separator between each scenario.
      */
     public static void main(String[] args) {
-        String fileName="ecoCloudPaper6681861.yml"; //a default file to load
-        if(args.length>0){
+        String fileName = "ecoCloudPaper6681861.yml"; //a default file to load
+        if (args.length > 0) {
             fileName = args[0];
-        } else {
-            if(!new File(fileName).exists()){
-                System.err.println("\n\nERROR: You must specify a YAML file, containing the CloudSim simulation scenario, as command line parameter.\n");
-                return;
-            }
+        } else if (!new File(fileName).exists()) {
+            System.err.println("\n\nERROR: You must specify a YAML file, containing the CloudSim simulation scenario, as command line parameter.\n");
+            return;
         }
 
         final List<YamlScenario> envs;
@@ -72,7 +70,7 @@ public class Main {
             return;
         }
 
-        if(envs == null || envs.isEmpty()) {
+        if (envs == null || envs.isEmpty()) {
             System.err.println("\n\nERROR: Your YAML file is empty or could not be loaded.\n");
             return;
         }
@@ -84,9 +82,7 @@ public class Main {
             for (YamlScenario env : envs) {
                 env.run(++i + " - " + scenarioName);
             }
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace(System.out);
             Log.printLine("The simulation has been terminated due to an unexpected error");
         }
@@ -106,7 +102,7 @@ public class Main {
      *                               error parsing the YAML file.
      */
     public static List<YamlScenario> loadScenarioFile(final String yamlFileName)
-            throws FileNotFoundException, YamlException {
+        throws FileNotFoundException, YamlException {
         final List<YamlScenario> envs = new ArrayList<>();
         final YamlReader reader = createYamlReader(yamlFileName);
 
