@@ -3,7 +3,7 @@ datacenterRegistries:
   - !datacenter
     name: datacenter1
     amount: 1
-    allocationPolicyAlias: SingleTreshold
+    allocationPolicyAlias: Simple
     architecture: x86
     os: Linux
     vmm: Xen
@@ -64,7 +64,7 @@ datacenterRegistries:
   - !datacenter
     name: 
     amount: 2
-    allocationPolicyAlias: SingleTreshold
+    allocationPolicyAlias: Simple
     architecture: x86
     os: Linux
     vmm: Xen
@@ -136,7 +136,7 @@ customerRegistries:
         bw: 100
         priority: 1
         vmm: Xen
-        schedulingPolicyAlias: DynamicWorkload
+        schedulingPolicyAlias: TimeShared
       - !vm
         amount: 8
         size: 400
@@ -146,7 +146,7 @@ customerRegistries:
         bw: 80
         priority: 1
         vmm: Xen
-        schedulingPolicyAlias: DynamicWorkload
+        schedulingPolicyAlias: TimeShared
     utilizationProfile:
       - !profile
         #id: #se omitido, será automaticamente gerado       
@@ -183,7 +183,7 @@ customerRegistries:
         bw: 250
         priority: 1
         vmm: Xen
-        schedulingPolicyAlias: DynamicWorkload
+        schedulingPolicyAlias: TimeShared
       - !vm
         amount: 8
         size: 1000
@@ -193,7 +193,7 @@ customerRegistries:
         bw: 180
         priority: 1
         vmm: Xen
-        schedulingPolicyAlias: DynamicWorkload
+        schedulingPolicyAlias: TimeShared
     utilizationProfile:
       - !profile
         #id: #se omitido, será automaticamente gerado       

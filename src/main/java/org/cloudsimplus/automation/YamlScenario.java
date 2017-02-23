@@ -159,8 +159,8 @@ public class YamlScenario {
     private List<Datacenter> createConcreteDatacentersFromAbstractDatacenterRegistries() throws IllegalArgumentException {
         String datacenterName;
         int datacenterCount = 0;
-        final int totalHostsAmout = datacenterRegistries.stream().mapToInt(DatacenterRegistry::getAmount).sum();
-        final List<Datacenter> list = new ArrayList<>(totalHostsAmout);
+        final int datacenterNumber = datacenterRegistries.stream().mapToInt(DatacenterRegistry::getAmount).sum();
+        final List<Datacenter> datacenterList = new ArrayList<>(datacenterNumber);
         for (DatacenterRegistry dcr : datacenterRegistries) {
             int hostCount = 0;
             for (int i = 0; i < dcr.getAmount(); i++) {
@@ -171,14 +171,14 @@ public class YamlScenario {
 
                 try {
                     Datacenter dc = createDataCenter(datacenterName, dcr, hostList);
-                    list.add(dc);
+                    datacenterList.add(dc);
                 } catch (Exception e) {
                     e.printStackTrace(System.out);
                 }
             }
         }
 
-        return list;
+        return datacenterList;
     }
 
     public Datacenter createDataCenter(
@@ -337,23 +337,21 @@ public class YamlScenario {
      *
      * @param dcr       A specific abstract datacenter information
      *                  get from the datacenterRegistries list at the YAML file.
-     * @param hostCount The global created host count for the
-     *                  specific simulation scenario loaded. This is used to incrementally
-     *                  assign an id for each host created that was not explicitly defined
-     *                  on id at the YAML file.
-     * @return Returns the list of created hosts from the specified datacenterRegistry.
+     * @param initialHostId the ID for the first Host to be created
+     * @return the list of created hosts from the specified datacenterRegistry.
      * @throws RuntimeException
      * @see YamlScenario#datacenterRegistries
      */
     private List<Host> createConcreteHostsFromAbstractHostRegistries(
-        final DatacenterRegistry dcr, int hostCount) throws RuntimeException
+        final DatacenterRegistry dcr, int initialHostId) throws RuntimeException
     {
         int hostId;
-        final List<Host> hostList = new ArrayList<>(hostCount);
+        final int hostNumber = dcr.getHostList().stream().mapToInt(HostRegistry::getAmount).sum();
+        final List<Host> hostList = new ArrayList<>(hostNumber);
         for (HostRegistry hr : dcr.getHostList()) {
             for (int i = 0; i < hr.getAmount(); i++) {
                 List<Pe> peList = createHostProcessingElements(hr);
-                hostId = generateHostId(hr, ++hostCount);
+                hostId = generateHostId(hr, ++initialHostId);
                 hostList.add(createHost(hostId, hr, peList));
             }
         }
@@ -434,7 +432,7 @@ public class YamlScenario {
     private List<Pe> createHostProcessingElements(final HostRegistry hr) {
         final List<Pe> list = new ArrayList<>(hr.getNumOfPes());
         for (int i = 0; i < hr.getNumOfPes(); i++) {
-            list.add(new PeSimple(i, PolicyLoader.newPeProvisioner(hr)));
+            list.add(new PeSimple(hr.getMipsPerPe(), PolicyLoader.newPeProvisioner(hr)));
         }
 
         return list;

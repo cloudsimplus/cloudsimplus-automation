@@ -32,7 +32,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -61,7 +63,7 @@ public class Main {
             return;
         }
 
-        final List<YamlScenario> envs;
+        final Map<Integer, YamlScenario> envs;
         try {
             envs = loadScenarioFile(fileName);
             //envs = null;
@@ -75,13 +77,10 @@ public class Main {
             return;
         }
 
-        Log.printLine("Starting " + YamlScenario.class.getSimpleName());
+        Log.printLine("Starting ...");
         try {
             final String scenarioName = new File(fileName).getName();
-            int i = 0;
-            for (YamlScenario env : envs) {
-                env.run(++i + " - " + scenarioName);
-            }
+            envs.forEach((i, env) -> env.run(i + " - " + scenarioName));
         } catch (Exception e) {
             e.printStackTrace(System.out);
             Log.printLine("The simulation has been terminated due to an unexpected error");
@@ -92,8 +91,8 @@ public class Main {
      * Loads CloudSim simulation scenarios from a YAML file.
      *
      * @param yamlFileName The YAML scenario file to be loaded.
-     * @return Returns a list of simulation scenarios specified
-     * inside the YAML file. Each scenario inside the file
+     * @return a map of simulation scenarios specified
+     * inside the YAML file, where the key is the scenario ID. Each scenario inside the file
      * can be delimited using the line below:
      * --- #Delimits each Cloud Environment
      * @throws FileNotFoundException Throws when the YAML file
@@ -101,15 +100,17 @@ public class Main {
      * @throws YamlException         Throws when there is any
      *                               error parsing the YAML file.
      */
-    public static List<YamlScenario> loadScenarioFile(final String yamlFileName)
+    public static Map<Integer, YamlScenario> loadScenarioFile(final String yamlFileName)
         throws FileNotFoundException, YamlException {
-        final List<YamlScenario> envs = new ArrayList<>();
+        final Map<Integer, YamlScenario> envs = new HashMap<>();
         final YamlReader reader = createYamlReader(yamlFileName);
 
         YamlScenario env;
-        do {
-            env = reader.read(YamlScenario.class);
-        } while (env != null && envs.add(env));
+        int i = 0;
+        while ((env = reader.read(YamlScenario.class)) != null) {
+            envs.put(i++, env);
+        }
+
         return envs;
     }
 
