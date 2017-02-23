@@ -15,7 +15,7 @@ The main contributions of this work are:
 
 You can run the tool from a terminal using the following command (check the correct version number of the jar file):
 
-*java -jar [CloudSimAutomation-1.1.1-jar-with-dependencies.jar](https://github.com/manoelcampos/CloudSimAutomation/releases/latest) PathToYamlSimulationScenarioFile*
+*java -jar [CloudSimAutomation-1.1.1-jar-with-dependencies.jar](https://github.com/manoelcampos/cloudsim-plus-automation/releases/tag/v1.1.1) PathToYamlSimulationScenarioFile*
 
 # Published Paper
 
@@ -24,6 +24,6 @@ For more information, read [this paper](paper_cloudsim_automation.pdf), that was
 **If you are using this work for publishing a paper, please cite our paper above.**
 
 # Notice
-This is an old version compatible with CloudSim 3 that is not actively maintained anymore. Updates may be performed after you create an [issue ticket](https://github.com/manoelcampos/CloudSimAutomation/issues). Every issue will be assessed and there is no guarantee that it will be fixed. If you would like to contribute to this version, feel free to submit a pull request.
+This is an old version compatible with CloudSim 3 that is not actively maintained anymore. Updates may be performed after you create an [issue ticket](https://github.com/manoelcampos/cloudsim-plus-automation/issues). Every issue will be assessed and there is no guarantee that it will be fixed. If you would like to contribute to this version, feel free to submit a pull request.
 
-The active developed version compatible with [CloudSim Plus](http://cloudsimplus.org) is available at the [master branch](https://github.com/manoelcampos/CloudSimAutomation).
+The active developed version compatible with [CloudSim Plus](http://cloudsimplus.org) is available at the [master branch](https://github.com/manoelcampos/cloudsim-plus-automation).
