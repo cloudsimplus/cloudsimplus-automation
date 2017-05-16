@@ -332,7 +332,7 @@ public class YamlScenario {
 
         for (int i = 0; i < size; i++) {
             cloudlet = list.get(i);
-            if (cloudlet.getCloudletStatus() == Cloudlet.SUCCESS) {
+            if (cloudlet.getStatus() == Cloudlet.SUCCESS) {
                 Vm vm = findVm(broker, cloudlet.getVmId());
                 final Object[] data = {
                         String.format("%3d", i + 1),

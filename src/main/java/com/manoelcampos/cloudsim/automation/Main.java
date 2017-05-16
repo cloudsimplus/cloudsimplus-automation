@@ -47,10 +47,12 @@ public class Main {
     /**
      * Execute the command line interface of the applications.
      *
-     * @param args Accept the name of YAML file containing
-     * the simulation scenarios to be created.
-     * Each YAML file can contain multiples scenarios to be created together.
-     * This is made only adding a --- separator between each scenario.
+     * @param args Arg 0: The name of YAML file containing
+     *             the simulation scenarios to be created.
+     *             Each YAML file can contain multiples scenarios to be created together.
+     *             This is made only adding a --- separator between each scenario.
+     *             <br>
+     *             Arg 1: false or 0 to disable the CloudSim Plus Log (optional)
      */
     public static void main(String[] args) {
         String fileName="ecoCloudPaper6681861.yml"; //a default file to load
@@ -58,7 +60,7 @@ public class Main {
             fileName = args[0];
         } else {
             if(!new File(fileName).exists()){
-                System.err.println("\n\nERROR: You must specify a YAML file, containing the CloudSim simulation scenario, as command line parameter.\n");
+                System.err.println("\n\nYou must specify a YAML file, containing the CloudSim simulation scenario, as command line parameter.\n");
                 return;
             }
         }
@@ -73,11 +75,12 @@ public class Main {
         }
 
         if(envs == null || envs.isEmpty()) {
-            System.err.println("\n\nERROR: Your YAML file is empty or could not be loaded.\n");
+            System.err.println("\n\nYour YAML file is empty or could not be loaded.\n");
             return;
         }
 
-        Log.printLine("Starting " + YamlScenario.class.getSimpleName());
+        Log.setDisabled(isToDisableLog(args));
+        System.out.printf("Starting %d Simulation Scenario(s) from file %s\n", envs.size(), fileName);
         try {
             final String scenarioName = new File(fileName).getName();
             int i = 0;
@@ -88,8 +91,17 @@ public class Main {
         catch (Exception e)
         {
             e.printStackTrace(System.out);
-            Log.printLine("The simulation has been terminated due to an unexpected error");
+            System.err.println("The simulation has been terminated due to an unexpected error");
         }
+    }
+
+    /**
+     * Checks if CloudSim Plus Log has to be disabled.
+     * @param args command line arguments
+     * @return
+     */
+    private static boolean isToDisableLog(String[] args) {
+        return args.length == 2 && ("false".equalsIgnoreCase(args[1]) || "0".equals(args[1]));
     }
 
     /**
