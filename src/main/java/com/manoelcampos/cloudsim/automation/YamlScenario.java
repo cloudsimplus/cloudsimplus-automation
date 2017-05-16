@@ -537,7 +537,7 @@ public class YamlScenario {
         }
 
         final double finishTimeSecs = (System.currentTimeMillis() - startTime)/1000;
-        System.out.printf("\nCloud Simulation finished in %.2f seconds\n!", finishTimeSecs);
+        System.out.printf("\nCloud Simulation finished in %.2f seconds!\n", finishTimeSecs);
     }
 
 
