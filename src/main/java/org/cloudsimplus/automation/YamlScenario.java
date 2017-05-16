@@ -464,6 +464,7 @@ public class YamlScenario {
      *                                  to be created.
      */
     public void run(final String simulationLabel) throws IllegalArgumentException {
+        final double startTime = System.currentTimeMillis();
         cloudsim = new CloudSim();
         System.out.println("Hosts========================");
         this.datacenters = createConcreteDatacentersFromAbstractDatacenterRegistries();
@@ -493,7 +494,9 @@ public class YamlScenario {
                 .setTitle(broker.getName())
                 .build();
         }
-        Log.printLine("\nCloud Simulation finished!");
+
+        final double finishTimeSecs = (System.currentTimeMillis() - startTime)/1000;
+        System.out.printf("\nCloud Simulation finished in %.2f seconds\n!", finishTimeSecs);
     }
 
 }
