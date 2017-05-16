@@ -42,11 +42,10 @@ import org.cloudbus.cloudsim.resources.PeSimple;
 import org.cloudbus.cloudsim.resources.SanStorage;
 import org.cloudbus.cloudsim.schedulers.cloudlet.CloudletScheduler;
 import org.cloudbus.cloudsim.schedulers.vm.VmScheduler;
-import org.cloudbus.cloudsim.util.Log;
 import org.cloudbus.cloudsim.utilizationmodels.UtilizationModel;
 import org.cloudbus.cloudsim.vms.Vm;
 import org.cloudbus.cloudsim.vms.VmSimple;
-import org.cloudsimplus.builders.tables.CloudletsTableBuilderHelper;
+import org.cloudsimplus.builders.tables.CloudletsTableBuilder;
 
 import java.util.*;
 
@@ -361,14 +360,17 @@ public class YamlScenario {
 
 
     public Host createHost(final int hostId, final HostRegistry hr, final List<Pe> peList) throws RuntimeException {
-        ResourceProvisioner ramProvisioner = PolicyLoader.newRamProvisioner(hr);
-        ResourceProvisioner bwProvisioner = PolicyLoader.newBwProvisioner(hr);
+        ResourceProvisioner ramProvisioner = PolicyLoader.newResourceProvisioner(hr);
+        ResourceProvisioner bwProvisioner = PolicyLoader.newResourceProvisioner(hr);
         VmScheduler vmScheduler = PolicyLoader.vmScheduler(hr.getSchedulingPolicyAlias());
 
-        return new HostSimple(hostId, hr.getStorage(), peList)
+        Host host = new HostSimple(hr.getRam(), hr.getBw(), hr.getStorage(), peList);
+        host
             .setRamProvisioner(ramProvisioner)
             .setBwProvisioner(bwProvisioner)
-            .setVmScheduler(vmScheduler);
+            .setVmScheduler(vmScheduler)
+            .setId(hostId);
+        return host;
     }
 
     private int generateHostId(final HostRegistry hr, final int currentHostCount) {
@@ -490,7 +492,7 @@ public class YamlScenario {
         }
 
         for (DatacenterBroker broker : brokers.keySet()) {
-            new CloudletsTableBuilderHelper(broker.getCloudletsFinishedList())
+            new CloudletsTableBuilder(broker.getCloudletsFinishedList())
                 .setTitle(broker.getName())
                 .build();
         }
