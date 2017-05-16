@@ -80,7 +80,7 @@ public class Main {
         }
 
         Log.setDisabled(isToDisableLog(args));
-        System.out.printf("Starting %d Simulation Scenario(s) from file %s\n", envs.size(), fileName);
+        System.out.printf("Starting %d Simulation Scenario(s) from file %s in CloudSim\n", envs.size(), fileName);
         try {
             final String scenarioName = new File(fileName).getName();
             int i = 0;
