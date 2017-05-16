@@ -535,7 +535,7 @@ public class YamlScenario {
         for (DatacenterBroker broker : brokers.keySet()) {
             printCloudletList(broker, receivedCloudletList.get(broker));
         }
-        
+
         final double finishTimeSecs = (System.currentTimeMillis() - startTime)/1000;
         System.out.printf("\nCloud Simulation finished in %.2f seconds\n!", finishTimeSecs);
     }
