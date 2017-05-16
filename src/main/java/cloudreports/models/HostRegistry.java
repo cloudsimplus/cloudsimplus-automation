@@ -38,7 +38,7 @@ import java.io.Serializable;
  * @author      Thiago T. Sá
  * @since       1.0
  */
-public final class HostRegistry implements Serializable{
+public final class HostRegistry implements Serializable {
     /** The host's id. */
     private int id;
 

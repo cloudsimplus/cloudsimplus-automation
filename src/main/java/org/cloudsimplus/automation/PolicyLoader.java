@@ -77,43 +77,30 @@ public class PolicyLoader {
      * @param classSufix The class suffix of the provisioner.
      * If you want to instantiate the provisioner class BwProvisionerSimple,
      * the provisioner suffix is just "Simple"
-     * @param resource The resource the provisioner has available to manage
      * @return A new instance of the provisioner with the given name.
      * For instance, if the class suffix is "Simple",
      * returns an instance the ResourceProvisionerSimple class.
      * @throws RuntimeException
      */
     private static <T extends ResourceProvisioner> T resourceProvisioner(
-        String classPrefix, String classSufix, ResourceManageable resource) throws RuntimeException {
+        String classPrefix, String classSufix) throws RuntimeException {
         try {
             final String className = generateFullProvisionerClassName(classPrefix, classSufix);
             final Class resourceProvisionerClass = Class.forName(className);
-            if(resource == null) {
-                Constructor cons = resourceProvisionerClass.getConstructor(new Class[]{});
-                return (T)cons.newInstance();
-            }
-            else {
-                Constructor cons = resourceProvisionerClass.getConstructor(new Class[]{ResourceManageable.class});
-                return (T)cons.newInstance(resource);
-            }
+            Constructor cons = resourceProvisionerClass.getConstructor(new Class[]{});
+            return (T)cons.newInstance();
         } catch (ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
             Logger.getLogger(PolicyLoader.class.getName()).log(Level.SEVERE, null, ex);
             throw new RuntimeException(ex);
         }
     }
 
-    public static ResourceProvisioner newBwProvisioner(final HostRegistry hr) throws RuntimeException {
-        Bandwidth bw = new Bandwidth(hr.getBw());
-        return resourceProvisioner("", hr.getBwProvisionerAlias(), bw);
-    }
-
-    public static ResourceProvisioner newRamProvisioner(final HostRegistry hr) throws RuntimeException {
-        Ram ram = new Ram(hr.getRam());
-        return resourceProvisioner("", hr.getRamProvisionerAlias(), ram);
+    public static ResourceProvisioner newResourceProvisioner(final HostRegistry hr) throws RuntimeException {
+        return resourceProvisioner("", hr.getBwProvisionerAlias());
     }
 
     public static PeProvisioner newPeProvisioner(final HostRegistry hr) throws RuntimeException {
-        return resourceProvisioner("Pe", hr.getPeProvisionerAlias(), null);
+        return resourceProvisioner("Pe", hr.getPeProvisionerAlias());
     }
 
     public static VmAllocationPolicy vmAllocationPolicy(final DatacenterRegistry dcr) throws RuntimeException {
