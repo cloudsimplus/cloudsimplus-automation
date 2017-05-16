@@ -495,13 +495,11 @@ public class YamlScenario {
      *                            to be created.
      */
     public void run(final String simulationLabel) throws ParameterException {
-        // First step: Initialize the CloudSim package. It should be called
-        // before creating any entities.
-        int num_user = 1;   // number of grid users 
+        final double startTime = System.currentTimeMillis();
+        int num_user = 1;   // number of cloud customers
         final Calendar calendar = Calendar.getInstance(Locale.getDefault());
-        boolean trace_flag = false;  // mean trace events
+        boolean trace_flag = false;  // trace events
 
-        // Initialize the CloudSim library
         CloudSim.init(num_user, calendar, trace_flag);
         System.out.println("Hosts========================");
         this.datacenters = createConcreteDatacentersFromAbstractDatacenterRegistries();
@@ -537,7 +535,9 @@ public class YamlScenario {
         for (DatacenterBroker broker : brokers.keySet()) {
             printCloudletList(broker, receivedCloudletList.get(broker));
         }
-        Log.printLine("\nCloudEnvironment Simulation finished!");
+        
+        final double finishTimeSecs = (System.currentTimeMillis() - startTime)/1000;
+        System.out.printf("\nCloud Simulation finished in %.2f seconds\n!", finishTimeSecs);
     }
 
 
