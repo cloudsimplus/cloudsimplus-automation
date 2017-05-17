@@ -26,6 +26,7 @@ import cloudreports.models.*;
 import com.esotericsoftware.yamlbeans.YamlConfig;
 import com.esotericsoftware.yamlbeans.YamlException;
 import com.esotericsoftware.yamlbeans.YamlReader;
+import org.cloudbus.cloudsim.core.CloudSim;
 import org.cloudbus.cloudsim.util.Log;
 
 import java.io.File;
@@ -80,7 +81,8 @@ public class Main {
         }
 
         Log.setDisabled(isToDisableLog(args));
-        System.out.printf("Starting %d Simulation Scenario(s) from file %s in CloudSim Plus\n", envs.size(), fileName);
+        System.out.printf("Starting %d Simulation Scenario(s) from file %s in CloudSim Plus %s\n",
+            envs.size(), fileName, CloudSim.VERSION);
         try {
             final String scenarioName = new File(fileName).getName();
             envs.forEach((i, env) -> env.run(i + " - " + scenarioName));
