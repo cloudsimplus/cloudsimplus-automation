@@ -15,7 +15,7 @@ The main contributions of this work are:
 
 You can run the tool from a terminal using the following command (check the correct version number of the jar file):
 
-*java -jar [CloudSimAutomation-1.1.1-jar-with-dependencies.jar](https://github.com/manoelcampos/cloudsim-plus-automation/releases/tag/v1.1.1) PathToYamlSimulationScenarioFile*
+*java -jar [CloudSimAutomation-1.1.2-jar-with-dependencies.jar](https://github.com/manoelcampos/cloudsim-plus-automation/releases/tag/v1.1.2) PathToYamlSimulationScenarioFile*
 
 # Published Paper
 
