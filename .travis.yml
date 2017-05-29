@@ -1,6 +1,6 @@
 language: java
 script: mvn clean package
-after_success:
-  - mvn versioneye:update 
+script:
+  - mvn versioneye:update
 jdk:
   - oraclejdk8
