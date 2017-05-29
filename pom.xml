@@ -8,13 +8,11 @@
     <packaging>jar</packaging>
 
     <name>CloudSim Plus Automation</name>
-    <description>Autonousmly generate CloudSim Plus simulation scenarios from a YAML file.</description>
+    <description>Autonomously builds and runs CloudSim Plus simulation environments from an YAML file.</description>
     <url>https://github.com/manoelcampos/cloudsim-plus-automation</url>
 
     <organization>
-        <name>Universidade da Beira Interior (UBI) - Instituto Federal de Educação Ciência e Tecnologia do Tocantins
-            (IFTO)
-        </name>
+        <name>Universidade da Beira Interior (UBI) - Instituto Federal de Educação Ciência e Tecnologia do Tocantins (IFTO)</name>
         <url>http://www.ubi.pt http://www.ifto.edu.br</url>
     </organization>
 
