@@ -9,7 +9,7 @@
 
     <name>CloudSim Plus Automation</name>
     <description>Autonousmly generate CloudSim Plus simulation scenarios from a YAML file.</description>
-    <url>https://github.com/manoelcampos/CloudSimAutomation</url>
+    <url>https://github.com/manoelcampos/cloudsim-plus-automation</url>
 
     <organization>
         <name>Universidade da Beira Interior (UBI) - Instituto Federal de Educação Ciência e Tecnologia do Tocantins
@@ -35,13 +35,13 @@
     </developers>
 
     <scm>
-        <connection>scm:git:git@github.com:manoelcampos/CloudSimAutomation.git</connection>
-        <developerConnection>scm:git:git@github.com:manoelcampos/CloudSimAutomation.git</developerConnection>
-        <url>git@github.com:manoelcampos/CloudSimAutomation.git</url>
+        <connection>scm:git:git@github.com:manoelcampos/cloudsim-plus-automation.git</connection>
+        <developerConnection>scm:git:git@github.com:manoelcampos/cloudsim-plus-automation.git</developerConnection>
+        <url>git@github.com:manoelcampos/cloudsim-plus-automation.git</url>
     </scm>
 
     <issueManagement>
-        <url>https://github.com/manoelcampos/CloudSimAutomation/issues</url>
+        <url>https://github.com/manoelcampos/cloudsim-plus-automation/issues</url>
         <system>GitHub Issues</system>
     </issueManagement>
 
@@ -75,7 +75,7 @@
                             <!-- Defines the root folder where the dependencies are. In this case
                              is the the root of the local maven repository. !-->
                             <classpathPrefix>${user.home}/.m2/repository/</classpathPrefix>
-                            <mainClass>org.cloudsimplus.automation.Main</mainClass>
+                            <mainClass>org.cloudsimplus.automation.Start</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
