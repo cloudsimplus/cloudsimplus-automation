@@ -91,7 +91,7 @@
             <plugin>
                 <groupId>com.versioneye</groupId>
                 <artifactId>versioneye-maven-plugin</artifactId>
-                <version>3.11.2</version>
+                <version>3.11.4</version>
                 <configuration>
                     <organisation>manoelcampos</organisation>
                     <projectId>58aeeecd0693850016ef1ed8</projectId>
