@@ -8,7 +8,7 @@
     <packaging>jar</packaging>
 
     <name>CloudSim Plus Automation</name>
-    <description>Autonomously builds and runs CloudSim Plus simulation environments from an YAML file.</description>
+    <description>Autonomously builds and runs Cloud Computing simulation environments in CloudSim Plus from an YAML file.</description>
     <url>https://github.com/manoelcampos/cloudsim-plus-automation</url>
 
     <organization>
