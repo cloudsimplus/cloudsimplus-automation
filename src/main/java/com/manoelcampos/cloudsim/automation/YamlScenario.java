@@ -125,7 +125,7 @@ public class YamlScenario {
      *                            to be created.
      * @see YamlScenario#datacenterRegistries
      */
-    private List<Datacenter> createConcreteDatacentersFromAbstractDatacenterRegistries()
+    private List<Datacenter> createDatacentersFromDatacenterRegistries()
             throws ParameterException
     {
         String datacenterName;
@@ -136,7 +136,7 @@ public class YamlScenario {
             for (int i = 0; i < dcr.getAmount(); i++) {
                 datacenterName = generateDataCenterName(dcr, ++datacenterCount);
 
-                List<Host> hostList = createConcreteHostsFromAbstractHostRegistries(dcr, hostCount);
+                List<Host> hostList = createHostsFromHostRegistries(dcr, hostCount);
                 hostCount += hostList.size();
 
                 try {
@@ -188,7 +188,7 @@ public class YamlScenario {
      * @return Returns the map created.
      * @see YamlScenario#customerRegistries
      */
-    private Map<DatacenterBroker, CustomerRegistry> createConcreteDatacenterBrokersFromAbstractCustomerRegistries() {
+    private Map<DatacenterBroker, CustomerRegistry> createDatacenterBrokersFromCustomerRegistries() {
         final Map<DatacenterBroker, CustomerRegistry> list = new HashMap<>();
         int brokerCount = 0;
         String brokerName;
@@ -220,9 +220,9 @@ public class YamlScenario {
      *
      * @return Returns the a map containing the list of created VMs
      * for each customer (DatacenterBroker).
-     * @see YamlScenario#createConcreteDatacenterBrokersFromAbstractCustomerRegistries()
+     * @see YamlScenario#createDatacenterBrokersFromCustomerRegistries()
      */
-    private Map<DatacenterBroker, List<Vm>> createConcreteVmListForAllBrokers(
+    private Map<DatacenterBroker, List<Vm>> createVmListForAllBrokers(
             final Map<DatacenterBroker, CustomerRegistry> brokers)
     {
         final Map<DatacenterBroker, List<Vm>> list = new HashMap<>();
@@ -230,15 +230,15 @@ public class YamlScenario {
         int vmCount = 0;
         for (DatacenterBroker broker : brokers.keySet()) {
             LinkedList<Vm> vms =
-                    createConcreteVmListForOneBroker(
-                            broker, brokers.get(broker), ++vmCount);
+                    createVmListForOneBroker(
+                            broker, brokers.get(broker), vmCount++);
             list.put(broker, vms);
         }
 
         return list;
     }
 
-    public LinkedList<Vm> createConcreteVmListForOneBroker(
+    public LinkedList<Vm> createVmListForOneBroker(
             final DatacenterBroker broker,
             final CustomerRegistry customerRegistry,
             final int vmCount) throws RuntimeException
@@ -246,7 +246,7 @@ public class YamlScenario {
         final LinkedList<Vm> list = new LinkedList<>();
         for (VirtualMachineRegistry vmr : customerRegistry.getVmList()) {
             for (int i = 0; i < vmr.getAmount(); i++) {
-                list.add(createVm(vmCount, broker, vmr));
+                list.add(createVm(vmCount+i, broker, vmr));
             }
         }
         return list;
@@ -271,7 +271,7 @@ public class YamlScenario {
      *                concrete customer created (DatacenterBroker).
      * @return Returns the list of Cloudlets created.
      */
-    private Map<DatacenterBroker, List<Cloudlet>> createConcreteCloudletsFromAbstractUtilizationProfiles(final Map<DatacenterBroker, CustomerRegistry> brokers) {
+    private Map<DatacenterBroker, List<Cloudlet>> createCloudletsFromUtilizationProfiles(final Map<DatacenterBroker, CustomerRegistry> brokers) {
         // Creates a container to store Cloudlets
         final Map<DatacenterBroker, List<Cloudlet>> list = new HashMap<>();
 
@@ -368,7 +368,7 @@ public class YamlScenario {
      * @throws RuntimeException
      * @see YamlScenario#datacenterRegistries
      */
-    private List<Host> createConcreteHostsFromAbstractHostRegistries(
+    private List<Host> createHostsFromHostRegistries(
             final DatacenterRegistry datacenterRegistry, int hostCount) throws RuntimeException {
         int hostId;
         final List<Host> hostList = new ArrayList<>();
@@ -502,18 +502,18 @@ public class YamlScenario {
 
         CloudSim.init(num_user, calendar, trace_flag);
         System.out.println("Hosts========================");
-        this.datacenters = createConcreteDatacentersFromAbstractDatacenterRegistries();
+        this.datacenters = createDatacentersFromDatacenterRegistries();
         for (Datacenter datacenter : datacenters) {
             System.out.println(datacenter.getName() + ": " + datacenter.getHostList().size() + " hosts");
         }
         System.out.println("=============================");
 
         //Third step: Create Brokers
-        final Map<DatacenterBroker, CustomerRegistry> brokers = createConcreteDatacenterBrokersFromAbstractCustomerRegistries();
+        final Map<DatacenterBroker, CustomerRegistry> brokers = createDatacenterBrokersFromCustomerRegistries();
 
         //Fourth step: Create VMs and Cloudlets and send them to broker
-        this.brokerVms = createConcreteVmListForAllBrokers(brokers);
-        this.brokerCloudlets = createConcreteCloudletsFromAbstractUtilizationProfiles(brokers);
+        this.brokerVms = createVmListForAllBrokers(brokers);
+        this.brokerCloudlets = createCloudletsFromUtilizationProfiles(brokers);
 
         for (DatacenterBroker broker : brokers.keySet()) {
             broker.submitVmList(brokerVms.get(broker));
