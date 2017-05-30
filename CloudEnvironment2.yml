@@ -3,7 +3,7 @@ datacenters:
   - !datacenter
     name:
     amount: 2
-    allocationPolicyAlias: Simple
+    vmAllocationPolicy: Simple
     architecture: x86
     os: Linux
     vmm: Xen
@@ -16,55 +16,49 @@ datacenters:
     costPerMem: 0.05
     costPerStorage: 0.001
     costPerBw: 0.1
-    sanList:
-      ##se o nome não for informado em qualquer elemento, ele deve ser criado automaticamente
+    sans:
       - !san
-        #nao tem amount na SanRegistry
         name: san1
         capacity: 100000
         bandwidth: 10000
         networkLatency: 5
-    hostList:
+    hosts:
       - !host
-        #id: #se omitido, será automaticamente gerado
         amount: 4
         ram: 1000000
         bw: 10000
         storage: 40000
         maxPower: 250
         staticPowerPercent: 0.7
-        numOfPes: 4
-        mipsPerPe: 1000
-        schedulingPolicyAlias: TimeShared
-        powerModelAlias: Linear
-        ramProvisionerAlias: Simple
-        bwProvisionerAlias: Simple
-        peProvisionerAlias: Simple
+        pes: 4
+        mips: 1000
+        vmScheduler: TimeShared
+        powerModel: Linear
+        ramProvisioner: Simple
+        bwProvisioner: Simple
+        peProvisioner: Simple
 customers:
   - !customer
     name:
     amount: 4
-    vmList:
+    vms:
       - !vm
-        #id: #se omitido, será automaticamente gerado
         amount: 4
         size: 500
-        pesNumber: 2
+        pes: 2
         mips: 1000
         ram: 2000
         bw: 100
         priority: 1
         vmm: Xen
-        schedulingPolicyAlias: TimeShared
-    utilizationProfile:
-      - !profile
-        #id: #se omitido, será automaticamente gerado       
-        numOfCloudlets: 4
-        brokerPolicyAlias: RoundRobin
-        cloudletsPesNumber: 2
+        cloudletScheduler: TimeShared
+    cloudlets:
+      - !cloudlet
+        amount: 4
+        pes: 2
         length: 1000
         fileSize: 50
         outputSize: 50
-        utilizationModelCpuAlias: Full
-        utilizationModelRamAlias: Full
-        utilizationModelBwAlias: Full      
+        utilizationModelCpu: Full
+        utilizationModelRam: Full
+        utilizationModelBw: Full

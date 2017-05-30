@@ -23,7 +23,7 @@ import java.util.List;
  * to read the given file.
  * The scenarios read will be available in the {@link #getScenarios() scenarios} attribute.
  * Then, to build and run each simulation scenario in CloudSim Plus,
- * just call {@link YamlCloudScenario#build()}.
+ * instantiate a {@link CloudSimulation} passing a {@link YamlCloudScenario} to it.
  * </p>
  *
  * @author Manoel Campos da Silva Filho
@@ -37,8 +37,6 @@ public class YamlCloudScenarioReader {
      * Instantiates a YamlCloudScenarioReader and
      * reads the YAML file containing the data to create Cloud Computing simulation scenarios.
      * Then, the List of simulation scenarios can be accessed using {@link #getScenarios()}.
-     * It doesn't create the simulation scenarios in CloudSim Plus.
-     * Each one added to the List should be created calling {@link YamlCloudScenario#build()}.
      *
      * @param filePath the path of the YAML file to read
      * @param disableLog indicate if CloudSim Plus log must be disabled or not
@@ -89,8 +87,8 @@ public class YamlCloudScenarioReader {
         cfg.setClassTag("customer", CustomerRegistry.class);
         cfg.setClassTag("san", SanStorageRegistry.class);
         cfg.setClassTag("host", HostRegistry.class);
-        cfg.setClassTag("profile", UtilizationProfile.class);
-        cfg.setClassTag("vm", VirtualMachineRegistry.class);
+        cfg.setClassTag("cloudlet", CloudletRegistry.class);
+        cfg.setClassTag("vm", VmRegistry.class);
 
         return reader;
     }

@@ -143,9 +143,9 @@ public class CloudSimulation implements Runnable {
         final CustomerRegistry cr,
         final int createdVms) throws RuntimeException
     {
-        final int totalVmsAmount = cr.getVmList().stream().mapToInt(VirtualMachineRegistry::getAmount).sum();
+        final int totalVmsAmount = cr.getVms().stream().mapToInt(VmRegistry::getAmount).sum();
         final List<Vm> list = new ArrayList<>(totalVmsAmount);
-        for (VirtualMachineRegistry vmr : cr.getVmList()) {
+        for (VmRegistry vmr : cr.getVms()) {
             for (int i = 0; i < vmr.getAmount(); i++) {
                 list.add(createVm(createdVms+i, broker, vmr));
             }
@@ -156,10 +156,10 @@ public class CloudSimulation implements Runnable {
 
     private Vm createVm(final int id,
                         final DatacenterBroker broker,
-                        final VirtualMachineRegistry vmr) throws RuntimeException
+                        final VmRegistry vmr) throws RuntimeException
     {
         CloudletScheduler scheduler = PolicyLoader.cloudletScheduler(vmr);
-        return new VmSimple(id, vmr.getMips(), vmr.getPesNumber())
+        return new VmSimple(id, vmr.getMips(), vmr.getPes())
             .setBroker(broker)
             .setRam(vmr.getRam())
             .setBw(vmr.getBw())
@@ -183,13 +183,13 @@ public class CloudSimulation implements Runnable {
         for (DatacenterBroker broker : brokerRegistries.keySet()) {
             final int cloudletsNum =
                 brokerRegistries.get(broker)
-                    .getUtilizationProfile()
+                    .getCloudlets()
                     .stream()
-                    .mapToInt(UtilizationProfile::getNumOfCloudlets)
+                    .mapToInt(CloudletRegistry::getAmount)
                     .sum();
             List<Cloudlet> cloudlets = new ArrayList<>(cloudletsNum);
-            for (UtilizationProfile up : brokerRegistries.get(broker).getUtilizationProfile()) {
-                for (int i = 0; i < up.getNumOfCloudlets(); i++) {
+            for (CloudletRegistry up : brokerRegistries.get(broker).getCloudlets()) {
+                for (int i = 0; i < up.getAmount(); i++) {
                     cloudlets.add(createCloudlet(++createdCloudlets, up, broker));
                 }
             }
@@ -201,14 +201,14 @@ public class CloudSimulation implements Runnable {
 
     private Cloudlet createCloudlet(
         final int id,
-        final UtilizationProfile up,
+        final CloudletRegistry up,
         final DatacenterBroker broker) throws RuntimeException
     {
-        UtilizationModel cpuUtilization = PolicyLoader.utilizationModel(up.getUtilizationModelCpuAlias());
-        UtilizationModel ramUtilization = PolicyLoader.utilizationModel(up.getUtilizationModelRamAlias());
-        UtilizationModel bwUtilization  = PolicyLoader.utilizationModel(up.getUtilizationModelBwAlias());
+        UtilizationModel cpuUtilization = PolicyLoader.utilizationModel(up.getUtilizationModelCpu());
+        UtilizationModel ramUtilization = PolicyLoader.utilizationModel(up.getUtilizationModelRam());
+        UtilizationModel bwUtilization  = PolicyLoader.utilizationModel(up.getUtilizationModelBw());
 
-        return new CloudletSimple(id, up.getLength(), up.getCloudletsPesNumber())
+        return new CloudletSimple(id, up.getLength(), up.getPes())
             .setFileSize(up.getFileSize())
             .setOutputSize(up.getOutputSize())
             .setUtilizationModelCpu(cpuUtilization)
@@ -280,9 +280,9 @@ public class CloudSimulation implements Runnable {
         final DatacenterRegistry dcr, int initialHostId) throws RuntimeException
     {
         int hostId;
-        final int hostNumber = dcr.getHostList().stream().mapToInt(HostRegistry::getAmount).sum();
+        final int hostNumber = dcr.getHosts().stream().mapToInt(HostRegistry::getAmount).sum();
         final List<Host> hostList = new ArrayList<>(hostNumber);
-        for (HostRegistry hr : dcr.getHostList()) {
+        for (HostRegistry hr : dcr.getHosts()) {
             for (int i = 0; i < hr.getAmount(); i++) {
                 List<Pe> peList = createHostProcessingElements(hr);
                 hostId = generateHostId(hr, ++initialHostId);
@@ -318,7 +318,7 @@ public class CloudSimulation implements Runnable {
     private Host createHost(final int hostId, final HostRegistry hr, final List<Pe> peList) throws RuntimeException {
         ResourceProvisioner ramProvisioner = PolicyLoader.newResourceProvisioner(hr);
         ResourceProvisioner bwProvisioner = PolicyLoader.newResourceProvisioner(hr);
-        VmScheduler vmScheduler = PolicyLoader.vmScheduler(hr.getSchedulingPolicyAlias());
+        VmScheduler vmScheduler = PolicyLoader.vmScheduler(hr.getVmScheduler());
 
         Host host = new HostSimple(hr.getRam(), hr.getBw(), hr.getStorage(), peList);
         host
@@ -347,8 +347,8 @@ public class CloudSimulation implements Runnable {
      * @see YamlCloudScenario#datacenterRegistries
      */
     private List<FileStorage> createSan(final DatacenterRegistry dcr) throws IllegalArgumentException {
-        final List<FileStorage> list = new ArrayList<>(dcr.getSanList().size());
-        for (SanStorageRegistry sr : dcr.getSanList()) {
+        final List<FileStorage> list = new ArrayList<>(dcr.getSans().size());
+        for (SanStorageRegistry sr : dcr.getSans()) {
             SanStorage san = new SanStorage(sr.getCapacity(), sr.getBandwidth(), sr.getNetworkLatency());
             list.add(san);
         }
@@ -388,9 +388,9 @@ public class CloudSimulation implements Runnable {
      * @return Returns the list of PEs created.
      */
     private List<Pe> createHostProcessingElements(final HostRegistry hr) {
-        final List<Pe> list = new ArrayList<>(hr.getNumOfPes());
-        for (int i = 0; i < hr.getNumOfPes(); i++) {
-            list.add(new PeSimple(hr.getMipsPerPe(), PolicyLoader.newPeProvisioner(hr)));
+        final List<Pe> list = new ArrayList<>(hr.getPes());
+        for (int i = 0; i < hr.getPes(); i++) {
+            list.add(new PeSimple(hr.getMips(), PolicyLoader.newPeProvisioner(hr)));
         }
 
         return list;

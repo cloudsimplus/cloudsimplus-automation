@@ -23,9 +23,6 @@ import org.cloudbus.cloudsim.power.models.PowerModel;
 import org.cloudbus.cloudsim.provisioners.PeProvisioner;
 import org.cloudbus.cloudsim.provisioners.ResourceProvisioner;
 import org.cloudbus.cloudsim.resources.Bandwidth;
-import org.cloudbus.cloudsim.resources.FileStorage;
-import org.cloudbus.cloudsim.resources.Pe;
-import org.cloudbus.cloudsim.resources.Ram;
 import org.cloudbus.cloudsim.schedulers.vm.VmScheduler;
 
 import java.io.Serializable;
@@ -39,69 +36,23 @@ import java.io.Serializable;
  * @since       1.0
  */
 public final class HostRegistry implements Serializable {
-    /** The host's id. */
     private int id;
-
-    /** The name suffix of the host's {@link VmScheduler} class. */
-    private String schedulingPolicyAlias;
-
-    /** The host's number of {@link Pe}. */
-    private int numOfPes;
-
-    /** The amount of mips by {@link Pe}. */
-    private double mipsPerPe;
-
-    /** The maximum power consumption. */
+    private int pes;
+    private double mips;
     private double maxPower;
-
-    /** The static power consumption percent. */
     private double staticPowerPercent;
-
-    /** The host's {@link PowerModel}. */
-    private String powerModelAlias;
-
-    /** The amount of {@link Ram}. */
     private int ram;
-
-    /** The name suffix of the host's RAM {@link ResourceProvisioner} class. */
-    private String ramProvisionerAlias;
-
-    /** The amount of {@link Bandwidth}. */
     private long bw;
-
-    /** The name suffix of the host's {@link Bandwidth} {@link ResourceProvisioner} class. */
-    private String bwProvisionerAlias;
-
-    /** The amount of hosts with this registry's specification
-     * owned by the datacenter. */
+    private String ramProvisioner;
+    private String bwProvisioner;
+    private String peProvisioner;
+    private String vmScheduler;
+    private String powerModel;
     private int amount;
-
-    /** The {@link FileStorage Storage} capacity. */
     private long storage;
 
-    /** The name suffix of the host's {@link PeProvisioner} class. */
-    private String peProvisionerAlias;
-
-    /**
-     * Creates a new host registry.
-     *
-     * @since 1.0
-     */
     public HostRegistry() {
         setAmount(1);
-        setSchedulingPolicyAlias("Time shared");
-        setNumOfPes(4);
-        setMipsPerPe(2400);
-        setMaxPower(250);
-        setStaticPowerPercent(0.7);
-        setPowerModelAlias("Linear");
-        setRam(40000);
-        setRamProvisionerAlias("Simple");
-        setBw(10000000);
-        setBwProvisionerAlias("Simple");
-        setAmount(1);
-        setStorage(1000000);
-        setPeProvisionerAlias("Simple");
     }
 
     /**
@@ -123,21 +74,21 @@ public final class HostRegistry implements Serializable {
     }
 
     /**
-     * Gets the host's scheduling policy.
+     * Gets the class name suffix for the Host's {@link VmScheduler}.
      *
-     * @return the host's scheduling policy.
+     * @return
      */
-    public String getSchedulingPolicyAlias() {
-        return schedulingPolicyAlias;
+    public String getVmScheduler() {
+        return vmScheduler;
     }
 
     /**
      * Sets the host's scheduling policy.
      *
-     * @param   schedulingPolicyAlias   the host's scheduling policy.
+     * @param   vmScheduler   the host's scheduling policy.
      */
-    public void setSchedulingPolicyAlias(String schedulingPolicyAlias) {
-        this.schedulingPolicyAlias = schedulingPolicyAlias;
+    public void setVmScheduler(String vmScheduler) {
+        this.vmScheduler = vmScheduler;
     }
 
     /**
@@ -145,8 +96,8 @@ public final class HostRegistry implements Serializable {
      *
      * @return the host's number of processing elements.
      */
-    public int getNumOfPes() {
-        return numOfPes;
+    public int getPes() {
+        return pes;
     }
 
     /**
@@ -154,8 +105,8 @@ public final class HostRegistry implements Serializable {
      *
      * @param   numOfpes    the host's number of processing elements.
      */
-    public void setNumOfPes(int numOfpes) {
-        this.numOfPes = numOfpes;
+    public void setPes(int numOfpes) {
+        this.pes = numOfpes;
     }
 
     /**
@@ -163,17 +114,17 @@ public final class HostRegistry implements Serializable {
      *
      * @return the amount of mips per processing elements.
      */
-    public double getMipsPerPe() {
-        return mipsPerPe;
+    public double getMips() {
+        return mips;
     }
 
     /**
      * Sets the amount of mips per processing elements.
      *
-     * @param   mipsPerPe   the amount of mips per processing elements.
+     * @param   mips   the amount of mips per processing elements.
      */
-    public void setMipsPerPe(double mipsPerPe) {
-        this.mipsPerPe = mipsPerPe;
+    public void setMips(double mips) {
+        this.mips = mips;
     }
 
     /**
@@ -212,21 +163,21 @@ public final class HostRegistry implements Serializable {
     }
 
     /**
-     * Gets the host's power model alias.
+     * Gets the name suffix of the class for Host's {@link PowerModel}.
      *
-     * @return the host's power model alias.
+     * @return
      */
-    public String getPowerModelAlias() {
-        return powerModelAlias;
+    public String getPowerModel() {
+        return powerModel;
     }
 
     /**
      * Sets the host's power model alias.
      *
-     * @param   powerModelAlias the host's power model alias.
+     * @param   powerModel the host's power model alias.
      */
-    public void setPowerModelAlias(String powerModelAlias) {
-        this.powerModelAlias = powerModelAlias;
+    public void setPowerModel(String powerModel) {
+        this.powerModel = powerModel;
     }
 
     /**
@@ -248,24 +199,6 @@ public final class HostRegistry implements Serializable {
     }
 
     /**
-     * Gets the host's RAM provisioner.
-     *
-     * @return the host's RAM provisioner.
-     */
-    public String getRamProvisionerAlias() {
-        return ramProvisionerAlias;
-    }
-
-    /**
-     * Sets the host's RAM provisioner.
-     *
-     * @param   ramProvisionerAlias the host's RAM provisioner.
-     */
-    public void setRamProvisionerAlias(String ramProvisionerAlias) {
-        this.ramProvisionerAlias = ramProvisionerAlias;
-    }
-
-    /**
      * Gets the host's bandwidth.
      *
      * @return the host's bandwidth.
@@ -284,21 +217,58 @@ public final class HostRegistry implements Serializable {
     }
 
     /**
-     * Gets the host's bandwidth provisioner.
+     * Gets the name suffix of the class for the host's RAM {@link ResourceProvisioner}.
      *
-     * @return the host's bandwidth provisioner.
+     * @return
      */
-    public String getBwProvisionerAlias() {
-        return bwProvisionerAlias;
+    public String getRamProvisioner() {
+        return ramProvisioner;
     }
 
     /**
-     * Sets the host's bandwidth provisioner.
+     * Sets the name suffix of the class for the host's RAM {@link ResourceProvisioner}.
      *
-     * @param bwProvisionerAlias    the host's bandwidth provisioner.
+     * @param   ramProvisioner the host's RAM provisioner class name suffix to set.
      */
-    public void setBwProvisionerAlias(String bwProvisionerAlias) {
-        this.bwProvisionerAlias = bwProvisionerAlias;
+    public void setRamProvisioner(String ramProvisioner) {
+        this.ramProvisioner = ramProvisioner;
+    }
+
+    /**
+     * Gets the name suffix of the class for Host's {@link Bandwidth} {@link ResourceProvisioner}.
+     *
+     * @return
+     */
+    public String getBwProvisioner() {
+        return bwProvisioner;
+    }
+
+    /**
+     * Sets the name suffix of the class for Host's {@link Bandwidth} {@link ResourceProvisioner}.
+     *
+     * @param bwProvisioner    the host's bandwidth provisioner class name suffix to set.
+     */
+    public void setBwProvisioner(String bwProvisioner) {
+        this.bwProvisioner = bwProvisioner;
+    }
+
+
+    /**
+     * Gets the name suffix of the class for the Host's {@link PeProvisioner}.
+     *
+     * @return
+     */
+    public String getPeProvisioner() {
+        return peProvisioner;
+    }
+
+    /**
+     * Sets the name suffix of the class for the Host's {@link PeProvisioner}.
+     *
+     * @param   peProvisioner  the host's processing elements provisioner class name suffix to set.
+     */
+    public void setPeProvisioner(String peProvisioner) {
+        this.peProvisioner = peProvisioner;
     }
 
     /**
@@ -338,24 +308,6 @@ public final class HostRegistry implements Serializable {
     }
 
     /**
-     * Gets the host's processing elements provisioner.
-     *
-     * @return the host's processing elements provisioner.
-     */
-    public String getPeProvisionerAlias() {
-        return peProvisionerAlias;
-    }
-
-    /**
-     * Sets the host's processing elements provisioner.
-     *
-     * @param   peProvisionerAlias  the host's processing elements provisioner.
-     */
-    public void setPeProvisionerAlias(String peProvisionerAlias) {
-        this.peProvisionerAlias = peProvisionerAlias;
-    }
-
-    /**
      * Indicates whether the host can allocate a virtual machine or not.
      *
      * @param   vmr     the virtual machine to be allocated.
@@ -363,9 +315,9 @@ public final class HostRegistry implements Serializable {
      *                  machine; <code>false</code> otherwise.
      * @since           1.0
      */
-    public boolean canRunVM(VirtualMachineRegistry vmr) {
+    public boolean canRunVM(VmRegistry vmr) {
         if(this.getRam()<vmr.getRam()) return false;
-        if((this.getNumOfPes()*this.getMipsPerPe()) < vmr.getMips()) return false;
+        if((this.getPes()*this.getMips()) < vmr.getMips()) return false;
         if(this.getBw()<vmr.getBw()) return false;
         if(this.getStorage()<vmr.getSize()) return false;
 
@@ -391,17 +343,17 @@ public final class HostRegistry implements Serializable {
     public String toString() {
         StringBuilder s = new StringBuilder("Host Id="+getId()+"\n");
         s.append("Amount="+getAmount()+"\n");
-        s.append("VM Scheduling ="+getSchedulingPolicyAlias()+"\n");
-        s.append("Processing Elements="+getNumOfPes()+"\n");
-        s.append("MIPS/PE="+getMipsPerPe()+"\n");
-        s.append("PE Provisioner ="+getPeProvisionerAlias()+"\n");
+        s.append("VM Scheduling ="+ getVmScheduler()+"\n");
+        s.append("Processing Elements="+ getPes()+"\n");
+        s.append("MIPS/PE="+ getMips()+"\n");
+        s.append("PE Provisioner ="+ getPeProvisioner()+"\n");
         s.append("Maximum Power="+getMaxPower()+"\n");
         s.append("Static Power Percent="+getStaticPowerPercent()+"\n");
-        s.append("Power Model ="+getPowerModelAlias()+"\n");
+        s.append("Power Model ="+ getPowerModel()+"\n");
         s.append("RAM="+getRam()+"\n");
-        s.append("RAM Provisioner ="+getRamProvisionerAlias()+"\n");
+        s.append("RAM Provisioner ="+ getRamProvisioner()+"\n");
         s.append("Bandwidth="+getBw()+"\n");
-        s.append("Bandwidth Provisioner ="+getBwProvisionerAlias()+"\n");
+        s.append("Bandwidth Provisioner ="+ getBwProvisioner()+"\n");
         s.append("Storage="+getStorage()+"\n");
 
         return s.toString();

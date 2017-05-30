@@ -29,37 +29,13 @@ import java.io.Serializable;
  * @since       1.0
  */
 public final class SanStorageRegistry implements Serializable {
-
-    /** The SAN's id. */
     private long id;
-
-    /** The SAN's name. */
     private String name;
-
-    /** The SAN's capacity. */
     private long capacity;
-
-    /** The SAN's bandwidth. */
     private double bandwidth;
-
-    /** The SAN's latency. */
     private double networkLatency;
 
-    /** The default constructor. */
-    public SanStorageRegistry() {}
-
-    /**
-     * Creates a new SAN registry with the given name.
-     *
-     * @param   name    the name of the SAN registry.
-     * @since           1.0
-     */
-    public SanStorageRegistry(String name) {
-        this();
-        setName(name);
-        setCapacity(10000000);
-        setBandwidth(10.0);
-        setNetworkLatency(5);
+    public SanStorageRegistry() {
     }
 
     /**
