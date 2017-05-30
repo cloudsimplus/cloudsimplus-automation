@@ -88,8 +88,8 @@ public final class Start {
 
         int i = 0;
         for (YamlCloudScenario scenario : reader.getScenarios()) {
-            final String ScenarioName = String.format("%d - %s", i++, reader.getFile().getName());
-            scenario.build(ScenarioName);
+            final String scenarioName = String.format("%d - %s", i++, reader.getFile().getName());
+            new CloudSimulation(scenario, scenarioName).run();
         }
     }
 
