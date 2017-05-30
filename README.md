@@ -4,6 +4,49 @@
 
 The tool releases researchers from writing Java code just to run simulation scenarios. This way, the attention can be focused on the problem to be solved, such as the creation of new algorithms for load balancing, new virtual machine scheduling policies, VM placement, resource provisioning, workload prediction, server consolidation, energy efficiency, cost reduction and so on. 
 
+A snippet of an YAML file used to automate the creation of CloudSim Plus simulation scenarios is presented below:
+
+```yml
+datacenters:
+  - !datacenter
+    amount: 1
+    vmAllocationPolicy: Simple
+    hosts:
+      - !host
+        amount: 8
+        ram: 1000000
+        bw: 100000
+        storage: 40000
+        pes: 4
+        mips: 50000
+        vmScheduler: TimeShared
+        ramProvisioner: Simple
+        bwProvisioner: Simple
+        peProvisioner: Simple
+customers:
+  - !customer
+    amount: 2
+    vms:
+      - !vm
+        amount: 2
+        size: 500
+        pes: 4
+        mips: 1000
+        ram: 2000
+        bw: 1000
+        cloudletScheduler: SpaceShared
+    cloudlets:
+      - !cloudlet
+        amount: 6
+        pes: 2
+        length: 100
+        fileSize: 50
+        outputSize: 70
+        utilizationModelCpu: Full
+        utilizationModelRam: Full
+        utilizationModelBw: Full
+```
+
 The main contributions of this work are:
 
 - to avoid programming on the creation of CloudSim Plus simulation environments;
