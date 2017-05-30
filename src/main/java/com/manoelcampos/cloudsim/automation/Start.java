@@ -84,8 +84,8 @@ public final class Start {
      */
     public void build() {
         System.out.printf(
-                "Starting %d Simulation Scenario(s) from file %s in CloudSim %s\n",
-                reader.getScenarios().size(), reader.getFile(), getCloudSimVersion());
+                "Starting %d Simulation Scenario(s) from file %s in CloudSim\n",
+                reader.getScenarios().size(), reader.getFile());
 
         int i = 0;
         for (YamlCloudScenario scenario : reader.getScenarios()) {
@@ -112,17 +112,4 @@ public final class Start {
         return args.length == 2 && ("false".equalsIgnoreCase(args[1]) || "0".equals(args[1]));
     }
 
-    /**
-     * Uses reflection to get the private constant indicating the CloudSim version.
-     * @return
-     */
-    public String getCloudSimVersion() {
-        try {
-            Field cloudSimVersionField = CloudSim.class.getField("CLOUDSIM_VERSION_STRING");
-            cloudSimVersionField.setAccessible(true);
-            return cloudSimVersionField.get(new CloudSim()).toString();
-        } catch (NoSuchFieldException | IllegalAccessException e) {
-            return "";
-        }
-    }
 }
