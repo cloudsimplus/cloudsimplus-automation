@@ -1,5 +1,5 @@
 --- #Delimits each Cloud Environment
-datacenterRegistries:
+datacenters:
   - !datacenter
     name: datacenter1
     amount: 1
@@ -121,7 +121,7 @@ datacenterRegistries:
         ramProvisionerAlias: Simple
         bwProvisionerAlias: Simple
         peProvisionerAlias: Simple
-customerRegistries:
+customers:
   - !customer
     name: Customer1
     amount: 1

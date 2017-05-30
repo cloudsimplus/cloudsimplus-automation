@@ -24,33 +24,8 @@ package org.cloudsimplus.automation;
 
 import cloudreports.models.*;
 import com.esotericsoftware.yamlbeans.YamlReader;
-import org.cloudbus.cloudsim.allocationpolicies.VmAllocationPolicy;
-import org.cloudbus.cloudsim.brokers.DatacenterBroker;
-import org.cloudbus.cloudsim.brokers.DatacenterBrokerSimple;
-import org.cloudbus.cloudsim.cloudlets.Cloudlet;
-import org.cloudbus.cloudsim.cloudlets.CloudletSimple;
-import org.cloudbus.cloudsim.core.CloudSim;
-import org.cloudbus.cloudsim.datacenters.Datacenter;
-import org.cloudbus.cloudsim.datacenters.DatacenterCharacteristics;
-import org.cloudbus.cloudsim.datacenters.DatacenterCharacteristicsSimple;
-import org.cloudbus.cloudsim.datacenters.DatacenterSimple;
-import org.cloudbus.cloudsim.hosts.Host;
-import org.cloudbus.cloudsim.hosts.HostSimple;
-import org.cloudbus.cloudsim.provisioners.ResourceProvisioner;
-import org.cloudbus.cloudsim.resources.FileStorage;
-import org.cloudbus.cloudsim.resources.Pe;
-import org.cloudbus.cloudsim.resources.PeSimple;
-import org.cloudbus.cloudsim.resources.SanStorage;
-import org.cloudbus.cloudsim.schedulers.cloudlet.CloudletScheduler;
-import org.cloudbus.cloudsim.schedulers.vm.VmScheduler;
-import org.cloudbus.cloudsim.utilizationmodels.UtilizationModel;
-import org.cloudbus.cloudsim.vms.Vm;
-import org.cloudbus.cloudsim.vms.VmSimple;
-import org.cloudsimplus.builders.tables.CloudletsTableBuilder;
 
 import java.util.*;
-
-import static java.util.stream.Collectors.toList;
 
 /**
  * Represents a Cloud Computing simulation scenario read from an YAML file.
@@ -75,11 +50,11 @@ import static java.util.stream.Collectors.toList;
  * @see YamlCloudScenarioReader
  */
 public class YamlCloudScenario {
-    /** @see #getDatacenterRegistries() */
-    private List<DatacenterRegistry> datacenterRegistries;
+    /** @see #getDatacenters() */
+    private List<DatacenterRegistry> datacenters;
 
-    /** @see #getCustomerRegistries() */
-    private List<CustomerRegistry> customerRegistries;
+    /** @see #getCustomers() */
+    private List<CustomerRegistry> customers;
 
     /**
      * A default constructor that is called by a {@link YamlReader} using
@@ -88,8 +63,8 @@ public class YamlCloudScenario {
      * @see YamlCloudScenarioReader
      */
     public YamlCloudScenario() {
-        this.customerRegistries = new ArrayList<>();
-        this.datacenterRegistries = new ArrayList<>();
+        this.customers = new ArrayList<>();
+        this.datacenters = new ArrayList<>();
     }
 
     /**
@@ -103,21 +78,21 @@ public class YamlCloudScenario {
      * created by CloudSim Plus.</p>
      * @return
      */
-    public List<DatacenterRegistry> getDatacenterRegistries() {
-        return datacenterRegistries;
+    public List<DatacenterRegistry> getDatacenters() {
+        return datacenters;
     }
 
     /**
      * Gets a List of {@link DatacenterRegistry} objects.
      *
-     * @param datacenterRegistries the datacenterRegistries to set
-     * @see #getDatacenterRegistries()
+     * @param datacenters the datacenters to set
+     * @see #getDatacenters()
      */
-    public void setDatacenterRegistries(final List<DatacenterRegistry> datacenterRegistries) {
-        if(datacenterRegistries == null){
+    public void setDatacenters(final List<DatacenterRegistry> datacenters) {
+        if(datacenters == null){
             return;
         }
-        this.datacenterRegistries = datacenterRegistries;
+        this.datacenters = datacenters;
     }
 
     /**
@@ -132,19 +107,19 @@ public class YamlCloudScenario {
      * </p>
      * @return
      */
-    public List<CustomerRegistry> getCustomerRegistries() {
-        return customerRegistries;
+    public List<CustomerRegistry> getCustomers() {
+        return customers;
     }
 
     /**
      * Sets a List of {@link CustomerRegistry} objects representing abstract information about customers (brokers).
-     * @param customerRegistries the customerRegistries to set
-     * @see #getCustomerRegistries()
+     * @param customers the customers to set
+     * @see #getCustomers()
      */
-    public void setCustomerRegistries(final List<CustomerRegistry> customerRegistries) {
-        if(customerRegistries == null){
+    public void setCustomers(final List<CustomerRegistry> customers) {
+        if(customers == null){
             return;
         }
-        this.customerRegistries = customerRegistries;
+        this.customers = customers;
     }
 }

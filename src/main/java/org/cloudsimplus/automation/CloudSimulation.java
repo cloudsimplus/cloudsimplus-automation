@@ -95,10 +95,10 @@ public class CloudSimulation implements Runnable {
      * @see YamlCloudScenario#customerRegistries
      */
     private Map<DatacenterBroker, CustomerRegistry> createDatacenterBrokersFromCustomerRegistries() {
-        final int totalBrokerAmount = scenario.getCustomerRegistries().stream().mapToInt(CustomerRegistry::getAmount).sum();
+        final int totalBrokerAmount = scenario.getCustomers().stream().mapToInt(CustomerRegistry::getAmount).sum();
         final Map<DatacenterBroker, CustomerRegistry> list = new HashMap<>(totalBrokerAmount);
         int brokerCount = 0;
-        for (CustomerRegistry cr: scenario.getCustomerRegistries()) {
+        for (CustomerRegistry cr: scenario.getCustomers()) {
             for (int i = 0; i < cr.getAmount(); i++) {
                 list.put(new DatacenterBrokerSimple(cloudsimplus), cr);
             }
@@ -243,9 +243,9 @@ public class CloudSimulation implements Runnable {
     private List<Datacenter> createDatacentersFromDatacenterRegistries() throws IllegalArgumentException {
         String datacenterName;
         int datacenterCount = 0;
-        final int datacenterNumber = scenario.getDatacenterRegistries().stream().mapToInt(DatacenterRegistry::getAmount).sum();
+        final int datacenterNumber = scenario.getDatacenters().stream().mapToInt(DatacenterRegistry::getAmount).sum();
         final List<Datacenter> datacenterList = new ArrayList<>(datacenterNumber);
-        for (DatacenterRegistry dcr : scenario.getDatacenterRegistries()) {
+        for (DatacenterRegistry dcr : scenario.getDatacenters()) {
             int hostCount = 0;
             for (int i = 0; i < dcr.getAmount(); i++) {
                 datacenterName = generateDataCenterName(dcr, ++datacenterCount);
