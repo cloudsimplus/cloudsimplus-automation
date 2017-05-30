@@ -28,26 +28,26 @@ import org.cloudbus.cloudsim.core.CloudSim;
 import java.io.FileNotFoundException;
 
 /**
- * Starts the tool by loading a Cloud Computing simulation environment from an YAML file given by command line.
+ * Starts the tool by loading a Cloud Computing simulation scenario from an YAML file given by command line.
  * This is the bootstrap class that starts the tool and parses command line arguments.
  *
  * @author Manoel Campos da Silva Filho
- * @see YamlCloudEnvironmentReader
+ * @see YamlCloudScenarioReader
  */
 public final class Start {
     /**
      * Command line args (see {@link #main(String[])}).
      */
     private final String[] args;
-    private YamlCloudEnvironmentReader reader;
+    private YamlCloudScenarioReader reader;
 
     /**
      * Executes the command line interface of the applications.
      *
      * @param args Arg 0: The name of YAML file containing
-     *             the simulation environments to be created.
-     *             Each YAML file can contain multiples environments to be created together.
-     *             This is made only adding a --- separator between each environment.
+     *             the simulation scenarios to be created.
+     *             Each YAML file can contain multiples scenarios to be created together.
+     *             This is made only adding a --- separator between each scenario.
      *             <br>
      *             Arg 1: false or 0 to disable the CloudSim Plus Log (optional)
      */
@@ -63,8 +63,8 @@ public final class Start {
     private Start(final String[] args){
         this.args = args;
         try {
-            this.reader = new YamlCloudEnvironmentReader(getFileNameFromCommandLine(), isToDisableLog());
-            if(reader.getEnvironments().isEmpty()) {
+            this.reader = new YamlCloudScenarioReader(getFileNameFromCommandLine(), isToDisableLog());
+            if(reader.getScenarios().isEmpty()) {
                 System.err.println("Your YAML file is empty.\n");
             }
             build();
@@ -79,17 +79,17 @@ public final class Start {
     }
 
     /**
-     * Builds and run the Cloud Computing simulation environments loaded from the YAML file.
+     * Builds and run Cloud Computing simulation scenarios loaded from the YAML file.
      */
     public void build() {
         System.out.printf(
-            "Starting %d Simulation Environments(s) from file %s in CloudSim Plus %s\n",
-            reader.getEnvironments().size(), reader.getFile(), CloudSim.VERSION);
+            "Starting %d Simulation Scenario(s) from file %s in CloudSim Plus %s\n",
+            reader.getScenarios().size(), reader.getFile(), CloudSim.VERSION);
 
         int i = 0;
-        for (YamlCloudEnvironment env : reader.getEnvironments()) {
-            final String environmentName = String.format("%d - %s", i++, reader.getFile().getName());
-            env.build(environmentName);
+        for (YamlCloudScenario scenario : reader.getScenarios()) {
+            final String ScenarioName = String.format("%d - %s", i++, reader.getFile().getName());
+            scenario.build(ScenarioName);
         }
     }
 

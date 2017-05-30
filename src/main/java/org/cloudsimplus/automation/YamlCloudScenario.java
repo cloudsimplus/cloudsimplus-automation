@@ -49,31 +49,30 @@ import org.cloudbus.cloudsim.vms.VmSimple;
 import org.cloudsimplus.builders.tables.CloudletsTableBuilder;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
 
 /**
- * Represents a Cloud Computing simulation environment read from an YAML file.
- * Each environment inside an YAML file is represented by an object of this class.
+ * Represents a Cloud Computing simulation scenario read from an YAML file.
+ * Each scenario inside an YAML file is represented by an object of this class.
  * It stores all data representing the simulation to be created in <a href="http://cloudsimplus.org">CloudSim Plus</a>
  * and enables one to build and execute the simulation.
  *
  * <p><b>Objects of this class are created automatically by
- * a {@link YamlCloudEnvironmentReader} class.</b>
+ * a {@link YamlCloudScenarioReader} class.</b>
  * After you have one of these instances, you may
  * call the {@link #build()} method
  * on it to create and run the Cloud Computing simulation using CloudSim Plus.</p>
  *
  * <p>
- * Each environment inside the YAML file can be delimited using 3 dashes:<br>
+ * Each scenario inside the YAML file can be delimited using 3 dashes:<br>
  * <center><b>---</b></center>
  * </p>
  *
  * @author Manoel Campos da Silva Filho
- * @see YamlCloudEnvironmentReader
+ * @see YamlCloudScenarioReader
  */
-public class YamlCloudEnvironment {
+public class YamlCloudScenario {
     private List<DatacenterRegistry> datacenterRegistries;
     private List<CustomerRegistry> customerRegistries;
 
@@ -87,9 +86,9 @@ public class YamlCloudEnvironment {
      * A default constructor that is called by a {@link YamlReader} using
      * reflection. This way, usually objects of this class don't have to be created manually.
      *
-     * @see YamlCloudEnvironmentReader
+     * @see YamlCloudScenarioReader
      */
-    public YamlCloudEnvironment() {
+    public YamlCloudScenario() {
         this.datacenters = new ArrayList<>();
         this.customerRegistries = new ArrayList<>();
         this.datacenterRegistries = new ArrayList<>();
@@ -115,7 +114,7 @@ public class YamlCloudEnvironment {
      * using such a framework.
      *
      * @param label A label to be used to identify the running
-     *              simulation environment. Commonly this can be the name
+     *              simulation scenario. Commonly this can be the name
      *              of the loaded YAML file.
      * @throws IllegalArgumentException Throws when the method,
      *                                  starting from the information at YAML file,
@@ -158,7 +157,7 @@ public class YamlCloudEnvironment {
      * used to create each concrete CloudSim customer ({@link DatacenterBroker}).
      *
      * @return Returns the map created.
-     * @see YamlCloudEnvironment#customerRegistries
+     * @see YamlCloudScenario#customerRegistries
      */
     private Map<DatacenterBroker, CustomerRegistry> createConcreteDatacenterBrokersFromAbstractCustomerRegistries() {
         final int totalBrokerAmount = customerRegistries.stream().mapToInt(CustomerRegistry::getAmount).sum();
@@ -179,7 +178,7 @@ public class YamlCloudEnvironment {
      * @param cr the information about the customers, which are represented
      *           in CloudSim Plus by {@link DatacenterBroker} objects.
      * @return the a map containing the list of created VMs for each customer (DatacenterBroker).
-     * @see YamlCloudEnvironment#createConcreteDatacenterBrokersFromAbstractCustomerRegistries()
+     * @see YamlCloudScenario#createConcreteDatacenterBrokersFromAbstractCustomerRegistries()
      */
     private Map<DatacenterBroker, List<Vm>> createConcreteVmListForAllBrokers(
         final Map<DatacenterBroker, CustomerRegistry> cr)
@@ -203,7 +202,7 @@ public class YamlCloudEnvironment {
      *           in CloudSim Plus by {@link DatacenterBroker} objects.
      * @param createdVms the number of VMs already created.
      * @return the a map containing the list of created VMs for the given customer (DatacenterBroker).
-     * @see YamlCloudEnvironment#createConcreteDatacenterBrokersFromAbstractCustomerRegistries()
+     * @see YamlCloudScenario#createConcreteDatacenterBrokersFromAbstractCustomerRegistries()
      */
     private List<Vm> createConcreteVmListForOneBroker(
         final DatacenterBroker broker,
@@ -305,7 +304,7 @@ public class YamlCloudEnvironment {
      *                                  starting from the information at YAML file,
      *                                  sets invalid parameters for CloudSim Datacenter objects
      *                                  to be created.
-     * @see YamlCloudEnvironment#datacenterRegistries
+     * @see YamlCloudScenario#datacenterRegistries
      */
     private List<Datacenter> createConcreteDatacentersFromAbstractDatacenterRegistries() throws IllegalArgumentException {
         String datacenterName;
@@ -341,7 +340,7 @@ public class YamlCloudEnvironment {
      * @param initialHostId the ID for the first Host to be created
      * @return the list of created hosts from the specified datacenterRegistry.
      * @throws RuntimeException
-     * @see YamlCloudEnvironment#datacenterRegistries
+     * @see YamlCloudScenario#datacenterRegistries
      */
     private List<Host> createConcreteHostsFromAbstractHostRegistries(
         final DatacenterRegistry dcr, int initialHostId) throws RuntimeException
@@ -411,7 +410,7 @@ public class YamlCloudEnvironment {
      *                                  starting from the information at YAML file,
      *                                  sets invalid parameters for CloudSim SAN objects
      *                                  to be created.
-     * @see YamlCloudEnvironment#datacenterRegistries
+     * @see YamlCloudScenario#datacenterRegistries
      */
     private List<FileStorage> createSan(final DatacenterRegistry dcr) throws IllegalArgumentException {
         final List<FileStorage> list = new ArrayList<>(dcr.getSanList().size());
@@ -432,7 +431,7 @@ public class YamlCloudEnvironment {
      *                  to be used to define the Datacenter characteristics.
      * @param hostList  The list of hosts of the Datacenter
      * @return Returns the DatacenterCharacteristics object created.
-     * @see YamlCloudEnvironment#createDatacenterCharacteristics(DatacenterRegistry, List)
+     * @see YamlCloudScenario#createDatacenterCharacteristics(DatacenterRegistry, List)
      */
     private DatacenterCharacteristics createDatacenterCharacteristics(
         final DatacenterRegistry dcr, List<Host> hostList)
@@ -468,7 +467,7 @@ public class YamlCloudEnvironment {
      * These objects contain, for instance, the amount of datacenters
      * to be created and the host amount and configurations.
      *
-     * <p>Each YAML environment can have multiple datacenters
+     * <p>Each YAML scenario can have multiple datacenters
      * that are abstractly specified using DatacenterRegistry
      * objects. The concrete datacenters are
      * created by CloudSim Plus.</p>
@@ -496,7 +495,7 @@ public class YamlCloudEnvironment {
      * These objects contain, for instance, the amount of customers
      * to be created and the VM amount and configurations.
      *
-     * <p>Each YAML environment can have multiple customers
+     * <p>Each YAML scenario can have multiple customers
      * that are abstractly specified using CustomerRegistry
      * objects. The concrete customers are
      * created by CloudSim Plus as its DatacenterBroker objects.

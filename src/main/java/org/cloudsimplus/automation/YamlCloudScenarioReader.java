@@ -13,64 +13,64 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Reads Cloud Computing simulation environments
- * from an YAML file and stores them into a {@link #getEnvironments() List} of
- * {@link YamlCloudEnvironment} objects.
- * These {@link YamlCloudEnvironment} are built using <a href="http://cloudsimplus.org">CloudSim Plus</a>.
+ * Reads Cloud Computing simulation scenarios
+ * from an YAML file and stores them into a {@link #getScenarios() List} of
+ * {@link YamlCloudScenario} objects.
+ * These {@link YamlCloudScenario} are built using <a href="http://cloudsimplus.org">CloudSim Plus</a>.
  *
- * <p>To create simulation environments from an YAML file,
+ * <p>To create simulation scenarios from an YAML file,
  * you have to use the class constructor that will try
  * to read the given file.
- * The environments read will be available in the {@link #getEnvironments() environments} attribute.
- * Then, to build and run each simulation environment in CloudSim Plus,
- * just call {@link YamlCloudEnvironment#build()}.
+ * The scenarios read will be available in the {@link #getScenarios() scenarios} attribute.
+ * Then, to build and run each simulation scenario in CloudSim Plus,
+ * just call {@link YamlCloudScenario#build()}.
  * </p>
  *
  * @author Manoel Campos da Silva Filho
- * @see YamlCloudEnvironment
+ * @see YamlCloudScenario
  */
-public class YamlCloudEnvironmentReader {
+public class YamlCloudScenarioReader {
     private final File file;
-    private final List<YamlCloudEnvironment> environments;
+    private final List<YamlCloudScenario> scenarios;
 
     /**
-     * Instantiates a YamlCloudEnvironmentReader and
-     * reads the YAML file containing the data to create Cloud Computing simulation environments.
-     * Then, the List of simulation environments can be accessed using {@link #getEnvironments()}.
+     * Instantiates a YamlCloudScenarioReader and
+     * reads the YAML file containing the data to create Cloud Computing simulation scenarios.
+     * Then, the List of simulation scenarios can be accessed using {@link #getScenarios()}.
      * It doesn't create the simulation scenarios in CloudSim Plus.
-     * Each one added to the List should be created calling {@link YamlCloudEnvironment#build()}.
+     * Each one added to the List should be created calling {@link YamlCloudScenario#build()}.
      *
      * @param filePath the path of the YAML file to read
      * @param disableLog indicate if CloudSim Plus log must be disabled or not
      */
-    public YamlCloudEnvironmentReader(final String filePath, final boolean disableLog) throws IllegalArgumentException, FileNotFoundException, YamlException {
+    public YamlCloudScenarioReader(final String filePath, final boolean disableLog) throws IllegalArgumentException, FileNotFoundException, YamlException {
         this.file = new File(filePath);
 
         if (filePath == null || "".equals(filePath)) {
-            throw new IllegalArgumentException("You must specify an YAML file, containing the CloudSim simulation environment, as command line parameter.");
+            throw new IllegalArgumentException("You must specify an YAML file, containing the CloudSim simulation scenario, as command line parameter.");
         }
         Log.setDisabled(disableLog);
 
-        this.environments = readYamlFile();
+        this.scenarios = readYamlFile();
     }
 
     /**
-     * Reads the YAML file containing the data to creat Cloud Computing simulation environments.
+     * Reads the YAML file containing the data to creat Cloud Computing simulation scenarios.
      *
-     * @return a List of simulation environments specified inside the YAML file.
+     * @return a List of simulation scenarios specified inside the YAML file.
      * @throws FileNotFoundException when the YAML file is not found.
      * @throws YamlException         when there is any error parsing the YAML file.
      */
-    private List<YamlCloudEnvironment> readYamlFile() throws FileNotFoundException, YamlException {
-        final List<YamlCloudEnvironment> envs = new ArrayList<YamlCloudEnvironment>();
+    private List<YamlCloudScenario> readYamlFile() throws FileNotFoundException, YamlException {
+        final List<YamlCloudScenario> scenarios = new ArrayList<YamlCloudScenario>();
         final YamlReader reader = createYamlReader();
 
-        YamlCloudEnvironment env;
-        while ((env = reader.read(YamlCloudEnvironment.class)) != null) {
-            envs.add(env);
+        YamlCloudScenario scenario;
+        while ((scenario = reader.read(YamlCloudScenario.class)) != null) {
+            scenarios.add(scenario);
         }
 
-        return envs;
+        return scenarios;
     }
 
     /**
@@ -104,10 +104,10 @@ public class YamlCloudEnvironmentReader {
     }
 
     /**
-     * Gets the List of Cloud Simulation environments loaded from the {@link #getFile() YAML file}.
+     * Gets the List of Cloud Simulation scenarios loaded from the {@link #getFile() YAML file}.
      * @return
      */
-    public List<YamlCloudEnvironment> getEnvironments() {
-        return environments;
+    public List<YamlCloudScenario> getScenarios() {
+        return scenarios;
     }
 }
