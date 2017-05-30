@@ -4,7 +4,7 @@
 
     <groupId>com.manoelcampos</groupId>
     <artifactId>CloudSimAutomation</artifactId>
-    <version>1.1.2</version>
+    <version>0.4.0</version>
     <packaging>jar</packaging>
 
     <name>CloudSimAutomation</name>
@@ -12,9 +12,7 @@
     <url>https://github.com/manoelcampos/CloudSimAutomation</url>
 
     <organization>
-        <name>Universidade da Beira Interior (UBI) - Instituto Federal de Educação Ciência e Tecnologia do Tocantins
-            (IFTO)
-        </name>
+        <name>Universidade da Beira Interior (UBI) - Instituto Federal de Educação Ciência e Tecnologia do Tocantins(IFTO)</name>
         <url>http://www.ubi.pt http://www.ifto.edu.br</url>
     </organization>
 
@@ -206,8 +204,8 @@
         </dependency>
         <dependency>
             <groupId>org.cloudbus.cloudsim</groupId>
-            <artifactId>modules</artifactId>
-            <version>3.1-SNAPSHOT</version>
+            <artifactId>cloudsim</artifactId>
+            <version>4.0</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>
