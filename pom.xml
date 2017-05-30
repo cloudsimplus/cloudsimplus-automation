@@ -73,7 +73,7 @@
                             <!-- Defines the root folder where the dependencies are. In this case
                              is the the root of the local maven repository. !-->
                             <classpathPrefix>${user.home}/.m2/repository/</classpathPrefix>
-                            <mainClass>com.manoelcampos.cloudsim.automation.Main</mainClass>
+                            <mainClass>com.manoelcampos.cloudsim.automation.Start</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

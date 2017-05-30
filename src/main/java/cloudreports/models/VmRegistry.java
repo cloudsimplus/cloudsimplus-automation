@@ -28,58 +28,19 @@ import java.io.Serializable;
  * @author      Thiago T. Sá
  * @since       1.0
  */
-public final class VirtualMachineRegistry implements Serializable{
-
-    /** The id of the virtual machine. */
+public final class VmRegistry implements Serializable{
     private long id;
-    
-    /** The virtual machine's image image size. */
-    private long size;
-    
-    /** The number of processing elements used by the virtual machine. */
-    private int pesNumber;
-    
-    /** The amount of mips required by the virtual machine. */
-    private double mips;
-    
-    /** The amount of RAM required by the virtual machine. */
-    private int ram;
-    
-    /** The amount of bandwidth required by the virtual machine. */
-    private long bw;
-    
-    /** The priority of the virtual machine. */
-    private int priority;
-    
-    /** The virtual machine's type of hypervisor. */
-    private String vmm;
-    
-    /** The virtual machine's scheduling policy. */
-    private String schedulingPolicyAlias;
-    
-    /** The amount of virtual machines with this registry's specification
-     * owned by the customer. */
     private int amount;
-    
-    /**
-     * VM inter arrival time mean following the exponential distribution
-     * that activate dynamic VM arrival.
-     * When defined, the amount attribute is ignored
-     * and it will be created VM during all the simulation time,
-     * following the VM inter arrival time defined here.
-     */
-    private double interArrivalTimeMean = 0.0;
+    private long size;
+    private int pes;
+    private double mips;
+    private int ram;
+    private long bw;
+    private int priority;
+    private String vmm;
+    private String cloudletScheduler;
 
-    /** The default constructor. */
-    public VirtualMachineRegistry() {
-        setSize(1000);
-        setPesNumber(1);
-        setMips(1000);
-        setRam(512);
-        setBw(100000);
-        setPriority(1);
-        setVmm("Xen");
-        setSchedulingPolicyAlias("Dynamic workload");
+    public VmRegistry() {
         setAmount(1);
     }
 
@@ -124,17 +85,17 @@ public final class VirtualMachineRegistry implements Serializable{
      * 
      * @return the virtual machine's number of processing elements.
      */
-    public int getPesNumber() {
-        return pesNumber;
+    public int getPes() {
+        return pes;
     }
 
     /**
      * Sets the virtual machine's number of processing elements.
      * 
-     * @param   pesNumber   the virtual machine's number of processing elements.
+     * @param   pes   the virtual machine's number of processing elements.
      */
-    public void setPesNumber(int pesNumber) {
-        this.pesNumber = pesNumber;
+    public void setPes(int pes) {
+        this.pes = pes;
     }
 
     /**
@@ -246,28 +207,28 @@ public final class VirtualMachineRegistry implements Serializable{
     }
 
     /**
-     * Gets the virtual machine's scheduling policy.
+     * Gets the VM's scheduling policy class name suffix.
      * 
-     * @return the virtual machine's scheduling policy.
+     * @return
      */
-    public String getSchedulingPolicyAlias() {
-        return schedulingPolicyAlias;
+    public String getCloudletScheduler() {
+        return cloudletScheduler;
     }
 
     /**
-     * Sets the virtual machine's scheduling policy.
+     * Sets the VM's scheduling policy class name suffix.
      * 
-     * @param   schedulingPolicyAlias   the virtual machine's scheduling policy.
+     * @param   cloudletScheduler   the VM's scheduling policy class name suffix to set
      */
-    public void setSchedulingPolicyAlias(String schedulingPolicyAlias) {
-        this.schedulingPolicyAlias = schedulingPolicyAlias;
+    public void setCloudletScheduler(String cloudletScheduler) {
+        this.cloudletScheduler = cloudletScheduler;
     }
     
     @Override
     public boolean equals(Object virtualMachine){
       if ( this == virtualMachine ) return true;
-      if ( !(virtualMachine instanceof VirtualMachineRegistry) ) return false;
-      VirtualMachineRegistry vr = (VirtualMachineRegistry)virtualMachine;
+      if ( !(virtualMachine instanceof VmRegistry) ) return false;
+      VmRegistry vr = (VmRegistry)virtualMachine;
       return this.getId() == vr.getId();
     }
 
@@ -283,7 +244,7 @@ public final class VirtualMachineRegistry implements Serializable{
         StringBuilder s = new StringBuilder("VM Id="+getId()+"\n");
         s.append("Number of VMs="+getAmount()+"\n");
         s.append("Image size="+getSize()+"\n");
-        s.append("VM processors="+getPesNumber()+"\n");
+        s.append("VM processors="+ getPes()+"\n");
         s.append("VM MIPS="+getMips()+"\n");
         s.append("VM RAM="+getRam()+"\n");
         s.append("VM Bandwidth="+getBw()+"\n");
@@ -292,19 +253,5 @@ public final class VirtualMachineRegistry implements Serializable{
         else s.append("Hypervisor=kvm\n");
 
         return s.toString();
-    }
-
-    /**
-     * @return the interArrivalTimeMean
-     */
-    public double getInterArrivalTimeMean() {
-        return interArrivalTimeMean;
-    }
-
-    /**
-     * @param interArrivalTimeMean the interArrivalTimeMean to set
-     */
-    public void setInterArrivalTimeMean(double interArrivalTimeMean) {
-        this.interArrivalTimeMean = interArrivalTimeMean;
     }
 }
