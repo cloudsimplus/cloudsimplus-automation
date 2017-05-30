@@ -19,6 +19,8 @@
 
 package cloudreports.models;
 
+import org.cloudbus.cloudsim.allocationpolicies.VmAllocationPolicy;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -33,101 +35,33 @@ import java.util.List;
  * @since       1.0
  */
 public final class DatacenterRegistry implements Serializable{
-
-    /** The datacenter's id. */
     private long id;
-
-    /** The datacenter's name. */
     private String name;
-
     private Integer amount;
-
-    /** The datacenter's architecture. */
     private String architecture;
-
-    /** The datacenter's operating system. */
     private String os;
-
-    /** The datacenter's hypervisor. */
     private String vmm;
-
-    /** The datacenter's time zone. */
     private double timeZone;
-
-    /** The alias of the datacenter's allocation policy. */
-    private String allocationPolicyAlias;
-
-    /** Indicates whether virtual machines migrations are enabled or not. */
+    private String vmAllocationPolicy;
     private boolean vmMigration;
-
-    /** The list of hosts owned by the datacenter. */
-    private List<HostRegistry> hostList;
-
-    /** The cost by second of processing. */
+    private List<HostRegistry> hosts;
     private double costPerSec;
-
-    /** The cost by RAM usage. */
     private double costPerMem;
-
-    /** The cost by storage usage. */
     private double costPerStorage;
-
-    /** The cost by bandwidth usage. */
     private double costPerBw;
-
-    /** The list of SAN owned by the datacenter. */
-    private List<SanStorageRegistry> sanList;
-
-    /** The upper utilization threshold of the datacenter. */
+    private List<SanStorageRegistry> sans;
     private double upperUtilizationThreshold;
-
-    /** The lower utilization threshold of the datacenter. */
     private double lowerUtilizationThreshold;
-
-    /** The datacenter's scheduling interval. */
     private double schedulingInterval;
 
-    /** The datacenter's monitoring interval. */
-    private double monitoringInterval;
-
-    /** The default constructor. */
     public DatacenterRegistry() {
         setAmount(1);
-        sanList = new ArrayList<>();
-        hostList = new ArrayList<>();
-    }
-
-    /**
-     * Creates a new datacenter registry with the given name.
-     *
-     * @param   name    the name of the datacenter registry.
-     * @since           1.0
-     */
-    public DatacenterRegistry(String name) {
-        this();
-        setName(name);
+        sans = new ArrayList<>();
+        hosts = new ArrayList<>();
         setArchitecture("x86");
         setOs("Linux");
         setVmm("Xen");
-        setTimeZone(-3.0);
-        setAllocationPolicyAlias("Single threshold");
-        setVmMigration(true);
-        setCostPerSec(0.1);
-        setCostPerMem(0.05);
-        setCostPerStorage(0.001);
-        setCostPerBw(0.1);
-        setUpperUtilizationThreshold(0.8);
-        setLowerUtilizationThreshold(0.2);
-        setSchedulingInterval(30);
-        setMonitoringInterval(180);
-
-        //Create host list
-        setHostList(new LinkedList<>());
-        getHostList().add(new HostRegistry());
-
-        //Create SAN Storage List
-        setSanList(new LinkedList<>());
-        getSanList().add(new SanStorageRegistry("SAN1"));
+        setSchedulingInterval(0);
     }
 
     /**
@@ -239,21 +173,21 @@ public final class DatacenterRegistry implements Serializable{
     }
 
     /**
-     * Gets the datacenter's allocation policy.
+     * Gets the class name suffix for Datacenter's {@link VmAllocationPolicy}.
      *
-     * @return the datacenter's allocation policy.
+     * @return
      */
-    public String getAllocationPolicyAlias() {
-        return allocationPolicyAlias;
+    public String getVmAllocationPolicy() {
+        return vmAllocationPolicy;
     }
 
     /**
      * Sets the datacenter's allocation policy.
      *
-     * @param   allocationPolicyAlias   the datacenter's allocation policy.
+     * @param   vmAllocationPolicy   the datacenter's allocation policy.
      */
-    public void setAllocationPolicyAlias(String allocationPolicyAlias) {
-        this.allocationPolicyAlias = allocationPolicyAlias;
+    public void setVmAllocationPolicy(String vmAllocationPolicy) {
+        this.vmAllocationPolicy = vmAllocationPolicy;
     }
 
     /**
@@ -281,17 +215,17 @@ public final class DatacenterRegistry implements Serializable{
      *
      * @return the datacenter's host list.
      */
-    public List<HostRegistry> getHostList() {
-        return hostList;
+    public List<HostRegistry> getHosts() {
+        return hosts;
     }
 
     /**
      * Sets the datacenter's hosts list.
      *
-     * @param   hostList    the datacenter's host list.
+     * @param   hosts    the datacenter's host list.
      */
-    public void setHostList(List<HostRegistry> hostList) {
-        this.hostList = hostList;
+    public void setHosts(List<HostRegistry> hosts) {
+        this.hosts = hosts;
     }
 
     /**
@@ -371,17 +305,17 @@ public final class DatacenterRegistry implements Serializable{
      *
      * @return the datacenter's SAN list.
      */
-    public List<SanStorageRegistry> getSanList() {
-        return sanList;
+    public List<SanStorageRegistry> getSans() {
+        return sans;
     }
 
     /**
      * Sets the datacenter's SAN list.
      *
-     * @param   sanList the datacenter's SAN list.
+     * @param   sans the datacenter's SAN list.
      */
-    public void setSanList(List<SanStorageRegistry> sanList) {
-        this.sanList = sanList;
+    public void setSans(List<SanStorageRegistry> sans) {
+        this.sans = sans;
     }
 
     /**
@@ -440,24 +374,6 @@ public final class DatacenterRegistry implements Serializable{
         this.lowerUtilizationThreshold = lowerUtilizationThreshold;
     }
 
-    /**
-     * Gets the datacenter's monitoring interval.
-     *
-     * @return the datacenter's monitoring interval.
-     */
-    public double getMonitoringInterval() {
-        return monitoringInterval;
-    }
-
-    /**
-     * Sets the datacenter's monitoring interval.
-     *
-     * @param   monitoringInterval  the datacenter's monitoring interval.
-     */
-    public void setMonitoringInterval(double monitoringInterval) {
-        this.monitoringInterval = monitoringInterval;
-    }
-
     @Override
     public boolean equals(Object datacenter){
       if ( this == datacenter ) return true;
@@ -479,7 +395,7 @@ public final class DatacenterRegistry implements Serializable{
         s.append("Architecture=").append(getArchitecture()).append("\n");
         s.append("Operating System=").append(getOs()).append("\n");
         s.append("Hypervisor=").append(getVmm()).append("\n");
-        s.append("Allocation Policy ID=").append(getAllocationPolicyAlias()).append("\n");
+        s.append("Allocation Policy ID=").append(getVmAllocationPolicy()).append("\n");
         s.append("Time Zone (GMT)=").append(getTimeZone()).append("\n");
         s.append("VM Migrations=").append(isVmMigration()).append("\n");
         s.append("Upper Utilization threshold=").append(getUpperUtilizationThreshold()).append("\n");
@@ -491,13 +407,13 @@ public final class DatacenterRegistry implements Serializable{
         s.append("Bandwidth Cost=").append(getCostPerBw()).append("\n");
 
         s.append("\n++Beginning of hosts list++\n");
-        for(HostRegistry hr : getHostList()) {
+        for(HostRegistry hr : getHosts()) {
             s.append("\n").append(hr.toString());
         }
         s.append("\n++End of hosts list++\n");
 
         s.append("\n++Beginning of SAN list++\n");
-        for(SanStorageRegistry sr : getSanList()) {
+        for(SanStorageRegistry sr : getSans()) {
             s.append("\n").append(sr.toString());
         }
         s.append("\n++End of SAN list++\n");

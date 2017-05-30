@@ -33,11 +33,10 @@ import java.util.logging.Logger;
 
 import cloudreports.models.DatacenterRegistry;
 import cloudreports.models.HostRegistry;
-import cloudreports.models.VirtualMachineRegistry;
+import cloudreports.models.VmRegistry;
 import org.cloudbus.cloudsim.allocationpolicies.VmAllocationPolicy;
 import org.cloudbus.cloudsim.provisioners.PeProvisioner;
 import org.cloudbus.cloudsim.provisioners.ResourceProvisioner;
-import org.cloudbus.cloudsim.resources.*;
 import org.cloudbus.cloudsim.schedulers.cloudlet.CloudletScheduler;
 import org.cloudbus.cloudsim.schedulers.vm.VmScheduler;
 import org.cloudbus.cloudsim.utilizationmodels.UtilizationModel;
@@ -96,16 +95,16 @@ public class PolicyLoader {
     }
 
     public static ResourceProvisioner newResourceProvisioner(final HostRegistry hr) throws RuntimeException {
-        return resourceProvisioner("", hr.getBwProvisionerAlias());
+        return resourceProvisioner("", hr.getBwProvisioner());
     }
 
     public static PeProvisioner newPeProvisioner(final HostRegistry hr) throws RuntimeException {
-        return resourceProvisioner("Pe", hr.getPeProvisionerAlias());
+        return resourceProvisioner("Pe", hr.getPeProvisioner());
     }
 
     public static VmAllocationPolicy vmAllocationPolicy(final DatacenterRegistry dcr) throws RuntimeException {
         try {
-            String classSufix = generateFullClassName(PKG+".allocationpolicies","VmAllocationPolicy", dcr.getAllocationPolicyAlias());
+            String classSufix = generateFullClassName(PKG+".allocationpolicies","VmAllocationPolicy", dcr.getVmAllocationPolicy());
             Class<? extends VmScheduler> klass = (Class<? extends VmScheduler>) Class.forName(classSufix);
             Constructor cons = klass.getConstructor(new Class[]{});
             return (VmAllocationPolicy) cons.newInstance();
@@ -115,9 +114,9 @@ public class PolicyLoader {
         }
     }
 
-    public static CloudletScheduler cloudletScheduler(final VirtualMachineRegistry vmr) throws RuntimeException {
+    public static CloudletScheduler cloudletScheduler(final VmRegistry vmr) throws RuntimeException {
         try {
-            String classSufix = generateFullClassName(PKG+".schedulers.cloudlet","CloudletScheduler", vmr.getSchedulingPolicyAlias());
+            String classSufix = generateFullClassName(PKG+".schedulers.cloudlet","CloudletScheduler", vmr.getCloudletScheduler());
             Class<? extends VmScheduler> klass = (Class<? extends VmScheduler>) Class.forName(classSufix);
             Constructor cons = klass.getConstructor();
             return (CloudletScheduler) cons.newInstance();
