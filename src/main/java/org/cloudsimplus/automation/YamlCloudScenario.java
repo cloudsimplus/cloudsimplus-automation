@@ -125,15 +125,15 @@ public class YamlCloudScenario {
         final double startTime = System.currentTimeMillis();
         cloudsimplus = new CloudSim();
         System.out.println("Hosts========================");
-        this.datacenters = createConcreteDatacentersFromAbstractDatacenterRegistries();
+        this.datacenters = createDatacentersFromDatacenterRegistries();
         for (Datacenter datacenter : datacenters) {
             System.out.println(datacenter.getName() + ": " + datacenter.getHostList().size() + " hosts");
         }
         System.out.println("=============================");
 
-        this.brokers = createConcreteDatacenterBrokersFromAbstractCustomerRegistries();
-        this.vmsToBrokerMap = createConcreteVmListForAllBrokers(brokers);
-        this.cloudletsToBrokerMap = createConcreteCloudletsFromAbstractUtilizationProfiles(brokers);
+        this.brokers = createDatacenterBrokersFromCustomerRegistries();
+        this.vmsToBrokerMap = createVmListForAllBrokers(brokers);
+        this.cloudletsToBrokerMap = createCloudletsFromUtilizationProfiles(brokers);
 
         for (DatacenterBroker broker : brokers.keySet()) {
             broker.submitVmList(vmsToBrokerMap.get(broker));
@@ -159,7 +159,7 @@ public class YamlCloudScenario {
      * @return Returns the map created.
      * @see YamlCloudScenario#customerRegistries
      */
-    private Map<DatacenterBroker, CustomerRegistry> createConcreteDatacenterBrokersFromAbstractCustomerRegistries() {
+    private Map<DatacenterBroker, CustomerRegistry> createDatacenterBrokersFromCustomerRegistries() {
         final int totalBrokerAmount = customerRegistries.stream().mapToInt(CustomerRegistry::getAmount).sum();
         final Map<DatacenterBroker, CustomerRegistry> list = new HashMap<>(totalBrokerAmount);
         int brokerCount = 0;
@@ -175,36 +175,35 @@ public class YamlCloudScenario {
     /**
      * Creates the list of VMs in CloudSim Plus for each customer represented by a {@link DatacenterBroker}.
      *
-     * @param cr the information about the customers, which are represented
-     *           in CloudSim Plus by {@link DatacenterBroker} objects.
+     * @param crMap a Map between a {@link DatacenterBroker} representing a customer in CloudSim Plus
+     *           and the {@link CustomerRegistry} object used to create VMs and Cloudlets for such a broker.
      * @return the a map containing the list of created VMs for each customer (DatacenterBroker).
-     * @see YamlCloudScenario#createConcreteDatacenterBrokersFromAbstractCustomerRegistries()
+     * @see YamlCloudScenario#createDatacenterBrokersFromCustomerRegistries()
      */
-    private Map<DatacenterBroker, List<Vm>> createConcreteVmListForAllBrokers(
-        final Map<DatacenterBroker, CustomerRegistry> cr)
+    private Map<DatacenterBroker, List<Vm>> createVmListForAllBrokers(
+        final Map<DatacenterBroker, CustomerRegistry> crMap)
     {
-        final Map<DatacenterBroker, List<Vm>> list = new HashMap<>(cr.size());
+        final Map<DatacenterBroker, List<Vm>> vmMap = new HashMap<>(crMap.size());
 
         int createdVms = 0;
-        for (DatacenterBroker broker : cr.keySet()) {
-            List<Vm> vms = createConcreteVmListForOneBroker(broker, cr.get(broker), ++createdVms);
-            list.put(broker, vms);
+        for (DatacenterBroker broker : crMap.keySet()) {
+            List<Vm> vms = createVmListForOneBroker(broker, crMap.get(broker), createdVms++);
+            vmMap.put(broker, vms);
         }
 
-        return list;
+        return vmMap;
     }
 
     /**
      * Creates the list of VMs in CloudSim Plus for a given customer represented by a {@link DatacenterBroker}.
      *
-     * @param broker the {@link DatacenterBroker} to create the VMs to
-     * @param cr the information about the customers, which are represented
-     *           in CloudSim Plus by {@link DatacenterBroker} objects.
-     * @param createdVms the number of VMs already created.
-     * @return the a map containing the list of created VMs for the given customer (DatacenterBroker).
-     * @see YamlCloudScenario#createConcreteDatacenterBrokersFromAbstractCustomerRegistries()
+     * @param broker {@link DatacenterBroker} representing a customer in CloudSim Plus, for who VMs will be created
+     * @param cr  {@link CustomerRegistry} object used to create VMs and Cloudlets for such a broker
+     * @param createdVms the number of VMs already created
+     * @return the a map containing the list of created VMs for the given customer (DatacenterBroker)
+     * @see YamlCloudScenario#createDatacenterBrokersFromCustomerRegistries()
      */
-    private List<Vm> createConcreteVmListForOneBroker(
+    private List<Vm> createVmListForOneBroker(
         final DatacenterBroker broker,
         final CustomerRegistry cr,
         final int createdVms) throws RuntimeException
@@ -213,7 +212,7 @@ public class YamlCloudScenario {
         final List<Vm> list = new ArrayList<>(totalVmsAmount);
         for (VirtualMachineRegistry vmr : cr.getVmList()) {
             for (int i = 0; i < vmr.getAmount(); i++) {
-                list.add(createVm(createdVms, broker, vmr));
+                list.add(createVm(createdVms+i, broker, vmr));
             }
         }
 
@@ -241,7 +240,7 @@ public class YamlCloudScenario {
      *                         concrete customer created ({@link DatacenterBroker}).
      * @return the map of Cloudlets created.
      */
-    private Map<DatacenterBroker, List<Cloudlet>> createConcreteCloudletsFromAbstractUtilizationProfiles(
+    private Map<DatacenterBroker, List<Cloudlet>> createCloudletsFromUtilizationProfiles(
         final Map<DatacenterBroker, CustomerRegistry> brokerRegistries)
     {
         final Map<DatacenterBroker, List<Cloudlet>> map = new HashMap<>(brokerRegistries.size());
@@ -306,7 +305,7 @@ public class YamlCloudScenario {
      *                                  to be created.
      * @see YamlCloudScenario#datacenterRegistries
      */
-    private List<Datacenter> createConcreteDatacentersFromAbstractDatacenterRegistries() throws IllegalArgumentException {
+    private List<Datacenter> createDatacentersFromDatacenterRegistries() throws IllegalArgumentException {
         String datacenterName;
         int datacenterCount = 0;
         final int datacenterNumber = datacenterRegistries.stream().mapToInt(DatacenterRegistry::getAmount).sum();
@@ -316,7 +315,7 @@ public class YamlCloudScenario {
             for (int i = 0; i < dcr.getAmount(); i++) {
                 datacenterName = generateDataCenterName(dcr, ++datacenterCount);
 
-                List<Host> hostList = createConcreteHostsFromAbstractHostRegistries(dcr, hostCount);
+                List<Host> hostList = createHostsFromHostRegistries(dcr, hostCount);
                 hostCount += hostList.size();
 
                 try {
@@ -342,7 +341,7 @@ public class YamlCloudScenario {
      * @throws RuntimeException
      * @see YamlCloudScenario#datacenterRegistries
      */
-    private List<Host> createConcreteHostsFromAbstractHostRegistries(
+    private List<Host> createHostsFromHostRegistries(
         final DatacenterRegistry dcr, int initialHostId) throws RuntimeException
     {
         int hostId;
