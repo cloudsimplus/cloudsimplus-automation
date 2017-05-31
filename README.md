@@ -4,7 +4,7 @@
 
 The tool releases researchers from writing Java code just to run simulation scenarios. This way, the attention can be focused on the problem to be solved, such as the creation of new algorithms for load balancing, new virtual machine scheduling policies, VM placement, resource provisioning, workload prediction, server consolidation, energy efficiency, cost reduction and so on. 
 
-A snippet of an YAML file used to automate the creation of CloudSim Plus simulation scenarios is presented below:
+A snippet of an YAML file used to automate the creation of CloudSim Plus simulation scenarios is presented below. Check a complete example in some files such as the [CloudEnvironment1.yml](CloudEnvironment1.yml).
 
 ```yml
 datacenters:
