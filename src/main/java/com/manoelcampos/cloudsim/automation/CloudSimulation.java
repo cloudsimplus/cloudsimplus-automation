@@ -30,6 +30,8 @@ import org.cloudbus.cloudsim.provisioners.PeProvisioner;
 import java.text.DecimalFormat;
 import java.util.*;
 
+import static java.util.Comparator.comparingInt;
+
 /**
  * Represents a simulation created in CloudSim.
  * @author Manoel Campos da Silva Filho
@@ -464,18 +466,15 @@ public class CloudSimulation {
 
         CloudSim.startSimulation();
 
-        final Map<DatacenterBroker, List<Cloudlet>> receivedCloudletList = new HashMap<DatacenterBroker, List<Cloudlet>>();
-        for (DatacenterBroker broker : brokers.keySet()) {
-            receivedCloudletList.put(broker, broker.getCloudletReceivedList());
-        }
-
         CloudSim.stopSimulation();
 
         if(showResults) {
             Log.enable();
             Log.printLine("\n============================Results: " + label);
             for (DatacenterBroker broker : brokers.keySet()) {
-                printCloudletList(broker, receivedCloudletList.get(broker));
+                List<Cloudlet> list = broker.getCloudletReceivedList();
+                list.sort(comparingInt((Cloudlet c) -> c.getVmId()).thenComparingInt(Cloudlet::getCloudletId));
+                printCloudletList(broker, list);
             }
         }
 
