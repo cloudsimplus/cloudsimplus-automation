@@ -43,6 +43,105 @@
         <system>GitHub Issues</system>
     </issueManagement>
 
+    <profiles>
+        <profile>
+            <!--
+             A profile used to execute all goals required to deploy
+             the project to the Maven Central.
+             To execute use: mvn clean deploy -P all
+
+             To check the deployed artifact and probably release it to maven central
+             you should visit https://oss.sonatype.org.
+             MAKE SURE YOU ARE LOGGED IN TO SEE YOUR DEPLOYMENTS.
+             -->
+            <id>all</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-source-plugin</artifactId>
+                        <version>3.0.1</version>
+                        <executions>
+                            <execution>
+                                <id>attach-sources</id>
+                                <goals>
+                                    <goal>jar-no-fork</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <version>2.10.4</version>
+                        <executions>
+                            <execution>
+                                <id>attach-javadocs</id>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+
+                        <configuration>
+                            <failOnError>false</failOnError>
+                            <tags>
+                                <direction>
+                                    <name>pre</name>
+                                    <placement>a</placement>
+                                    <head>Precondition:</head>
+                                </direction>
+                                <direction>
+                                    <name>post</name>
+                                    <placement>a</placement>
+                                    <head>Postcondition:</head>
+                                </direction>
+                            </tags>
+                        </configuration>
+                    </plugin>
+
+                    <!--
+                     Signs the generated jar using GPG, as required for deploying at the Maven Central.
+                     Configurations are defined into the local repo settings.xml
+                    -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>1.6</version>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+                    <!--
+                    Plugin to deploy to the maven central using a Sonatype account.
+                    Credentials are defined into the local repo settings.xml
+                    -->
+                    <plugin>
+                        <groupId>org.sonatype.plugins</groupId>
+                        <artifactId>nexus-staging-maven-plugin</artifactId>
+                        <version>1.6.8</version>
+                        <extensions>true</extensions>
+                        <configuration>
+                            <serverId>ossrh</serverId>
+                            <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+                            <!--If the artifact will be automatically released to maven central
+                            after the upload to sonatype.-->
+                            <autoReleaseAfterClose>false</autoReleaseAfterClose>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
     <build>
         <plugins>
             <plugin>

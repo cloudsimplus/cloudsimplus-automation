@@ -1,4 +1,4 @@
-# CloudSim Plus Automation: A Human Readable Scenario Specification for Automated Creation of Simulations on CloudSim [![Build Status](https://travis-ci.org/manoelcampos/cloudsim-plus-automation.png?branch=master)](https://travis-ci.org/manoelcampos/cloudsim-plus-automation) [![Dependency Status](https://www.versioneye.com/user/projects/58aeeecd0693850016ef1ed8/badge.svg?style=rounded-square)](https://www.versioneye.com/user/projects/58aeeecd0693850016ef1ed8) [![GPL licensed](https://img.shields.io/badge/license-GPL-blue.svg)](http://www.gnu.org/licenses/gpl-3.0)
+# CloudSim Plus Automation: A Human Readable Scenario Specification for Automated Creation of Simulations on CloudSim [![Build Status](https://travis-ci.org/manoelcampos/cloudsim-plus-automation.png?branch=master)](https://travis-ci.org/manoelcampos/cloudsim-plus-automation) [![Dependency Status](https://www.versioneye.com/user/projects/58aeeecd0693850016ef1ed8/badge.svg?style=rounded-square)](https://www.versioneye.com/user/projects/58aeeecd0693850016ef1ed8) [![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.cloudsimplus/cloudsim-plus-automation/badge.svg)] [![Javadocs](https://www.javadoc.io/badge/org.cloudsimplus/cloudsim-plus-automation.svg)](https://www.javadoc.io/doc/org.cloudsimplus/cloudsim-plus-automation) [![GPL licensed](https://img.shields.io/badge/license-GPL-blue.svg)](http://www.gnu.org/licenses/gpl-3.0)
 
 **CloudSim Plus Automation** is a Java command line tool based on [CloudSim Plus](http://cloudsimplus.org) and [CloudReports](https://github.com/thiagotts/CloudReports) classes which is able to read specifications of CloudSim Plus simulation scenarios from a YAML file, a very human readable data format. Simulation scenarios can be written inside a YAML file and CloudSim Plus Automation reads these simulation scenarios, creates and runs them on CloudSim Plus.  
 
@@ -55,11 +55,27 @@ The main contributions of this work are:
 - to use a human readable file format to specify cloud simulation scenarios and speed up such a simulation process phase;
 - to allow reuse, extension and sharing of simulations scenarios.
 
-# How to use the tool 
+# Using the command line tool 
 
-You can run the tool from a terminal using the following command (check the correct version number of the jar file):
+You can simply download the [jar file from the latest release](https://github.com/manoelcampos/cloudsim-plus-automation/releases/latest) and run it in a terminal
+by issuing the following command (check the correct version number of the jar file):
 
-*java -jar [cloudsim-plus-automation-1.2.1-with-dependencies.jar](https://github.com/manoelcampos/cloudsim-plus-automation/releases/latest) PathToYamlSimulationScenarioFile*
+```bash
+java -jar cloudsim-plus-automation-1.2.1-with-dependencies.jar PathToYamlSimulationScenarioFile
+```
+
+# Using it as a maven dependency into your own project
+You can build your own applications on top of CloudSim Plus Automation to automate the creation cloud computing simulations.
+This way, your applications will be able to read simulation scenarios from YAML files, build and execute them on CloudSim Plus.
+Just add CloudSim Plus Automation as a Maven dependency into your own project and start coding:
+
+```xml
+<dependency>
+  <groupId>org.cloudsimplus</groupId>
+  <artifactId>cloudsim-plus-automation</artifactId>
+  <version>1.2.1</version>
+</dependency>
+```
 
 # Published Paper
 
