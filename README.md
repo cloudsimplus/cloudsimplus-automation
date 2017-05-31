@@ -19,11 +19,12 @@ You can run the tool from a terminal using the following command (check the corr
 
 # Published Paper
 
-For more information, read [this paper](paper_cloudsim_automation.pdf), that was published on the [Springer Lecture Notes in Computer Science Volume 8662](http://doi.org/10.1007/978-3-319-11167-4_34).
+For more information, read the paper published on the [Springer Lecture Notes in Computer Science Volume 8662](http://doi.org/10.1007/978-3-319-11167-4_34). Realize the paper is related to an older version of the tool, which is compatible with CloudSim 3. 
+The YAML structure has changed since there too, making it simpler and matching the name of entries with CloudSim and CloudSim Plus classes (such as VmAllocationPolicy, VmScheduler, CloudletScheduler). See the last section for more information.
 
 **If you are using this work for publishing a paper, please cite our paper above.**
 
 # Notice
-This is an old version compatible with CloudSim 4, which is not actively maintained anymore. Updates may be performed after you create an [issue ticket](https://github.com/manoelcampos/cloudsim-plus-automation/issues). Every issue will be assessed and there is no guarantee that it will be fixed. If you would like to contribute to this version, feel free to submit a pull request.
+This is a version compatible with CloudSim 4, which is not actively maintained. Updates may be performed after you create an [issue ticket](https://github.com/manoelcampos/cloudsim-plus-automation/issues). Every issue will be assessed and there is no guarantee that it will be fixed. If you would like to contribute to this version, feel free to submit a pull request.
 
 The active developed version compatible with [CloudSim Plus](http://cloudsimplus.org) is available at the [master branch](https://github.com/manoelcampos/cloudsim-plus-automation).
