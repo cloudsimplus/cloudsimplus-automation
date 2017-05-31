@@ -73,6 +73,8 @@ by issuing the following command (check the correct version number of the jar fi
 java -jar cloudsim-plus-automation-1.2.1-with-dependencies.jar PathToYamlSimulationScenarioFile
 ```
 
+Execute the tool without any parameter to see the usage help.
+
 # Using it as a maven dependency into your own project
 You can build your own applications on top of CloudSim Plus Automation to automate the creation cloud computing simulations.
 This way, your applications will be able to read simulation scenarios from YAML files, build and execute them on CloudSim Plus.

@@ -166,7 +166,8 @@ public final class Start {
     }
 
     /**
-     * Gets the file name from the command line arguments.
+     * Gets the file name from the command line arguments,
+     * which is the first argument remained after the parsing.
      *
      * @return
      */
