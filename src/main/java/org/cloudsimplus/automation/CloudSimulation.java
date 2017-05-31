@@ -438,7 +438,7 @@ public class CloudSimulation implements Runnable {
 
         cloudsimplus.start();
 
-        if (showResults) {
+        if(showResults) {
             Log.enable();
             for (DatacenterBroker broker : brokers.keySet()) {
                 List<Cloudlet> list = broker.getCloudletsFinishedList();
@@ -451,6 +451,20 @@ public class CloudSimulation implements Runnable {
 
         final double finishTimeSecs = (System.currentTimeMillis() - startTime) / 1000;
         printFinishTime(finishTimeSecs);
+    }
+
+    private void printFinishTime(final double finishTimeSecs) {
+        System.out.printf("\nCloud Simulation finished in %.2f seconds", finishTimeSecs);
+        if(finishTimeSecs < 60) {
+            return;
+        }
+
+        if(finishTimeSecs >= 3600) {
+            System.out.printf(" (%.2f hours)!\n", finishTimeSecs/3600.0);
+            return;
+        }
+
+        System.out.printf(" (%.2f minutes)!\n", finishTimeSecs/60.0);
     }
 
     /**
@@ -547,19 +561,5 @@ public class CloudSimulation implements Runnable {
     public CloudSimulation setLogEnabled(boolean logEnabled) {
         this.logEnabled = logEnabled;
         return this;
-    }
-
-    public void printFinishTime(final double finishTimeSecs) {
-        System.out.printf("\nCloud Simulation finished in %.2f seconds", finishTimeSecs);
-        if(finishTimeSecs < 60) {
-            return;
-        }
-
-        if(finishTimeSecs >= 3600) {
-            System.out.printf(" (%.2f hours)!\n", finishTimeSecs/3600.0);
-            return;
-        }
-
-        System.out.printf(" (%.2f minutes)!\n", finishTimeSecs/60.0);
     }
 }
