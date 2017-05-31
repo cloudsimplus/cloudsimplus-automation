@@ -85,4 +85,4 @@ For more information, read [this paper](paper_cloudsim_automation.pdf), that was
 
 # Notice
 
-If you are looking for the **CloudSim Automation**, which is the version compatible with [CloudSim 3](http://github.com/Cloudslab/cloudsim), it is available at [cloudsim-version](https://github.com/manoelcampos/cloudsim-plus-automation/tree/cloudsim-version) branch. However, that is not an actively maintained version anymore.
+If you are looking for the **CloudSim Automation**, which is the version compatible with [CloudSim 4](http://github.com/Cloudslab/cloudsim), it is available at [cloudsim-version](https://github.com/manoelcampos/cloudsim-plus-automation/tree/cloudsim-version) branch. However, that is not an actively maintained version anymore.
