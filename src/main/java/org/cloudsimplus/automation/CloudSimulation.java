@@ -51,6 +51,7 @@ import org.cloudsimplus.builders.tables.CloudletsTableBuilder;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static java.util.Comparator.comparingInt;
 import static java.util.stream.Collectors.toList;
 
 /**
@@ -440,7 +441,9 @@ public class CloudSimulation implements Runnable {
         if(showResults) {
             Log.enable();
             for (DatacenterBroker broker : brokers.keySet()) {
-                new CloudletsTableBuilder(broker.getCloudletsFinishedList())
+                List<Cloudlet> list = broker.getCloudletsFinishedList();
+                list.sort(comparingInt((Cloudlet c) -> c.getVm().getId()).thenComparingInt(Cloudlet::getId));
+                new CloudletsTableBuilder(list)
                     .setTitle(broker.getName())
                     .build();
             }
