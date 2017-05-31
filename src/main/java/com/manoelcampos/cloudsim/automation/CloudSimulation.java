@@ -498,8 +498,23 @@ public class CloudSimulation {
         }
 
         final double finishTimeSecs = (System.currentTimeMillis() - startTime) / 1000;
-        System.out.printf("\nCloud Simulation finished in %.2f seconds!\n", finishTimeSecs);
+        printFinishTime(finishTimeSecs);
     }
+
+    private void printFinishTime(final double finishTimeSecs) {
+        System.out.printf("\nCloud Simulation finished in %.2f seconds", finishTimeSecs);
+        if(finishTimeSecs < 60) {
+            return;
+        }
+
+        if(finishTimeSecs >= 3600) {
+            System.out.printf(" (%.2f hours)!\n", finishTimeSecs/3600.0);
+            return;
+        }
+
+        System.out.printf(" (%.2f minutes)!\n", finishTimeSecs/60.0);
+    }
+
 
     /**
      * Concrete data center list.
