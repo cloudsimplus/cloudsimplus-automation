@@ -79,8 +79,8 @@ Just add CloudSim Plus Automation as a Maven dependency into your own project an
 
 # Published Paper
 
-For more information, read the paper published on the [Springer Lecture Notes in Computer Science Volume 8662](http://doi.org/10.1007/978-3-319-11167-4_34). Realize that the paper is for the older version of the tool, which is compatible with CloudSim 3. 
-The YAML structure have changed since there too, making it simpler and matching the name of entries with CloudSim and CloudSim Plus classes (such as VmAllocationPolicy, VmScheduler, CloudletScheduler). See the last section for more information.
+For more information, read the paper published on the [Springer Lecture Notes in Computer Science Volume 8662](http://doi.org/10.1007/978-3-319-11167-4_34). Realize the paper is related to an older version of the tool, which is compatible with CloudSim 3. 
+The YAML structure has changed since there too, making it simpler and matching the name of entries with CloudSim and CloudSim Plus classes (such as VmAllocationPolicy, VmScheduler, CloudletScheduler). See the last section for more information.
 
 **If you are using this work for publishing a paper, please cite our paper above.**
 
