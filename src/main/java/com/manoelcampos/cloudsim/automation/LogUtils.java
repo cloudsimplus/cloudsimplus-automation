@@ -33,7 +33,7 @@ import org.cloudbus.cloudsim.Log;
  * @author Manoel Campos da Silva Filho
  */
 public class LogUtils {
-    private static String colSeparator="|\t";
+    private static String colSeparator="|";
 
     /**
      * Print a array of objects like a table.
@@ -48,7 +48,7 @@ public class LogUtils {
         for (int i = 0; i < captions.length; i++) {
             //The data will be printed with the same size of the caption 
             //of the corresponding column.
-            fmt = "%-" + captions[i].length() + "s";
+            fmt = "%" + captions[i].length() + "s";
             data = "";
             if (i < dataArray.length) {
                 data = dataArray[i].toString();

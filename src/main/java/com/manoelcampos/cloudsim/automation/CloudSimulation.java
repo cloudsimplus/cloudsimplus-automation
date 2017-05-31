@@ -275,13 +275,11 @@ public class CloudSimulation {
                         broker.getCloudletReceivedList().size() +
                         "========================================================");
         final String[] captions = {
-                "###", "CloudletID", "STATUS  ",
+                "###", "CloudletID", "  STATUS",
                 "DataCenterID", "VmID", "HostID", "ExecTime",
                 "Start Time", "Finish Time"};
         LogUtils.printCaptions(captions);
         LogUtils.printLine(captions, new String[]{"int", "int", "string", "int", "int", "int", "secs", "secs", "secs"});
-
-        final DecimalFormat dft = new DecimalFormat("###.##");
 
         for (int i = 0; i < size; i++) {
             cloudlet = list.get(i);
@@ -291,9 +289,9 @@ public class CloudSimulation {
                         String.format("%3d", i + 1),
                         cloudlet.getCloudletId(), "SUCCESS", cloudlet.getResourceId(),
                         cloudlet.getVmId(), getHostIdOfVm(vm),
-                        dft.format(cloudlet.getActualCPUTime()),
-                        dft.format(cloudlet.getExecStartTime()),
-                        dft.format(cloudlet.getFinishTime())};
+                        (long)cloudlet.getActualCPUTime(),
+                        (long)cloudlet.getExecStartTime(),
+                        (long)cloudlet.getFinishTime()};
 
                 LogUtils.printLine(captions, data);
             }
