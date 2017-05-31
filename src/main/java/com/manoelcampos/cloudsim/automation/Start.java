@@ -23,10 +23,12 @@
 package com.manoelcampos.cloudsim.automation;
 
 import com.esotericsoftware.yamlbeans.YamlException;
+import org.apache.commons.cli.*;
 import org.cloudbus.cloudsim.core.CloudSim;
 
 import java.io.FileNotFoundException;
-import java.lang.reflect.Field;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Starts the tool by loading a Cloud Computing simulation scenario from an YAML file given by command line.
@@ -36,21 +38,14 @@ import java.lang.reflect.Field;
  * @see YamlCloudScenarioReader
  */
 public final class Start {
-    /**
-     * Command line args (see {@link #main(String[])}).
-     */
-    private final String[] args;
+    private Options options;
     private YamlCloudScenarioReader reader;
+    private CommandLine cmd;
 
     /**
      * Executes the command line interface of the applications.
      *
-     * @param args Arg 0: The name of YAML file containing
-     *             the simulation scenarios to be created.
-     *             Each YAML file can contain multiples scenarios to be created together.
-     *             This is made only adding a --- separator between each scenario.
-     *             <br>
-     *             Arg 1: false or 0 to disable the CloudSim Plus Log (optional)
+     * @param args command line arguments.
      */
     public static void main(String[] args) {
         new Start(args);
@@ -62,9 +57,13 @@ public final class Start {
      * @param args command line parameters (see {@link #main(String[])})
      */
     private Start(final String[] args){
-        this.args = args;
         try {
-            this.reader = new YamlCloudScenarioReader(getFileNameFromCommandLine(), isToDisableLog());
+            if(!parseCommandLineOptions(args)){
+                return;
+            }
+
+            this.reader =
+                    new YamlCloudScenarioReader(getFileNameFromCommandLine());
             if(reader.getScenarios().isEmpty()) {
                 System.err.println("Your YAML file is empty.\n");
             }
@@ -73,10 +72,79 @@ public final class Start {
             System.err.printf("%s", e.getMessage());
         } catch (YamlException e){
             System.err.printf("Error trying to parse the YAML file: %s\n", e.getMessage());
+        } catch (ParseException e){
+            System.err.printf("Error parsing command line arguments. %s\n", e.getMessage());
         } catch (Exception e){
             System.err.printf("An unexpected error happened: %s\n", e.getMessage());
         }
 
+    }
+
+    private void showUsageHelp() {
+        HelpFormatter formatter = new HelpFormatter();
+        formatter.printHelp(getApplicationStartCmd() +" [options] YamlFilePath", options);
+    }
+
+    /**
+     * Parses options given by command line.
+     * @param args the command line options
+     */
+    private boolean parseCommandLineOptions(String[] args) throws ParseException {
+        options = new Options();
+        Option option = new Option("v", "Enables CloudSim Plus Log");
+        option.setLongOpt("verbose");
+        options.addOption(option);
+
+        options.addOption("s", "Suppress simulation results");
+        options.addOption("h", "Show usage help");
+
+        CommandLineParser parser = new DefaultParser();
+        this.cmd = parser.parse(options, args);
+
+        /*
+         * If after parsing the options there is an additional parameter to the YAML file name,
+         * show the usage help.
+         */
+        if(cmd.getArgs().length == 0 || cmd.hasOption("h")){
+            showUsageHelp();
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Gets the command used to launch the application.
+     * If the application was launched from the jar file, returns
+     * a command like "java -jar name-of-the-jar-file".
+     * If it was launched directly from the class file,
+     * returns a command like "java class-file".
+     * @return
+     */
+    private String getApplicationStartCmd() {
+        final String fullClassFilePath = getFullClassFilePath();
+        final String jarRegex = ".*\\/(.*\\.jar).*\\/";
+        final String jarFile = regexMatch(jarRegex, fullClassFilePath);
+        return (jarFile.isEmpty()) ? "java " + Start.class.getName() : "java -jar "+jarFile;
+    }
+
+    private String regexMatch(final String regex, final String text) {
+        final Matcher matcher = Pattern.compile(regex).matcher(text);
+        if(matcher.find()){
+            return matcher.group(1);
+        }
+
+        return "";
+    }
+
+    /**
+     * Gets the full file path of this class, which may include the
+     * path of a jar if the class is being run from a jar package.
+     * @return
+     */
+    private String getFullClassFilePath() {
+        final String classFileName = '/' + Start.class.getName().replace('.', '/') + ".class";
+        return Start.class.getResource(classFileName).getFile();
     }
 
     /**
@@ -90,26 +158,29 @@ public final class Start {
         int i = 0;
         for (YamlCloudScenario scenario : reader.getScenarios()) {
             final String scenarioName = String.format("%d - %s", i++, reader.getFile().getName());
-            new CloudSimulation(scenario, scenarioName).run();
+            new CloudSimulation(scenario, scenarioName)
+                    .setShowResults(!cmd.hasOption("s"))
+                    .setLogEnabled(isToEnableLog())
+                    .run();
         }
     }
 
     /**
-     * Gets the file name from the command line arguments.
+     * Gets the file name from the command line arguments,
+     * which is the first argument remained after the parsing.
      *
      * @return
      */
     private String getFileNameFromCommandLine() {
-        return args.length > 0 ? args[0] : "";
+        return cmd.getArgs().length > 0 ? cmd.getArgs()[0] : "";
     }
 
     /**
-     * Checks if CloudSim Plus Log has to be disabled.
+     * Checks if CloudSim Plus Log has to be enabled.
      *
      * @return
      */
-    private boolean isToDisableLog() {
-        return args.length == 2 && ("false".equalsIgnoreCase(args[1]) || "0".equals(args[1]));
+    private boolean isToEnableLog() {
+        return cmd.hasOption("v");
     }
-
 }

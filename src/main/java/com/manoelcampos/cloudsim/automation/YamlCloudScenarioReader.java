@@ -59,17 +59,15 @@ public class YamlCloudScenarioReader {
      * Instantiates a YamlCloudScenarioReader and
      * reads the YAML file containing the data to create Cloud Computing simulation scenarios.
      * Then, the List of simulation scenarios can be accessed using {@link #getScenarios()}.
+     *  @param filePath the path of the YAML file to read
      *
-     * @param filePath the path of the YAML file to read
-     * @param disableLog indicate if CloudSim log must be disabled or not
      */
-    public YamlCloudScenarioReader(final String filePath, final boolean disableLog) throws IllegalArgumentException, FileNotFoundException, YamlException {
+    public YamlCloudScenarioReader(final String filePath) throws IllegalArgumentException, FileNotFoundException, YamlException {
         this.file = new File(filePath);
 
         if (filePath == null || "".equals(filePath)) {
             throw new IllegalArgumentException("You must specify an YAML file, containing the CloudSim simulation scenario, as command line parameter.");
         }
-        Log.setDisabled(disableLog);
 
         this.scenarios = readYamlFile();
     }

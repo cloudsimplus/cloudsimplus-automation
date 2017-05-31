@@ -57,6 +57,8 @@ public class CloudSimulation {
     Map<DatacenterBroker, List<Vm>> brokerVms;
 
     List<Datacenter> datacenters;
+    private boolean logEnabled;
+    private boolean showResults;
 
     public CloudSimulation(YamlCloudScenario scenario) {
         this(scenario, "");
@@ -67,6 +69,8 @@ public class CloudSimulation {
         this.brokerVms = new HashMap<>();
         this.brokerCloudlets = new HashMap<>();
         this.label = label;
+        this.logEnabled = false;
+        this.showResults = true;
     }
 
     /**
@@ -78,7 +82,7 @@ public class CloudSimulation {
      *                            starting from the information at YAML file,
      *                            sets invalid parameters for CloudSim Datacenter objects
      *                            to be created.
-     * @see YamlCloudScenario#datacenterRegistries
+     * @see YamlCloudScenario#getDatacenters()
      */
     List<Datacenter> createDatacentersFromDatacenterRegistries()
             throws ParameterException {
@@ -135,7 +139,7 @@ public class CloudSimulation {
      * used to create each concrete CloudSim customer (DatacenterBroker).
      *
      * @return Returns the map created.
-     * @see YamlCloudScenario#customerRegistries
+     * @see YamlCloudScenario#getDatacenters()
      */
     Map<DatacenterBroker, CustomerRegistry> createDatacenterBrokersFromCustomerRegistries() {
         final Map<DatacenterBroker, CustomerRegistry> list = new HashMap<DatacenterBroker, CustomerRegistry>();
@@ -313,7 +317,7 @@ public class CloudSimulation {
      *                           on id at the YAML file.
      * @return Returns the list of created hosts from the specified datacenterRegistry.
      * @throws RuntimeException
-     * @see YamlCloudScenario#datacenterRegistries
+     * @see YamlCloudScenario#getDatacenters()
      */
     List<Host> createHostsFromHostRegistries(
             final DatacenterRegistry datacenterRegistry, int hostCount) throws RuntimeException {
@@ -356,7 +360,7 @@ public class CloudSimulation {
      *                            starting from the information at YAML file,
      *                            sets invalid parameters for CloudSim SAN objects
      *                            to be created.
-     * @see YamlCloudScenario#datacenterRegistries
+     * @see YamlCloudScenario#getDatacenters()
      */
     LinkedList<Storage> createSan(final DatacenterRegistry dcr) throws ParameterException {
         final LinkedList<Storage> list = new LinkedList<Storage>();
@@ -434,9 +438,9 @@ public class CloudSimulation {
         final double startTime = System.currentTimeMillis();
         int num_user = 1;   // number of cloud customers
         final Calendar calendar = Calendar.getInstance(Locale.getDefault());
-        boolean trace_flag = false;  // trace events
 
-        CloudSim.init(num_user, calendar, trace_flag);
+        Log.setDisabled(!logEnabled);
+        CloudSim.init(num_user, calendar, logEnabled);
         System.out.println("Hosts========================");
         try {
             this.datacenters = createDatacentersFromDatacenterRegistries();
@@ -448,10 +452,8 @@ public class CloudSimulation {
         }
         System.out.println("=============================");
 
-        //Third step: Create Brokers
         final Map<DatacenterBroker, CustomerRegistry> brokers = createDatacenterBrokersFromCustomerRegistries();
 
-        //Fourth step: Create VMs and Cloudlets and send them to broker
         this.brokerVms = createVmListForAllBrokers(brokers);
         this.brokerCloudlets = createCloudletsFromUtilizationProfiles(brokers);
 
@@ -460,20 +462,21 @@ public class CloudSimulation {
             broker.submitCloudletList(brokerCloudlets.get(broker));
         }
 
-        // Fifth step: Starts the simulation
         CloudSim.startSimulation();
 
         final Map<DatacenterBroker, List<Cloudlet>> receivedCloudletList = new HashMap<DatacenterBroker, List<Cloudlet>>();
-        // Final step: Print results when simulation is over
         for (DatacenterBroker broker : brokers.keySet()) {
             receivedCloudletList.put(broker, broker.getCloudletReceivedList());
         }
 
         CloudSim.stopSimulation();
 
-        Log.printLine("\n============================Results: " + label);
-        for (DatacenterBroker broker : brokers.keySet()) {
-            printCloudletList(broker, receivedCloudletList.get(broker));
+        if(showResults) {
+            Log.enable();
+            Log.printLine("\n============================Results: " + label);
+            for (DatacenterBroker broker : brokers.keySet()) {
+                printCloudletList(broker, receivedCloudletList.get(broker));
+            }
         }
 
         final double finishTimeSecs = (System.currentTimeMillis() - startTime) / 1000;
@@ -487,5 +490,23 @@ public class CloudSimulation {
      */
     public List<Datacenter> getDatacenters() {
         return datacenters;
+    }
+
+    public boolean isShowResults() {
+        return showResults;
+    }
+
+    public CloudSimulation setShowResults(boolean showResults) {
+        this.showResults = showResults;
+        return this;
+    }
+
+    public boolean isLogEnabled() {
+        return logEnabled;
+    }
+
+    public CloudSimulation setLogEnabled(boolean logEnabled) {
+        this.logEnabled = logEnabled;
+        return this;
     }
 }
