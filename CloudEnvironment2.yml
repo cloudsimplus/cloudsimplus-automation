@@ -54,7 +54,7 @@ customers:
         cloudletScheduler: TimeShared
     cloudlets:
       - !cloudlet
-        amount: 4
+        amount: 2
         pes: 2
         length: 1000
         fileSize: 50
@@ -62,3 +62,12 @@ customers:
         utilizationModelCpu: Full
         utilizationModelRam: Full
         utilizationModelBw: Full
+      - !cloudlet
+        amount: 2
+        pes: 2
+        length: 2000
+        fileSize: 50
+        outputSize: 50
+        utilizationModelCpu: Full
+        utilizationModelRam: Full
+        utilizationModelBw: Full        

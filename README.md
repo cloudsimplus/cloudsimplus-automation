@@ -25,21 +25,30 @@ datacenters:
         peProvisioner: Simple
 customers:
   - !customer
-    amount: 2
+    amount: 4
     vms:
       - !vm
-        amount: 2
+        amount: 4
         size: 500
-        pes: 4
+        pes: 2
         mips: 1000
         ram: 2000
         bw: 1000
         cloudletScheduler: SpaceShared
     cloudlets:
       - !cloudlet
-        amount: 6
+        amount: 8
         pes: 2
-        length: 100
+        length: 1000
+        fileSize: 50
+        outputSize: 70
+        utilizationModelCpu: Full
+        utilizationModelRam: Full
+        utilizationModelBw: Full
+      - !cloudlet
+        amount: 8
+        pes: 2
+        length: 2000
         fileSize: 50
         outputSize: 70
         utilizationModelCpu: Full
