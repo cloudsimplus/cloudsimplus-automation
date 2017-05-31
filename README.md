@@ -56,13 +56,13 @@ customers:
         utilizationModelBw: Full
 ```
 
-The main contributions of this work are:
+This work contributes to:
 
-- to avoid programming on the creation of CloudSim Plus simulation environments;
-- to reduce learning curve on creation of CloudSim Plus simulation scenarios;
-- to facilitate and automate CloudSim Plus simulation environments creation;
-- to use a human readable file format to specify cloud simulation scenarios and speed up such a simulation process phase;
-- to allow reuse, extension and sharing of simulations scenarios.
+- avoid programming on the creation of CloudSim Plus simulation environments;
+- reduce learning curve on creation of CloudSim Plus simulation scenarios;
+- facilitate and automate CloudSim Plus simulation environments creation;
+- use a human readable file format to specify cloud simulation scenarios and speed up such a simulation process phase;
+- allow reuse, extension and sharing of simulations scenarios.
 
 # Using the command line tool 
 
