@@ -26,7 +26,11 @@
  */
 package com.manoelcampos.cloudsim.automation;
 
+import org.apache.commons.lang3.StringUtils;
 import org.cloudbus.cloudsim.Log;
+
+import java.util.Collections;
+import java.util.stream.Stream;
 
 /**
  * Useful methods to print log information to the terminal
@@ -42,23 +46,20 @@ public class LogUtils {
      * @see LogUtils#printCaptions(java.lang.String[]) 
      */
     public static void printLine(String[] captions, Object[] dataArray, String colSeparator) {
-        String s;
-        String fmt;
-        String data;
         for (int i = 0; i < captions.length; i++) {
             //The data will be printed with the same size of the caption 
             //of the corresponding column.
-            fmt = "%" + captions[i].length() + "s";
-            data = "";
-            if (i < dataArray.length) {
-                data = dataArray[i].toString();
-            }
-            s = String.format(fmt, data) + colSeparator;
-            Log.print(s);
+            String data = (i < dataArray.length) ? dataArray[i].toString() : "";
+            Log.print(getFormattedData(captions[i].length(), data, colSeparator));
         }
         Log.printLine();
     }
-    
+
+    private static String getFormattedData(int colSize, String data, String colSeparator) {
+        final String fmt = "%" + colSize + "s";
+        return String.format(fmt, data) + colSeparator;
+    }
+
     public static void printLine(String[] captions, Object[] dataArray) {
         printLine(captions, dataArray, colSeparator);
     }
@@ -93,5 +94,24 @@ public class LogUtils {
     public static void setColSeparator(String aColSeparator) {
         colSeparator = aColSeparator;
     }
-    
+
+    public static void printLineSeparator(String[] captions) {
+        for(String caption: captions){
+            Log.print(String.join("", Collections.nCopies(caption.length()+1, "-")));
+        }
+        Log.printLine();
+    }
+
+    private static int getLengthOfColumnHeadersRow(String[] captions){
+        return Stream.of(captions).mapToInt(col -> col.length()).sum();
+    }
+
+    public static String getCentralizedString(String[] captions, final String str) {
+        final int identationLength = (getLengthOfColumnHeadersRow(captions) - str.length())/2;
+        return String.format("%s%s", StringUtils.repeat(" ", identationLength), str);
+    }
+
+    public static void printCentralizedString(String[] captions, String text) {
+        Log.printLine(getCentralizedString(captions, text));
+    }
 }

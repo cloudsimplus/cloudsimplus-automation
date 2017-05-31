@@ -27,7 +27,6 @@ import org.cloudbus.cloudsim.*;
 import org.cloudbus.cloudsim.core.CloudSim;
 import org.cloudbus.cloudsim.provisioners.PeProvisioner;
 
-import java.text.DecimalFormat;
 import java.util.*;
 
 import static java.util.Comparator.comparingInt;
@@ -270,39 +269,61 @@ public class CloudSimulation {
         Cloudlet cloudlet;
 
         Log.printLine();
-        Log.printLine(
-                "Broker: name " + broker.getName() + " id " + broker.getId() + " cloudlets executed: " +
-                        broker.getCloudletReceivedList().size() +
-                        "========================================================");
         final String[] captions = {
-                "###", "CloudletID", "  STATUS",
-                "DataCenterID", "VmID", "HostID", "ExecTime",
-                "Start Time", "Finish Time"};
+                "Cloudlet", "Status ", "DC", "Host", "Host PEs ", "VM", "VM PEs   ",
+                "CloudletLen", "CloudletPEs", "StartTime", "FinishTime", "ExecTime"};
+        final String[] units = new String[]{
+                "ID", "", "ID", "ID", "CPU cores", "ID", "CPU cores", "MI", "CPU cores", "Seconds", "Seconds", "Seconds"};
+
+        LogUtils.printCentralizedString(captions,"DatacenterBroker " + broker.getId());
         LogUtils.printCaptions(captions);
-        LogUtils.printLine(captions, new String[]{"int", "int", "string", "int", "int", "int", "secs", "secs", "secs"});
+        LogUtils.printLine(captions, units);
+        LogUtils.printLineSeparator(captions);
 
         for (int i = 0; i < size; i++) {
             cloudlet = list.get(i);
             if (cloudlet.getStatus() == Cloudlet.SUCCESS) {
                 Vm vm = findVm(broker, cloudlet.getVmId());
                 final Object[] data = {
-                        String.format("%3d", i + 1),
-                        cloudlet.getCloudletId(), "SUCCESS", cloudlet.getResourceId(),
-                        cloudlet.getVmId(), getHostIdOfVm(vm),
-                        (long)cloudlet.getActualCPUTime(),
+                        cloudlet.getCloudletId(), cloudlet.getCloudletStatusString(),
+                        cloudlet.getResourceId(),
+                        getHostId(vm), getHostPes(vm),
+                        vm.getId(), vm.getNumberOfPes(),
+                        cloudlet.getCloudletLength(), cloudlet.getNumberOfPes(),
                         (long)cloudlet.getExecStartTime(),
-                        (long)cloudlet.getFinishTime()};
+                        (long)cloudlet.getFinishTime(),
+                        (long)cloudlet.getActualCPUTime()};
 
                 LogUtils.printLine(captions, data);
             }
         }
+        LogUtils.printLineSeparator(captions);
     }
 
-    public String getHostIdOfVm(final Vm vm) {
+    public Host getHost(final Vm vm) {
         if (vm != null && vm.getHost() != null) {
-            return String.valueOf(vm.getHost().getId());
+            return vm.getHost();
         }
-        return "";
+
+        return null;
+    }
+
+    public String getHostId(final Vm vm) {
+        Host h = getHost(vm);
+        if(h == null) {
+            return "";
+        }
+
+        return String.valueOf(h.getId());
+    }
+
+    public String getHostPes(final Vm vm) {
+        Host h = getHost(vm);
+        if(h == null) {
+            return "";
+        }
+
+        return String.valueOf(h.getNumberOfPes());
     }
 
     /**
