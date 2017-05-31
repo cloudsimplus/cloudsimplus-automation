@@ -17,6 +17,8 @@ You can run the tool from a terminal using the following command (check the corr
 
 *java -jar [CloudSimAutomation-0.4.0-jar-with-dependencies.jar](https://github.com/manoelcampos/cloudsim-plus-automation/releases/tag/v0.4.0) PathToYamlSimulationScenarioFile*
 
+Execute the tool without any parameter to see the usage help.
+
 # Published Paper
 
 For more information, read the paper published on the [Springer Lecture Notes in Computer Science Volume 8662](http://doi.org/10.1007/978-3-319-11167-4_34). Realize the paper is related to an older version of the tool, which is compatible with CloudSim 3. 
