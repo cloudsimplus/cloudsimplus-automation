@@ -515,12 +515,12 @@ public class CloudSimulation {
         Log.enable();
         LogUtils.setColSeparator(";");
         final String[] captions =
-                {"Framework", "Simulation time (seconds)", "Simulation time (minutes)", "Simulation time (hours)",
+                {"Framework    ", "Simulation time (seconds)", "Simulation time (minutes)", "Simulation time (hours)",
                         "Datacenters", "Hosts from all DCs", "VMs from all Customers", "Cloudlets from all Customers"};
 
         LogUtils.printCaptions(captions);
         LogUtils.printLine(captions,
-                "CloudSim",
+                "CloudSim     ",
                 finishTimeSecs,
                 String.format("%.4f", finishTimeSecs/60.0),
                 String.format("%.6f", finishTimeSecs/3600.0),

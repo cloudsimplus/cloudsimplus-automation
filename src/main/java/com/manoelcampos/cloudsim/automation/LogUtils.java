@@ -37,27 +37,30 @@ import java.util.stream.Stream;
  * @author Manoel Campos da Silva Filho
  */
 public class LogUtils {
-    private static String colSeparator="|";
+    private static String colSeparator="|\t";
 
     /**
      * Print a array of objects like a table.
      * @param captions The captions of the table
      * @param dataArray The data to be printed.
-     * @see LogUtils#printCaptions(java.lang.String[]) 
+     * @see LogUtils#printCaptions(java.lang.String[])
      */
     public static void printLine(String[] captions, Object[] dataArray, String colSeparator) {
+        String s;
+        String fmt;
+        String data;
         for (int i = 0; i < captions.length; i++) {
-            //The data will be printed with the same size of the caption 
+            //The data will be printed with the same size of the caption
             //of the corresponding column.
-            String data = (i < dataArray.length) ? dataArray[i].toString() : "";
-            Log.print(getFormattedData(captions[i].length(), data, colSeparator));
+            fmt = "%-" + captions[i].length() + "s";
+            data = "";
+            if (i < dataArray.length) {
+                data = dataArray[i].toString();
+            }
+            s = String.format(fmt, data) + colSeparator;
+            Log.print(s);
         }
         Log.printLine();
-    }
-
-    private static String getFormattedData(int colSize, String data, String colSeparator) {
-        final String fmt = "%" + colSize + "s";
-        return String.format(fmt, data) + colSeparator;
     }
 
     public static void printLine(String[] captions, Object... dataArray) {
@@ -75,8 +78,8 @@ public class LogUtils {
         }
         Log.printLine();
     }
-    
-    public static void printCaptions(String ...captions) {
+
+    public static void printCaptions(String... captions) {
         printCaptions(captions, colSeparator);
     }
 
@@ -94,15 +97,15 @@ public class LogUtils {
         colSeparator = aColSeparator;
     }
 
+    private static int getLengthOfColumnHeadersRow(String[] captions){
+        return Stream.of(captions).mapToInt(col -> col.length()).sum();
+    }
+
     public static void printLineSeparator(String[] captions) {
         for(String caption: captions){
             Log.print(String.join("", Collections.nCopies(caption.length()+1, "-")));
         }
         Log.printLine();
-    }
-
-    private static int getLengthOfColumnHeadersRow(String[] captions){
-        return Stream.of(captions).mapToInt(col -> col.length()).sum();
     }
 
     public static String getCentralizedString(String[] captions, final String str) {
