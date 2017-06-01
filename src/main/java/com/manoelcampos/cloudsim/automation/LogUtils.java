@@ -60,15 +60,14 @@ public class LogUtils {
         return String.format(fmt, data) + colSeparator;
     }
 
-    public static void printLine(String[] captions, Object[] dataArray) {
+    public static void printLine(String[] captions, Object... dataArray) {
         printLine(captions, dataArray, colSeparator);
     }
 
-    
     /**
      * Print the captions of a table to be presented at the terminal.
      * @param captions Captions of the table
-     * @see LogUtils#printCaptions(java.lang.String[]) 
+     * @see LogUtils#printCaptions(java.lang.String[])
      */
     public static void printCaptions(String[] captions, String colSeparator) {
         for (String caption : captions) {
@@ -77,7 +76,7 @@ public class LogUtils {
         Log.printLine();
     }
     
-    public static void printCaptions(String[] captions) {
+    public static void printCaptions(String ...captions) {
         printCaptions(captions, colSeparator);
     }
 
