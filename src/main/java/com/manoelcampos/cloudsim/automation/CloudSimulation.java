@@ -274,12 +274,12 @@ public class CloudSimulation {
         final String[] captions = {
                 "Cloudlet", "Status ", "DC", "Host", "Host PEs ", "VM", "VM PEs   ",
                 "CloudletLen", "CloudletPEs", "StartTime", "FinishTime", "ExecTime"};
-        final String[] units = new String[]{
-                "ID", "", "ID", "ID", "CPU cores", "ID", "CPU cores", "MI", "CPU cores", "Seconds", "Seconds", "Seconds"};
-
         LogUtils.printCentralizedString(captions,"DatacenterBroker " + broker.getId());
         LogUtils.printCaptions(captions);
-        LogUtils.printLine(captions, units);
+        LogUtils.printLine(captions,
+                "ID", "", "ID", "ID", "CPU cores", "ID",
+                "CPU cores", "MI", "CPU cores",
+                "Seconds", "Seconds", "Seconds");
         LogUtils.printLineSeparator(captions);
 
         for (int i = 0; i < size; i++) {
@@ -464,6 +464,12 @@ public class CloudSimulation {
 
         Log.setDisabled(!logEnabled);
         CloudSim.init(num_user, calendar, logEnabled);
+
+        try {
+            this.datacenters = createDatacentersFromDatacenterRegistries();
+        } catch (ParameterException e) {
+            throw new RuntimeException(e);
+        }
         printScenariosConfiguration();
 
         final Map<DatacenterBroker, CustomerRegistry> brokers = createDatacenterBrokersFromCustomerRegistries();
@@ -500,11 +506,6 @@ public class CloudSimulation {
         }
 
         System.out.println("Hosts========================");
-        try {
-            this.datacenters = createDatacentersFromDatacenterRegistries();
-        } catch (ParameterException e) {
-            throw new RuntimeException(e);
-        }
         for (Datacenter datacenter : datacenters) {
             System.out.println(datacenter.getName() + ": " + datacenter.getHostList().size() + " hosts");
         }
