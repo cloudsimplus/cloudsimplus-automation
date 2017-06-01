@@ -40,14 +40,14 @@ public class LogUtils {
      * Print a array of objects like a table.
      * @param captions The captions of the table
      * @param dataArray The data to be printed.
-     * @see LogUtils#printCaptions(java.lang.String[]) 
+     * @see LogUtils#printCaptions(java.lang.String[])
      */
     public static void printLine(String[] captions, Object[] dataArray, String colSeparator) {
         String s;
         String fmt;
         String data;
         for (int i = 0; i < captions.length; i++) {
-            //The data will be printed with the same size of the caption 
+            //The data will be printed with the same size of the caption
             //of the corresponding column.
             fmt = "%-" + captions[i].length() + "s";
             data = "";
@@ -59,15 +59,15 @@ public class LogUtils {
         }
         Log.printLine();
     }
-    
-    public static void printLine(String[] captions, Object[] dataArray) {
+
+    public static void printLine(String[] captions, Object... dataArray) {
         printLine(captions, dataArray, colSeparator);
     }
 
     /**
      * Print the captions of a table to be presented at the terminal.
      * @param captions Captions of the table
-     * @see LogUtils#printCaptions(java.lang.String[]) 
+     * @see LogUtils#printCaptions(java.lang.String[])
      */
     public static void printCaptions(String[] captions, String colSeparator) {
         for (String caption : captions) {
@@ -75,8 +75,8 @@ public class LogUtils {
         }
         Log.printLine();
     }
-    
-    public static void printCaptions(String[] captions) {
+
+    public static void printCaptions(String... captions) {
         printCaptions(captions, colSeparator);
     }
 

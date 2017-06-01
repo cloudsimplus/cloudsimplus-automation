@@ -64,6 +64,7 @@ public class CloudSimulation implements Runnable {
     private List<Datacenter> datacenters;
     private boolean showResults;
     private boolean logEnabled;
+    private boolean printScenariosConfiguration;
 
     private Map<DatacenterBroker, CustomerRegistry> brokers;
     private Map<DatacenterBroker, List<Vm>> vmsToBrokerMap;
@@ -91,6 +92,7 @@ public class CloudSimulation implements Runnable {
     public CloudSimulation(YamlCloudScenario scenario, final String label) {
         this.scenario = scenario;
         this.showResults = true;
+        this.printScenariosConfiguration = true;
         this.datacenters = new ArrayList<>();
         this.logEnabled = false;
 
@@ -420,12 +422,7 @@ public class CloudSimulation implements Runnable {
         this.cloudsimplus = new CloudSim();
         Log.setDisabled(!logEnabled);
 
-        System.out.println("Hosts========================");
-        this.datacenters = createDatacenters();
-        for (Datacenter datacenter : datacenters) {
-            System.out.println(datacenter.getName() + ": " + datacenter.getHostList().size() + " hosts");
-        }
-        System.out.println("=============================");
+        printScenariosConfiguration();
 
         this.brokers = createBrokers();
         this.vmsToBrokerMap = createVmListForAllBrokers(brokers);
@@ -450,19 +447,68 @@ public class CloudSimulation implements Runnable {
         }
 
         final double finishTimeSecs = (System.currentTimeMillis() - startTime) / 1000;
-        printFinishTime(finishTimeSecs);
+        printFinalResults(finishTimeSecs);
     }
 
-    private void printFinishTime(final double finishTimeSecs) {
-        System.out.printf("\nCloud Simulation execution time in seconds: %.2f\n", finishTimeSecs);
-        if(finishTimeSecs < 60) {
+    private void printScenariosConfiguration() {
+        if(!isPrintScenariosConfiguration()){
             return;
         }
 
-        System.out.printf("Cloud Simulation execution time in hours: %.2f\n", finishTimeSecs/3600.0);
-        System.out.printf("Cloud Simulation execution time in minutes: %.2f\n", finishTimeSecs/60.0);
+        System.out.println("Hosts========================");
+        this.datacenters = createDatacenters();
+        for (Datacenter datacenter : datacenters) {
+            System.out.println(datacenter.getName() + ": " + datacenter.getHostList().size() + " hosts");
+        }
+        System.out.println("=============================");
     }
 
+    private void printFinalResults(final double finishTimeSecs) {
+        Log.enable();
+        LogUtils.setColSeparator(";");
+        final String[] captions =
+            {"Framework    ", "Simulation time (seconds)", "Simulation time (minutes)", "Simulation time (hours)",
+                "Datacenters", "Hosts from all DCs", "VMs from all Customers", "Cloudlets from all Customers"};
+
+        LogUtils.printCaptions(captions);
+        LogUtils.printLine(captions,
+            "CloudSim Plus",
+            finishTimeSecs,
+            String.format("%.4f", finishTimeSecs/60.0),
+            String.format("%.6f", finishTimeSecs/3600.0),
+            getNumDatacenters(),
+            getNumHostsFromAllDatacenters(),
+            getNumVmsFromAllCustomers(),
+            getNumCloudletsFromAllCustomers());
+    }
+
+    private int getNumDatacenters() {
+        return scenario.getDatacenters().stream().mapToInt(DatacenterRegistry::getAmount).sum();
+    }
+
+    private int getNumHostsFromAllDatacenters() {
+        return scenario.getDatacenters().stream().mapToInt(dc -> dc.getAmount() * getNumOfHostsFromDatacenter(dc)).sum();
+    }
+
+    private int getNumOfHostsFromDatacenter(DatacenterRegistry dc) {
+        return dc.getHosts().stream().mapToInt(h -> h.getAmount()).sum();
+    }
+
+    private int getNumVmsFromAllCustomers() {
+        return scenario.getCustomers().stream().mapToInt(c -> c.getAmount() * getNumVmsForCustomer(c)).sum();
+    }
+
+    private int getNumVmsForCustomer(CustomerRegistry customer) {
+        return customer.getVms().stream().mapToInt(vm -> vm.getAmount()).sum();
+    }
+
+    private int getNumCloudletsFromAllCustomers() {
+        return scenario.getCustomers().stream().mapToInt(c -> c.getAmount() * getNumCloudletsForCustomer(c)).sum();
+    }
+
+    private int getNumCloudletsForCustomer(CustomerRegistry customer) {
+        return customer.getCloudlets().stream().mapToInt(cloudlet -> cloudlet.getAmount()).sum();
+    }
     /**
      * Gets the <a href="http://cloudsimplus.org">CloudSim Plus</a> instance used to run the simulation.
      *
@@ -556,6 +602,15 @@ public class CloudSimulation implements Runnable {
 
     public CloudSimulation setLogEnabled(boolean logEnabled) {
         this.logEnabled = logEnabled;
+        return this;
+    }
+
+    public boolean isPrintScenariosConfiguration() {
+        return printScenariosConfiguration;
+    }
+
+    public CloudSimulation setPrintScenariosConfiguration(boolean printScenariosConfiguration) {
+        this.printScenariosConfiguration = printScenariosConfiguration;
         return this;
     }
 }

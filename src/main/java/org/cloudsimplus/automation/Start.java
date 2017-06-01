@@ -91,12 +91,13 @@ public final class Start {
      */
     private boolean parseCommandLineOptions(String[] args) throws ParseException {
         options = new Options();
-        Option option = new Option("v", "Enables CloudSim Plus Log");
+        Option option = new Option("v", "Enables CloudSim Plus Log (disabled by default)");
         option.setLongOpt("verbose");
         options.addOption(option);
 
         options.addOption("s", "Suppress simulation results");
         options.addOption("h", "Show usage help");
+        options.addOption("c", "Print scenario configuration");
 
         CommandLineParser parser = new DefaultParser();
         this.cmd = parser.parse(options, args);
@@ -161,6 +162,7 @@ public final class Start {
             new CloudSimulation(scenario, scenarioName)
                 .setShowResults(!cmd.hasOption("s"))
                 .setLogEnabled(isToEnableLog())
+                .setPrintScenariosConfiguration(isToPrintScenariosConfiguration())
                 .run();
         }
     }
@@ -182,6 +184,10 @@ public final class Start {
      */
     private boolean isToEnableLog() {
         return cmd.hasOption("v");
+    }
+
+    private boolean isToPrintScenariosConfiguration() {
+        return cmd.hasOption("c");
     }
 
 }
