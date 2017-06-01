@@ -422,6 +422,7 @@ public class CloudSimulation implements Runnable {
         this.cloudsimplus = new CloudSim();
         Log.setDisabled(!logEnabled);
 
+        this.datacenters = createDatacenters();
         printScenariosConfiguration();
 
         this.brokers = createBrokers();
@@ -456,7 +457,6 @@ public class CloudSimulation implements Runnable {
         }
 
         System.out.println("Hosts========================");
-        this.datacenters = createDatacenters();
         for (Datacenter datacenter : datacenters) {
             System.out.println(datacenter.getName() + ": " + datacenter.getHostList().size() + " hosts");
         }

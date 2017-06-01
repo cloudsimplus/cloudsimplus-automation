@@ -28,6 +28,8 @@ package org.cloudsimplus.automation;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -50,17 +52,51 @@ import org.cloudbus.cloudsim.utilizationmodels.UtilizationModel;
  */
 public class PolicyLoader {
     /**
+     * Map of already loaded class, which are stored
+     * to speedup getting a class from its name.
+     * This way, after a class is get from the first time,
+     * it isn't used reflection anymore when a class with the same
+     * name is requested again.
+     * Each key is a full class name and each value is the class itself.
+     */
+    private static final Map<String, Class> map = new HashMap<>();
+
+    /**
      * The base CloudSim package name.
      */
     private static final String PKG = "org.cloudbus.cloudsim";
 
-    public static VmScheduler vmScheduler(String classSufix) throws RuntimeException {
+    /**
+     * Try to get a class corresponding to its full name from
+     * the map of already loaded classes.
+     * If the class was not loaded yet, try to load
+     * and return it.
+     * @param fullClassName the full qualified name of the class (including package name)
+     * @return the loaded class
+     */
+    private static <T> Class<T> loadClass(final String fullClassName){
+        Class<T> klass = map.get(fullClassName);
+        if(klass == null){
+            try {
+                klass = (Class<T>) Class.forName(fullClassName);;
+                map.put(fullClassName, klass);
+                return klass;
+            } catch (ClassNotFoundException e) {
+                Logger.getLogger(PolicyLoader.class.getName()).log(Level.SEVERE, null, e);
+                throw new RuntimeException(e);
+            }
+        }
+
+        return klass;
+    }
+
+    public static VmScheduler vmScheduler(final String classSuffix) throws RuntimeException {
         try {
-            classSufix = generateFullClassName(PKG+".schedulers.vm","VmScheduler", classSufix);
-            Class<? extends VmScheduler> klass = (Class<? extends VmScheduler>) Class.forName(classSufix);
+            final String className = generateFullClassName(PKG+".schedulers.vm","VmScheduler", classSuffix);
+            Class<VmScheduler> klass = PolicyLoader.<VmScheduler>loadClass(className);
             Constructor cons = klass.getConstructor(new Class[]{});
             return (VmScheduler) cons.newInstance();
-        } catch (ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
+        } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
             Logger.getLogger(PolicyLoader.class.getName()).log(Level.SEVERE, null, ex);
             throw new RuntimeException(ex);
         }
@@ -82,13 +118,13 @@ public class PolicyLoader {
      * @throws RuntimeException
      */
     private static <T extends ResourceProvisioner> T resourceProvisioner(
-        String classPrefix, String classSufix) throws RuntimeException {
+        final String classPrefix, final String classSufix) throws RuntimeException {
         try {
             final String className = generateFullProvisionerClassName(classPrefix, classSufix);
-            final Class resourceProvisionerClass = Class.forName(className);
-            Constructor cons = resourceProvisionerClass.getConstructor(new Class[]{});
+            Class<ResourceProvisioner> klass = PolicyLoader.<ResourceProvisioner>loadClass(className);
+            Constructor cons = klass.getConstructor(new Class[]{});
             return (T)cons.newInstance();
-        } catch (ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
+        } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
             Logger.getLogger(PolicyLoader.class.getName()).log(Level.SEVERE, null, ex);
             throw new RuntimeException(ex);
         }
@@ -104,11 +140,11 @@ public class PolicyLoader {
 
     public static VmAllocationPolicy vmAllocationPolicy(final DatacenterRegistry dcr) throws RuntimeException {
         try {
-            String classSufix = generateFullClassName(PKG+".allocationpolicies","VmAllocationPolicy", dcr.getVmAllocationPolicy());
-            Class<? extends VmScheduler> klass = (Class<? extends VmScheduler>) Class.forName(classSufix);
+            final String className = generateFullClassName(PKG+".allocationpolicies","VmAllocationPolicy", dcr.getVmAllocationPolicy());
+            Class<VmAllocationPolicy> klass = PolicyLoader.<VmAllocationPolicy>loadClass(className);
             Constructor cons = klass.getConstructor(new Class[]{});
             return (VmAllocationPolicy) cons.newInstance();
-        } catch (ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
+        } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
             Logger.getLogger(PolicyLoader.class.getName()).log(Level.SEVERE, null, ex);
             throw new RuntimeException(ex);
         }
@@ -116,11 +152,11 @@ public class PolicyLoader {
 
     public static CloudletScheduler cloudletScheduler(final VmRegistry vmr) throws RuntimeException {
         try {
-            String classSufix = generateFullClassName(PKG+".schedulers.cloudlet","CloudletScheduler", vmr.getCloudletScheduler());
-            Class<? extends VmScheduler> klass = (Class<? extends VmScheduler>) Class.forName(classSufix);
+            final String className = generateFullClassName(PKG+".schedulers.cloudlet","CloudletScheduler", vmr.getCloudletScheduler());
+            Class<CloudletScheduler> klass = PolicyLoader.<CloudletScheduler>loadClass(className);
             Constructor cons = klass.getConstructor();
             return (CloudletScheduler) cons.newInstance();
-        } catch (ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
+        } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
             Logger.getLogger(PolicyLoader.class.getName()).log(Level.SEVERE, null, ex);
             throw new RuntimeException(ex);
         }
@@ -135,13 +171,13 @@ public class PolicyLoader {
         return generateFullClassName(PKG+".provisioners", classPrefix, classSuffix);
     }
 
-    public static UtilizationModel utilizationModel(String classSufix) throws RuntimeException {
+    public static UtilizationModel utilizationModel(final String classSuffix) throws RuntimeException {
         try {
-            final String className = generateFullClassName(PKG+".utilizationmodels", "UtilizationModel", classSufix);
-            Class<? extends VmScheduler> klass = (Class<? extends VmScheduler>) Class.forName(className);
+            final String className = generateFullClassName(PKG+".utilizationmodels", "UtilizationModel", classSuffix);
+            Class<UtilizationModel> klass = PolicyLoader.<UtilizationModel>loadClass(className);
             Constructor cons = klass.getConstructor();
             return (UtilizationModel) cons.newInstance();
-        } catch (ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
+        } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
             Logger.getLogger(PolicyLoader.class.getName()).log(Level.SEVERE, null, ex);
             throw new RuntimeException(ex);
         }
