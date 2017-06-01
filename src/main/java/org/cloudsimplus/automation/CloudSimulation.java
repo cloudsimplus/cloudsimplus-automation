@@ -454,17 +454,13 @@ public class CloudSimulation implements Runnable {
     }
 
     private void printFinishTime(final double finishTimeSecs) {
-        System.out.printf("\nCloud Simulation finished in %.2f seconds", finishTimeSecs);
+        System.out.printf("\nCloud Simulation execution time in seconds: %.2f\n", finishTimeSecs);
         if(finishTimeSecs < 60) {
             return;
         }
 
-        if(finishTimeSecs >= 3600) {
-            System.out.printf(" (%.2f hours)!\n", finishTimeSecs/3600.0);
-            return;
-        }
-
-        System.out.printf(" (%.2f minutes)!\n", finishTimeSecs/60.0);
+        System.out.printf("Cloud Simulation execution time in hours: %.2f\n", finishTimeSecs/3600.0);
+        System.out.printf("Cloud Simulation execution time in minutes: %.2f\n", finishTimeSecs/60.0);
     }
 
     /**
