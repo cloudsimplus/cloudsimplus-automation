@@ -86,18 +86,6 @@
 
                         <configuration>
                             <failOnError>false</failOnError>
-                            <tags>
-                                <direction>
-                                    <name>pre</name>
-                                    <placement>a</placement>
-                                    <head>Precondition:</head>
-                                </direction>
-                                <direction>
-                                    <name>post</name>
-                                    <placement>a</placement>
-                                    <head>Postcondition:</head>
-                                </direction>
-                            </tags>
                         </configuration>
                     </plugin>
 
