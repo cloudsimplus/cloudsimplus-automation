@@ -439,7 +439,7 @@ public class CloudSimulation implements Runnable {
         if(showResults) {
             Log.enable();
             for (DatacenterBroker broker : brokers.keySet()) {
-                List<Cloudlet> list = broker.getCloudletsFinishedList();
+                List<Cloudlet> list = broker.getCloudletFinishedList();
                 list.sort(comparingInt((Cloudlet c) -> c.getVm().getId()).thenComparingInt(Cloudlet::getId));
                 new CloudletsTableBuilder(list)
                     .setTitle(broker.getName())
