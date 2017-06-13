@@ -94,7 +94,7 @@ The complete example project is available [here](example).
 ```java
 try {
     //Loads a YAML file containing 1 or more simulation scenarios.
-    final YamlCloudScenarioReader reader = new YamlCloudScenarioReader("PATH TO YOUR SIMULATION SCENARIOS YAML FILE");
+    final YamlCloudScenarioReader reader = new YamlCloudScenarioReader("PATH TO YOUR YAML FILE");
     //Gets the list or parsed scenarios.
     final List<YamlCloudScenario> simulationScenarios = reader.getScenarios();
     //For each existing scenario, creates and runs it in CloudSim Plus, printing results.
