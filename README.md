@@ -78,14 +78,32 @@ Execute the tool without any parameter to see the usage help.
 # Using it as a maven dependency into your own project
 You can build your own applications on top of CloudSim Plus Automation to automate the creation cloud computing simulations.
 This way, your applications will be able to read simulation scenarios from YAML files, build and execute them on CloudSim Plus.
-Just add CloudSim Plus Automation as a Maven dependency into your own project and start coding:
+Just add CloudSim Plus Automation as a Maven dependency into your own project and start coding. 
 
 ```xml
 <dependency>
   <groupId>org.cloudsimplus</groupId>
   <artifactId>cloudsim-plus-automation</artifactId>
-  <version>1.2.1</version>
+  <version>1.2.3</version>
 </dependency>
+```
+
+You can programmatically load a YAML file containing simulation scenarios using some code such as the example below.
+The complete example project is available [here](example).
+
+```java
+try {
+    //Loads a YAML file containing 1 or more simulation scenarios.
+    final YamlCloudScenarioReader reader = new YamlCloudScenarioReader("PATH TO YOUR SIMULATION SCENARIOS YAML FILE");
+    //Gets the list or parsed scenarios.
+    final List<YamlCloudScenario> simulationScenarios = reader.getScenarios();
+    //For each existing scenario, creates and runs it in CloudSim Plus, printing results.
+    for (YamlCloudScenario scenario : simulationScenarios) {
+        new CloudSimulation(scenario).run();
+    }
+} catch (FileNotFoundException | YamlException e) {
+    System.err.println("Error when trying to load the simulation scenario from the YAML file: "+e.getMessage());
+}
 ```
 
 # Published Paper

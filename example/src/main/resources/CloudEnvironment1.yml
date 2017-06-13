@@ -1,0 +1,49 @@
+datacenters:
+  - !datacenter
+    amount: 1
+    vmAllocationPolicy: Simple
+    vmMigration: enabled
+    costPerSec: 0.1
+    costPerMem: 0.05
+    costPerStorage: 0.001
+    costPerBw: 0.1
+    sans:
+      - !san
+        capacity: 10000
+        bandwidth: 10000
+        networkLatency: 5
+    hosts:
+      - !host
+        amount: 8
+        ram: 1000000
+        bw: 100000
+        storage: 40000
+        pes: 4
+        mips: 50000
+        vmScheduler: TimeShared
+        ramProvisioner: Simple
+        bwProvisioner: Simple
+        peProvisioner: Simple
+customers:
+  - !customer
+    amount: 2
+    vms:
+      - !vm
+        amount: 2
+        size: 500
+        pes: 4
+        mips: 1000
+        ram: 2000
+        bw: 1000
+        cloudletScheduler: SpaceShared
+        vmm: Xen
+    cloudlets:
+      - !cloudlet
+        amount: 6
+        pes: 2
+        length: 100
+        fileSize: 50
+        outputSize: 70
+        utilizationModelCpu: Full
+        utilizationModelRam: Full
+        utilizationModelBw: Full
