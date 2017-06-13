@@ -1,6 +1,6 @@
 # CloudSim Plus Automation Example
 
-This is an example project showing how to use CloudSim Plus as a maven dependency.
+This is an example project showing how to use CloudSim Plus Automation as a maven dependency.
 This way, it allows your own application to load simulation scenarios from YAML files
 and automate the creation and execution of them in CloudSim Plus.
 
