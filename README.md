@@ -70,7 +70,7 @@ You can simply download the [jar file from the latest release](https://github.co
 by issuing the following command (check the correct version number of the jar file):
 
 ```bash
-java -jar cloudsim-plus-automation-1.2.1-with-dependencies.jar PathToYamlSimulationScenarioFile
+java -jar cloudsim-plus-automation-1.2.3-with-dependencies.jar PathToYamlSimulationScenarioFile
 ```
 
 Execute the tool without any parameter to see the usage help.
