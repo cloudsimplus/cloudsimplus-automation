@@ -26,7 +26,6 @@
  */
 package org.cloudsimplus.automation;
 
-import org.cloudbus.cloudsim.util.Log;
 
 /**
  * Useful methods to print log information to the terminal.
@@ -55,9 +54,9 @@ public class LogUtils {
                 data = dataArray[i].toString();
             }
             s = String.format(fmt, data) + colSeparator;
-            Log.print(s);
+            System.out.print(s);
         }
-        Log.printLine();
+        System.out.println();
     }
 
     public static void printLine(String[] captions, Object... dataArray) {
@@ -71,9 +70,9 @@ public class LogUtils {
      */
     public static void printCaptions(String[] captions, String colSeparator) {
         for (String caption : captions) {
-            Log.print(caption + colSeparator);
+            System.out.print(caption + colSeparator);
         }
-        Log.printLine();
+        System.out.println();
     }
 
     public static void printCaptions(String... captions) {

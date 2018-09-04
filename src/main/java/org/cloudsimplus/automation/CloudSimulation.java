@@ -22,6 +22,7 @@
  */
 package org.cloudsimplus.automation;
 
+import ch.qos.logback.classic.Level;
 import cloudreports.models.*;
 import org.cloudbus.cloudsim.allocationpolicies.VmAllocationPolicy;
 import org.cloudbus.cloudsim.brokers.DatacenterBroker;
@@ -30,25 +31,23 @@ import org.cloudbus.cloudsim.cloudlets.Cloudlet;
 import org.cloudbus.cloudsim.cloudlets.CloudletSimple;
 import org.cloudbus.cloudsim.core.CloudSim;
 import org.cloudbus.cloudsim.datacenters.Datacenter;
-import org.cloudbus.cloudsim.datacenters.DatacenterCharacteristics;
-import org.cloudbus.cloudsim.datacenters.DatacenterCharacteristicsSimple;
 import org.cloudbus.cloudsim.datacenters.DatacenterSimple;
 import org.cloudbus.cloudsim.hosts.Host;
 import org.cloudbus.cloudsim.hosts.HostSimple;
 import org.cloudbus.cloudsim.provisioners.ResourceProvisioner;
-import org.cloudbus.cloudsim.resources.FileStorage;
-import org.cloudbus.cloudsim.resources.Pe;
-import org.cloudbus.cloudsim.resources.PeSimple;
-import org.cloudbus.cloudsim.resources.SanStorage;
+import org.cloudbus.cloudsim.resources.*;
 import org.cloudbus.cloudsim.schedulers.cloudlet.CloudletScheduler;
 import org.cloudbus.cloudsim.schedulers.vm.VmScheduler;
-import org.cloudbus.cloudsim.util.Log;
 import org.cloudbus.cloudsim.utilizationmodels.UtilizationModel;
 import org.cloudbus.cloudsim.vms.Vm;
 import org.cloudbus.cloudsim.vms.VmSimple;
 import org.cloudsimplus.builders.tables.CloudletsTableBuilder;
+import org.cloudsimplus.util.Log;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import static java.util.Comparator.comparingInt;
@@ -323,13 +322,15 @@ public class CloudSimulation implements Runnable {
         final String datacenterName, final DatacenterRegistry dcr,
         final List<Host> hostList)
     {
-        final DatacenterCharacteristics characteristics = createDatacenterCharacteristics(dcr, hostList);
+
         final List<FileStorage> storageList = createSan(dcr);
         final VmAllocationPolicy allocationPolicy = PolicyLoader.vmAllocationPolicy(dcr);
 
-        return new DatacenterSimple(cloudsimplus, characteristics, allocationPolicy)
-            .setStorageList(storageList)
-            .setSchedulingInterval(dcr.getSchedulingInterval());
+        Datacenter dc = new DatacenterSimple(cloudsimplus, hostList, allocationPolicy);
+        dc.setSchedulingInterval(dcr.getSchedulingInterval())
+          .setDatacenterStorage(new DatacenterStorage(storageList));
+        setDatacenterCharacteristics(dc, dcr);
+        return dc;
     }
 
     private Host createHost(final int hostId, final HostRegistry hr, final List<Pe> peList) throws RuntimeException {
@@ -374,20 +375,18 @@ public class CloudSimulation implements Runnable {
     }
 
     /**
-     * Create a DatacenterCharacteristics object
-     * that represents that characteristics of one CloudSim Datacenter,
+     * Sets the attributes of the DatacenterCharacteristics inside the Datacenter.
+     * It represents that characteristics of one CloudSim Datacenter,
      * including the list of hosts of the Datacenter.
      *
+     * @param dc the Datacenter to set its characteristics
      * @param dcr       The abstract DatacenterRegistry information, obtained from the YAML file,
      *                  to be used to define the Datacenter characteristics.
-     * @param hostList  The list of hosts of the Datacenter
-     * @return Returns the DatacenterCharacteristics object created.
-     * @see #createDatacenterCharacteristics(DatacenterRegistry, List)
      */
-    private DatacenterCharacteristics createDatacenterCharacteristics(
-        final DatacenterRegistry dcr, List<Host> hostList)
+    private void setDatacenterCharacteristics(
+        Datacenter dc, final DatacenterRegistry dcr)
     {
-        return new DatacenterCharacteristicsSimple(hostList)
+        dc.getCharacteristics()
             .setArchitecture(dcr.getArchitecture())
             .setOs(dcr.getOs())
             .setVmm(dcr.getVmm())
@@ -420,7 +419,9 @@ public class CloudSimulation implements Runnable {
     public void run() {
         final double startTime = System.currentTimeMillis();
         this.cloudsimplus = new CloudSim();
-        Log.setDisabled(!logEnabled);
+        if(!logEnabled){
+            Log.setLevel(Level.OFF);
+        }
 
         this.datacenters = createDatacenters();
         printScenariosConfiguration();
@@ -437,7 +438,6 @@ public class CloudSimulation implements Runnable {
         cloudsimplus.start();
 
         if(showResults) {
-            Log.enable();
             for (DatacenterBroker broker : brokers.keySet()) {
                 List<Cloudlet> list = broker.getCloudletFinishedList();
                 list.sort(comparingInt((Cloudlet c) -> c.getVm().getId()).thenComparingInt(Cloudlet::getId));
@@ -464,7 +464,6 @@ public class CloudSimulation implements Runnable {
     }
 
     private void printFinalResults(final double finishTimeSecs) {
-        Log.enable();
         LogUtils.setColSeparator(";");
         final String[] captions =
             {"Framework    ", "Simulation time (seconds)", "Simulation time (minutes)", "Simulation time (hours)",

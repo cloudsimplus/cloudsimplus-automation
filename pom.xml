@@ -4,7 +4,7 @@
 
     <groupId>org.cloudsimplus</groupId>
     <artifactId>cloudsim-plus-automation</artifactId>
-    <version>1.2.4</version>
+    <version>4.0.0</version>
     <packaging>jar</packaging>
 
     <name>CloudSim Plus Automation</name>
@@ -135,7 +135,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.6.1</version>
+                <version>3.7.0</version>
                 <configuration>
                     <showDeprecation>true</showDeprecation>
                     <source>1.8</source>
@@ -164,29 +164,6 @@
                         </manifest>
                     </archive>
                 </configuration>
-            </plugin>
-
-            <!--
-            Checks out-of-date dependencies and License violations: http://versioneye.com
-            The plugin automatically collect dependencies information and submit to the
-            project on its website.
-            It requires an API key that can be defined in an environment variable: export VERSIONEYE_API_KEY=value
-            For manual update execute: mvn versioneye:update
-            -->
-            <plugin>
-                <groupId>com.versioneye</groupId>
-                <artifactId>versioneye-maven-plugin</artifactId>
-                <version>3.11.4</version>
-                <configuration>
-                    <organisation>manoelcampos</organisation>
-                    <projectId>58aeeecd0693850016ef1ed8</projectId>
-                </configuration>
-                <!--
-                The plugin is just being executed when the repository is pushed to travis-ci.org
-                in order to speed up local build.
-                See the .travis.yml file to check the command line being executed.
-                -->
-                <!--<executions><execution><goals><goal>update</goal></goals></execution></executions>-->
             </plugin>
 
             <!-- Creates a "uber jar" that includes all external dependencies

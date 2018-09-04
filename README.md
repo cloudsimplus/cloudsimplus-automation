@@ -1,4 +1,5 @@
-# CloudSim Plus Automation: A Human Readable Scenario Specification for Automated Creation of Simulations on CloudSim [![Build Status](https://travis-ci.org/manoelcampos/cloudsim-plus-automation.png?branch=master)](https://travis-ci.org/manoelcampos/cloudsim-plus-automation) [![Dependency Status](https://www.versioneye.com/user/projects/58aeeecd0693850016ef1ed8/badge.svg?style=rounded-square)](https://www.versioneye.com/user/projects/58aeeecd0693850016ef1ed8) [![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.cloudsimplus/cloudsim-plus-automation/badge.svg)] [![Javadocs](https://www.javadoc.io/badge/org.cloudsimplus/cloudsim-plus-automation.svg)](https://www.javadoc.io/doc/org.cloudsimplus/cloudsim-plus-automation) [![GPL licensed](https://img.shields.io/badge/license-GPL-blue.svg)](http://www.gnu.org/licenses/gpl-3.0)
+# CloudSim Plus Automation: A Human Readable Scenario Specification for Automated Creation of Simulations on CloudSim [![Build Status](https://travis-ci.org/manoelcampos/cloudsim-plus-automation.png?branch=master)](https://travis-ci.org/manoelcampos/cloudsim-plus-automation) [![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.cloudsimplus/cloudsim-plus-automation/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.cloudsimplus/cloudsim-plus-automation/) [![Javadocs](https://www.javadoc.io/badge/org.cloudsimplus/cloudsim-plus-automation.svg)](https://www.javadoc.io/doc/org.cloudsimplus/cloudsim-plus-automation) [![GPL licensed](https://img.shields.io/badge/license-GPL-blue.svg)](http://www.gnu.org/licenses/gpl-3.0)
+
 
 **CloudSim Plus Automation** is a Java command line tool based on [CloudSim Plus](http://cloudsimplus.org) and [CloudReports](https://github.com/thiagotts/CloudReports) classes which is able to read specifications of CloudSim Plus simulation scenarios from a YAML file, a very human readable data format. Simulation scenarios can be written inside a YAML file and CloudSim Plus Automation reads these simulation scenarios, creates and runs them on CloudSim Plus.  
 
@@ -82,9 +83,10 @@ Just add CloudSim Plus Automation as a Maven dependency into your own project an
 
 ```xml
 <dependency>
-  <groupId>org.cloudsimplus</groupId>
-  <artifactId>cloudsim-plus-automation</artifactId>
-  <version>1.2.3</version>
+    <groupId>org.cloudsimplus</groupId>
+    <artifactId>cloudsim-plus-automation</artifactId>
+    <!-- Set a specific version or use the latest one -->
+    <version>LATEST</version>
 </dependency>
 ```
 
