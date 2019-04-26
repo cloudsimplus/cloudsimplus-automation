@@ -50,7 +50,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static java.util.Comparator.comparingInt;
+import static java.util.Comparator.comparingLong;
 import static java.util.stream.Collectors.toList;
 
 /**
@@ -175,12 +175,14 @@ public class CloudSimulation implements Runnable {
                         final VmRegistry vmr) throws RuntimeException
     {
         CloudletScheduler scheduler = PolicyLoader.cloudletScheduler(vmr);
-        return new VmSimple(id, vmr.getMips(), vmr.getPes())
-            .setBroker(broker)
+        final Vm vm = new VmSimple(id, vmr.getMips(), vmr.getPes());
+        vm
             .setRam(vmr.getRam())
             .setBw(vmr.getBw())
             .setSize(vmr.getSize())
-            .setCloudletScheduler(scheduler);
+            .setCloudletScheduler(scheduler)
+            .setBroker(broker);
+        return vm;
     }
 
     /**
@@ -224,13 +226,15 @@ public class CloudSimulation implements Runnable {
         UtilizationModel ramUtilization = PolicyLoader.utilizationModel(up.getUtilizationModelRam());
         UtilizationModel bwUtilization  = PolicyLoader.utilizationModel(up.getUtilizationModelBw());
 
-        return new CloudletSimple(id, up.getLength(), up.getPes())
+        final Cloudlet cloudlet = new CloudletSimple(id, up.getLength(), up.getPes());
+        cloudlet
             .setFileSize(up.getFileSize())
             .setOutputSize(up.getOutputSize())
             .setUtilizationModelCpu(cpuUtilization)
             .setUtilizationModelRam(ramUtilization)
             .setUtilizationModelBw(bwUtilization)
             .setBroker(broker);
+        return cloudlet;
     }
 
     /**
@@ -440,7 +444,7 @@ public class CloudSimulation implements Runnable {
         if(showResults) {
             for (DatacenterBroker broker : brokers.keySet()) {
                 List<Cloudlet> list = broker.getCloudletFinishedList();
-                list.sort(comparingInt((Cloudlet c) -> c.getVm().getId()).thenComparingInt(Cloudlet::getId));
+                list.sort(comparingLong((Cloudlet c) -> c.getVm().getId()).thenComparingLong(Cloudlet::getId));
                 new CloudletsTableBuilder(list)
                     .setTitle(broker.getName())
                     .build();
