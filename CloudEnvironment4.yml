@@ -1,0 +1,42 @@
+#A scenario where there is only the half number of PEs required by all Cloudlets
+#running inside a VM. This way, start time of half of the Cloudlets is delayed,
+#but the execution times are not affected
+#since it's used a CloudletSchedulerSpaceShared.
+datacenters:
+  - !datacenter
+    vmAllocationPolicy: Simple
+    vmMigration: disable
+    hosts:
+      - !host
+        amount: 200
+        ram: 1000000
+        bw: 100000
+        storage: 1200000
+        pes: 8
+        mips: 50000
+        vmScheduler: TimeShared
+        ramProvisioner: Simple
+        bwProvisioner: Simple
+        peProvisioner: Simple
+customers:
+  - !customer
+    vms:
+      - !vm
+        amount: 5000
+        size: 500
+        pes: 4
+        mips: 1000
+        ram: 2000
+        bw: 1000
+        cloudletScheduler: SpaceShared
+        vmm: Xen
+    cloudlets:
+      - !cloudlet
+        amount: 20000
+        pes: 2
+        length: 10000
+        fileSize: 50
+        outputSize: 70
+        utilizationModelCpu: Full
+        utilizationModelRam: Full
+        utilizationModelBw: Full

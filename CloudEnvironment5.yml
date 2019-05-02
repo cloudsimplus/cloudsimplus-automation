@@ -1,0 +1,38 @@
+datacenters:
+  - !datacenter
+    vmAllocationPolicy: Simple
+    vmMigration: disable
+    hosts:
+      - !host
+        amount: 20000
+        ram: 1000000
+        bw: 100000
+        storage: 1200000
+        pes: 8
+        mips: 50000
+        vmScheduler: TimeShared
+        ramProvisioner: Simple
+        bwProvisioner: Simple
+        peProvisioner: Simple
+customers:
+  - !customer
+    vms:
+      - !vm
+        amount: 40000
+        size: 500
+        pes: 4
+        mips: 1000
+        ram: 2000
+        bw: 1000
+        cloudletScheduler: SpaceShared
+        vmm: Xen
+    cloudlets:
+      - !cloudlet
+        amount: 50000
+        pes: 2
+        length: 10000
+        fileSize: 50
+        outputSize: 70
+        utilizationModelCpu: Full
+        utilizationModelRam: Full
+        utilizationModelBw: Full
