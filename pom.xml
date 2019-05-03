@@ -4,7 +4,7 @@
 
     <groupId>org.cloudsimplus</groupId>
     <artifactId>cloudsim-plus-automation</artifactId>
-    <version>4.3.2</version>
+    <version>4.3.5</version>
     <packaging>jar</packaging>
 
     <name>CloudSim Plus Automation</name>
@@ -266,6 +266,12 @@
 
     <dependencies>
         <dependency>
+            <groupId>org.cloudsimplus</groupId>
+            <artifactId>cloudsim-plus</artifactId>
+            <version>${project.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.12</version>
@@ -275,12 +281,6 @@
             <groupId>com.esotericsoftware.yamlbeans</groupId>
             <artifactId>yamlbeans</artifactId>
             <version>1.12</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.cloudsimplus</groupId>
-            <artifactId>cloudsim-plus</artifactId>
-            <version>${project.version}</version>
             <scope>compile</scope>
         </dependency>
         <dependency>

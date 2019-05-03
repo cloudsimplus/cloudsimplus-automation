@@ -1,6 +1,6 @@
 datacenters:
   - !datacenter
-    vmAllocationPolicy: Simple
+    vmAllocationPolicy: BestFit
     vmMigration: disable
     hosts:
       - !host
