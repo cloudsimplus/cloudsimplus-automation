@@ -4,7 +4,7 @@
 
     <groupId>org.cloudsimplus</groupId>
     <artifactId>cloudsim-plus-automation</artifactId>
-    <version>4.3.5</version>
+    <version>4.4.2</version>
     <packaging>jar</packaging>
 
     <name>CloudSim Plus Automation</name>
@@ -26,7 +26,7 @@
     <developers>
         <developer>
             <name>Manoel Campos da Silva Filho</name>
-            <email>manoelcampos@gmail.com</email>
+            <email>mcampos@ifto.edu.br</email>
             <organization>Instituto Federal de Educação Ciência e Tecnologia do Tocantins (IFTO)</organization>
             <organizationUrl>http://www.ifto.edu.br</organizationUrl>
         </developer>
