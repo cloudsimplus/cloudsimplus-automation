@@ -53,6 +53,7 @@ public final class DatacenterRegistry implements Serializable{
     private double upperUtilizationThreshold;
     private double lowerUtilizationThreshold;
     private double schedulingInterval;
+    private double monitoringInterval;
 
     public DatacenterRegistry() {
         setAmount(1);
@@ -62,6 +63,7 @@ public final class DatacenterRegistry implements Serializable{
         setOs("Linux");
         setVmm("Xen");
         setSchedulingInterval(0);
+        setMonitoringInterval(0);
     }
 
     /**
@@ -326,6 +328,15 @@ public final class DatacenterRegistry implements Serializable{
     public double getSchedulingInterval() {
         return schedulingInterval;
     }
+    
+    /**
+     * Gets the datacenter's monitoring interval.
+     *
+     * @return the datacenter's monitoring interval.
+     */
+    public double getMonitoringInterval() {
+        return monitoringInterval;
+    }
 
     /**
      * Sets the datacenter's scheduling interval.
@@ -334,6 +345,15 @@ public final class DatacenterRegistry implements Serializable{
      */
     public void setSchedulingInterval(double schedulingInterval) {
         this.schedulingInterval = schedulingInterval;
+    }
+    
+    /**
+     * Sets the datacenter's monitoring interval.
+     *
+     * @param   monitoringInterval  the datacenter's monitoring interval.
+     */
+    public void setMonitoringInterval(double monitoringInterval) {
+        this.monitoringInterval = monitoringInterval;
     }
 
     /**
@@ -401,6 +421,7 @@ public final class DatacenterRegistry implements Serializable{
         s.append("Upper Utilization threshold=").append(getUpperUtilizationThreshold()).append("\n");
         s.append("Lower Utilization threshold=").append(getLowerUtilizationThreshold()).append("\n");
         s.append("Scheduling interval=").append(getSchedulingInterval()).append("\n");
+        s.append("Monitoring interval=").append(getMonitoringInterval()).append("\n");
         s.append("Processing Cost=").append(getCostPerSec()).append("\n");
         s.append("Memory Cost=").append(getCostPerMem()).append("\n");
         s.append("Storage Cost=").append(getCostPerStorage()).append("\n");
