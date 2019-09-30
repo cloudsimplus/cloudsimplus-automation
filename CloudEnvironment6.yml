@@ -1,6 +1,6 @@
 datacenters:
   - !datacenter
-    vmAllocationPolicy: BestFit
+    vmAllocationPolicy: FirstFit
     vmMigration: disable
     hosts:
       - !host
