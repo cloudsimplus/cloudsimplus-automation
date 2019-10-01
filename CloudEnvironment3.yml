@@ -11,7 +11,6 @@ datacenters:
     lowerUtilizationThreshold: 0.2
     vmMigration: enabled
     schedulingInterval: 30
-    monitoringInterval: 180
     costPerSec: 0.1
     costPerMem: 0.05
     costPerStorage: 0.001
@@ -68,7 +67,6 @@ datacenters:
     lowerUtilizationThreshold: 0.2
     vmMigration: enabled
     schedulingInterval: 30
-    monitoringInterval: 180
     costPerSec: 0.1
     costPerMem: 0.05
     costPerStorage: 0.001
