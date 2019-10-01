@@ -1,7 +1,11 @@
-# CloudSim Plus Automation: A Human-Readable Scenario Specification for Automated Creation of Simulations on CloudSim [![Build Status](https://travis-ci.org/manoelcampos/cloudsim-plus-automation.png?branch=master)](https://travis-ci.org/manoelcampos/cloudsim-plus-automation) [![Maven Central](https://img.shields.io/maven-central/v/org.cloudsimplus/cloudsim-plus-automation.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22org.cloudsimplus%22%20AND%20a:%22cloudsim-plus-automation%22) [![Javadocs](https://www.javadoc.io/badge/org.cloudsimplus/cloudsim-plus-automation.svg)](https://www.javadoc.io/doc/org.cloudsimplus/cloudsim-plus-automation) [![GPL licensed](https://img.shields.io/badge/license-GPL-blue.svg)](http://www.gnu.org/licenses/gpl-3.0)
+# CloudSim Plus Automation: Human-Readable Scenario Specification Tool for Automated Creation of Simulations on CloudSim and CloudSim Plus [![Build Status](https://travis-ci.org/manoelcampos/cloudsim-plus-automation.png?branch=master)](https://travis-ci.org/manoelcampos/cloudsim-plus-automation) [![Maven Central](https://img.shields.io/maven-central/v/org.cloudsimplus/cloudsim-plus-automation.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22org.cloudsimplus%22%20AND%20a:%22cloudsim-plus-automation%22) [![Javadocs](https://www.javadoc.io/badge/org.cloudsimplus/cloudsim-plus-automation.svg)](https://www.javadoc.io/doc/org.cloudsimplus/cloudsim-plus-automation) [![GPL licensed](https://img.shields.io/badge/license-GPL-blue.svg)](http://www.gnu.org/licenses/gpl-3.0)
 
 
-**CloudSim Plus Automation** is a Java command line tool based on [CloudSim Plus](http://cloudsimplus.org) and [CloudReports](https://github.com/thiagotts/CloudReports) classes which is able to read specifications of CloudSim Plus simulation scenarios from a YAML file, a very human readable data format. Simulation scenarios can be written inside a YAML file and CloudSim Plus Automation reads these simulation scenarios, creates and runs them on CloudSim Plus.  
+**CloudSim Plus Automation** is a Java command line tool based on [CloudSim Plus](http://cloudsimplus.org) 
+(and some [CloudReports](https://github.com/thiagotts/CloudReports) classes) 
+which is able to read specifications of CloudSim Plus simulation scenarios from a YAML file, 
+a very human-readable data format. 
+Simulation scenarios can be written inside a YAML file and CloudSim Plus Automation reads these simulation scenarios, creates and runs them on CloudSim Plus.  
 
 The tool releases researchers from writing Java code just to run simulation scenarios. 
 This way, the attention can be focused on the problem to be solved, such as the creation of new algorithms for load balancing, 
