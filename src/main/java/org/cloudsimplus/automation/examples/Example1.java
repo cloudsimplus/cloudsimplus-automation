@@ -1,3 +1,5 @@
+package org.cloudsimplus.automation.examples;
+
 import com.esotericsoftware.yamlbeans.YamlException;
 import org.cloudbus.cloudsim.util.ResourceLoader;
 import org.cloudsimplus.automation.CloudSimulation;
@@ -14,8 +16,8 @@ import java.util.List;
  *
  * @author Manoel Campos da Silva Filho
  */
-public class Start {
-    private Start(){
+public class Example1 {
+    private Example1(){
         //Gets the path to the YAML file inside the resource directory.
         final String yamlFilePath = ResourceLoader.getResourcePath(getClass(), "CloudEnvironment1.yml");
         try {
@@ -33,6 +35,6 @@ public class Start {
     }
 
     public static void main(String[] args) {
-        new Start();
+        new Example1();
     }
 }
