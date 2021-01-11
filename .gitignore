@@ -1,3 +1,6 @@
+paper/
+*.csv
+
 .DS_Store
 /docs/_build
 dependency-reduced-pom.xml
