@@ -1,15 +1,10 @@
 paper/
 *.csv
+deploy.sh
 
 .DS_Store
 /docs/_build
 dependency-reduced-pom.xml
-/cloudsim-plus/target/
-/cloudsim-plus-examples/target/
-/cloudsim-plus-benchmarks/target/
-/cloudsim-plus-testbeds/target/
-/cloudsim-plus/nbproject/
-/distribution/target/
 **/target/
 *.jar
 
