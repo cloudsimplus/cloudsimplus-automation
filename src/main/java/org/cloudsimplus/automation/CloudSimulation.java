@@ -35,7 +35,10 @@ import org.cloudbus.cloudsim.datacenters.DatacenterSimple;
 import org.cloudbus.cloudsim.hosts.Host;
 import org.cloudbus.cloudsim.hosts.HostSimple;
 import org.cloudbus.cloudsim.provisioners.ResourceProvisioner;
-import org.cloudbus.cloudsim.resources.*;
+import org.cloudbus.cloudsim.resources.DatacenterStorage;
+import org.cloudbus.cloudsim.resources.Pe;
+import org.cloudbus.cloudsim.resources.PeSimple;
+import org.cloudbus.cloudsim.resources.SanStorage;
 import org.cloudbus.cloudsim.schedulers.cloudlet.CloudletScheduler;
 import org.cloudbus.cloudsim.schedulers.vm.VmScheduler;
 import org.cloudbus.cloudsim.utilizationmodels.UtilizationModel;
@@ -327,7 +330,7 @@ public class CloudSimulation implements Runnable {
         final List<Host> hostList)
     {
 
-        final List<FileStorage> storageList = createSan(dcr);
+        final List<SanStorage> storageList = createSan(dcr);
         final VmAllocationPolicy allocationPolicy = PolicyLoader.vmAllocationPolicy(dcr);
 
         Datacenter dc = new DatacenterSimple(cloudsimplus, hostList, allocationPolicy);
@@ -368,8 +371,8 @@ public class CloudSimulation implements Runnable {
      *                                  to be created.
      * @see YamlCloudScenario#getDatacenters()
      */
-    private List<FileStorage> createSan(final DatacenterRegistry dcr) throws IllegalArgumentException {
-        final List<FileStorage> list = new ArrayList<>(dcr.getSans().size());
+    private List<SanStorage> createSan(final DatacenterRegistry dcr) throws IllegalArgumentException {
+        final List<SanStorage> list = new ArrayList<>(dcr.getSans().size());
         for (SanStorageRegistry sr : dcr.getSans()) {
             SanStorage san = new SanStorage(sr.getCapacity(), sr.getBandwidth(), sr.getNetworkLatency());
             list.add(san);
