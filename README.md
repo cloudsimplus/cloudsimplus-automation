@@ -2,6 +2,7 @@
 
 [![Build Status](https://github.com/manoelcampos/cloudsim-plus-automation/actions/workflows/maven.yml/badge.svg)](https://github.com/manoelcampos/cloudsim-plus-automation/actions/workflows/maven.yml) [![Maven Central](https://img.shields.io/maven-central/v/org.cloudsimplus/cloudsim-plus-automation.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22org.cloudsimplus%22%20AND%20a:%22cloudsim-plus-automation%22) [![Javadocs](https://www.javadoc.io/badge/org.cloudsimplus/cloudsim-plus-automation.svg)](https://www.javadoc.io/doc/org.cloudsimplus/cloudsim-plus-automation) [![GPL licensed](https://img.shields.io/badge/license-GPL-blue.svg)](http://www.gnu.org/licenses/gpl-3.0)
 
+## 1. Introduction
 
 **CloudSim Plus Automation** is a Java command line tool based on [CloudSim Plus](http://cloudsimplus.org) 
 (and some [CloudReports](https://github.com/thiagotts/CloudReports) classes) 
@@ -75,18 +76,18 @@ This work contributes to:
 - use a human readable file format to specify cloud simulation scenarios and speed up such a simulation process phase;
 - allow reuse, extension and sharing of simulations scenarios.
 
-# Using the command line tool 
+## 2. Using the command line tool 
 
 You can simply download the [jar file from the latest release](https://github.com/manoelcampos/cloudsim-plus-automation/releases/latest) and run it in a terminal
 by issuing the following command (check the correct version number of the jar file):
 
 ```bash
-java -jar cloudsim-plus-automation-4.0.0-with-dependencies.jar PathToYamlSimulationScenarioFile
+java -jar cloudsim-plus-automation-7.1.0-with-dependencies.jar PathToSimulationScenario.yml
 ```
 
 Execute the tool without any parameter to see the usage help.
 
-# Using it as a maven dependency into your own project
+## 3. Using it as a maven dependency into your own project
 
 You can build your own applications on top of CloudSim Plus Automation to automate the creation cloud computing simulations.
 This way, your applications will be able to read simulation scenarios from YAML files, build and execute them on CloudSim Plus.
@@ -119,16 +120,16 @@ try {
 }
 ```
 
-# Published Paper
+## 4. Published Paper
 
 For more information, read the paper published on the [Springer Lecture Notes in Computer Science Volume 8662](http://doi.org/10.1007/978-3-319-11167-4_34). Realize the paper is related to an older version of the tool, which is compatible with CloudSim 3. 
 The YAML structure has changed since there too, making it simpler and matching the name of entries with CloudSim and CloudSim Plus classes (such as VmAllocationPolicy, VmScheduler, CloudletScheduler). See the last section for more information.
 
 **If you are using this work for publishing a paper, please cite our paper above.**
 
-# Notice
+## 5. Notice
 
 If you are looking for the **CloudSim Automation**, 
 which is the version compatible with [CloudSim 4](http://github.com/Cloudslab/cloudsim), 
 it is available at [cloudsim-version](https://github.com/manoelcampos/cloudsim-plus-automation/tree/cloudsim-version) branch. 
-However, that version isn't actively maintained anymore.
+However, that version is not supported anymore.
