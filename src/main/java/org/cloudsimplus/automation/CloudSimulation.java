@@ -455,6 +455,7 @@ public class CloudSimulation implements Runnable {
         }
 
         final double finishTimeSecs = (System.currentTimeMillis() - startTime) / 1000;
+        System.out.println();
         printFinalResults(finishTimeSecs);
     }
 

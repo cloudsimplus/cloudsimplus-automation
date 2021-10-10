@@ -1,6 +1,7 @@
 package org.cloudsimplus.automation.examples;
 
 import com.esotericsoftware.yamlbeans.YamlException;
+import org.cloudbus.cloudsim.core.CloudSim;
 import org.cloudbus.cloudsim.util.ResourceLoader;
 import org.cloudsimplus.automation.CloudSimulation;
 import org.cloudsimplus.automation.YamlCloudScenario;
@@ -18,6 +19,8 @@ import java.util.List;
  */
 public class Example1 {
     private Example1(){
+        System.out.printf("Starting %s on %s%n", getClass().getSimpleName(), CloudSim.VERSION);
+
         //Gets the path to the YAML file inside the resource directory.
         final String yamlFilePath = ResourceLoader.getResourcePath(getClass(), "CloudEnvironment1.yml");
         try {
