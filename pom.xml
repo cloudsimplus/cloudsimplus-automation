@@ -4,7 +4,7 @@
 
     <groupId>org.cloudsimplus</groupId>
     <artifactId>cloudsim-plus-automation</artifactId>
-    <version>7.3.3</version>
+    <version>8.0.0</version>
     <packaging>jar</packaging>
 
     <name>CloudSim Plus Automation</name>

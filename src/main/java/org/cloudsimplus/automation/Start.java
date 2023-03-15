@@ -24,7 +24,7 @@ package org.cloudsimplus.automation;
 
 import com.esotericsoftware.yamlbeans.YamlException;
 import org.apache.commons.cli.*;
-import org.cloudbus.cloudsim.core.CloudSim;
+import org.cloudsimplus.core.CloudSimPlus;
 
 import java.io.FileNotFoundException;
 import java.util.regex.Matcher;
@@ -154,7 +154,7 @@ public final class Start {
     public void build() {
         System.out.printf(
             "Starting %d Simulation Scenario(s) from file %s in CloudSim Plus %s\n",
-            reader.getScenarios().size(), reader.getFile(), CloudSim.VERSION);
+            reader.getScenarios().size(), reader.getFile(), CloudSimPlus.VERSION);
 
         int i = 0;
         for (YamlCloudScenario scenario : reader.getScenarios()) {

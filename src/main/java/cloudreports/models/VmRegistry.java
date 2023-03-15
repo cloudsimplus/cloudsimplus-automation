@@ -19,8 +19,8 @@
 
 package cloudreports.models;
 
-import org.cloudbus.cloudsim.schedulers.cloudlet.CloudletScheduler;
-import org.cloudbus.cloudsim.vms.Vm;
+import org.cloudsimplus.schedulers.cloudlet.CloudletScheduler;
+import org.cloudsimplus.vms.Vm;
 
 import java.io.Serializable;
 

@@ -19,11 +19,11 @@
 
 package cloudreports.models;
 
-import org.cloudbus.cloudsim.power.models.PowerModel;
-import org.cloudbus.cloudsim.provisioners.PeProvisioner;
-import org.cloudbus.cloudsim.provisioners.ResourceProvisioner;
-import org.cloudbus.cloudsim.resources.Bandwidth;
-import org.cloudbus.cloudsim.schedulers.vm.VmScheduler;
+import org.cloudsimplus.power.models.PowerModel;
+import org.cloudsimplus.provisioners.PeProvisioner;
+import org.cloudsimplus.provisioners.ResourceProvisioner;
+import org.cloudsimplus.resources.Bandwidth;
+import org.cloudsimplus.schedulers.vm.VmScheduler;
 
 import java.io.Serializable;
 

@@ -19,11 +19,10 @@
 
 package cloudreports.models;
 
-import org.cloudbus.cloudsim.allocationpolicies.VmAllocationPolicy;
+import org.cloudsimplus.allocationpolicies.VmAllocationPolicy;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 /**

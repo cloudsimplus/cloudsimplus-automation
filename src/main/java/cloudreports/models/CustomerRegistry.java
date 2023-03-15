@@ -19,8 +19,8 @@
 
 package cloudreports.models;
 
-import org.cloudbus.cloudsim.cloudlets.Cloudlet;
-import org.cloudbus.cloudsim.vms.Vm;
+import org.cloudsimplus.cloudlets.Cloudlet;
+import org.cloudsimplus.vms.Vm;
 
 import java.io.Serializable;
 import java.util.ArrayList;

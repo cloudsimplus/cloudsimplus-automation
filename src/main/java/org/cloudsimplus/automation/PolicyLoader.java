@@ -26,22 +26,22 @@
  */
 package org.cloudsimplus.automation;
 
+import cloudreports.models.DatacenterRegistry;
+import cloudreports.models.HostRegistry;
+import cloudreports.models.VmRegistry;
+import org.cloudsimplus.allocationpolicies.VmAllocationPolicy;
+import org.cloudsimplus.provisioners.PeProvisioner;
+import org.cloudsimplus.provisioners.ResourceProvisioner;
+import org.cloudsimplus.schedulers.cloudlet.CloudletScheduler;
+import org.cloudsimplus.schedulers.vm.VmScheduler;
+import org.cloudsimplus.utilizationmodels.UtilizationModel;
+
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import cloudreports.models.DatacenterRegistry;
-import cloudreports.models.HostRegistry;
-import cloudreports.models.VmRegistry;
-import org.cloudbus.cloudsim.allocationpolicies.VmAllocationPolicy;
-import org.cloudbus.cloudsim.provisioners.PeProvisioner;
-import org.cloudbus.cloudsim.provisioners.ResourceProvisioner;
-import org.cloudbus.cloudsim.schedulers.cloudlet.CloudletScheduler;
-import org.cloudbus.cloudsim.schedulers.vm.VmScheduler;
-import org.cloudbus.cloudsim.utilizationmodels.UtilizationModel;
 
 /**
  * Dynamically creates instances of classes such as {@link VmScheduler}, {@link VmAllocationPolicy},
@@ -64,7 +64,7 @@ public class PolicyLoader {
     /**
      * The base CloudSim package name.
      */
-    private static final String PKG = "org.cloudbus.cloudsim";
+    private static final String PKG = "org.cloudsimplus";
 
     /**
      * Try to get a class corresponding to its full name from
