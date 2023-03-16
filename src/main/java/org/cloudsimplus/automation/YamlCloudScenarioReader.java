@@ -79,15 +79,15 @@ public class YamlCloudScenarioReader {
      * @throws YamlException         when there is any error parsing the YAML file.
      */
     private List<YamlCloudScenario> readYamlFile() throws FileNotFoundException, YamlException {
-        final List<YamlCloudScenario> scenarios = new ArrayList<YamlCloudScenario>();
-        final YamlReader reader = createYamlReader();
+        final var scenariosList = new ArrayList<YamlCloudScenario>();
+        final var reader = createYamlReader();
 
         YamlCloudScenario scenario;
         while ((scenario = reader.read(YamlCloudScenario.class)) != null) {
-            scenarios.add(scenario);
+            scenariosList.add(scenario);
         }
 
-        return scenarios;
+        return scenariosList;
     }
 
     /**
@@ -98,7 +98,7 @@ public class YamlCloudScenarioReader {
      * @throws FileNotFoundException
      */
     private YamlReader createYamlReader() throws FileNotFoundException {
-        final YamlReader reader = new YamlReader(new FileReader(file));
+        final var reader = new YamlReader(new FileReader(file));
         final YamlConfig cfg = reader.getConfig();
 
         //Defines the aliases in the YAML file that refers to specific java Classes.

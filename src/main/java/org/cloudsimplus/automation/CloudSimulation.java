@@ -24,7 +24,6 @@ package org.cloudsimplus.automation;
 
 import ch.qos.logback.classic.Level;
 import cloudreports.models.*;
-import org.cloudsimplus.allocationpolicies.VmAllocationPolicy;
 import org.cloudsimplus.brokers.DatacenterBroker;
 import org.cloudsimplus.brokers.DatacenterBrokerSimple;
 import org.cloudsimplus.builders.tables.CloudletsTableBuilder;
@@ -35,15 +34,11 @@ import org.cloudsimplus.datacenters.Datacenter;
 import org.cloudsimplus.datacenters.DatacenterSimple;
 import org.cloudsimplus.hosts.Host;
 import org.cloudsimplus.hosts.HostSimple;
-import org.cloudsimplus.provisioners.ResourceProvisioner;
 import org.cloudsimplus.resources.DatacenterStorage;
 import org.cloudsimplus.resources.Pe;
 import org.cloudsimplus.resources.PeSimple;
 import org.cloudsimplus.resources.SanStorage;
-import org.cloudsimplus.schedulers.cloudlet.CloudletScheduler;
-import org.cloudsimplus.schedulers.vm.VmScheduler;
 import org.cloudsimplus.util.Log;
-import org.cloudsimplus.utilizationmodels.UtilizationModel;
 import org.cloudsimplus.vms.Vm;
 import org.cloudsimplus.vms.VmSimple;
 
@@ -98,9 +93,6 @@ public class CloudSimulation implements Runnable {
         this.datacenters = new ArrayList<>();
         this.logEnabled = false;
 
-        this.vmsToBrokerMap = new HashMap<>();
-        this.cloudletsToBrokerMap = new HashMap<>();
-
         this.brokers = new HashMap<>();
         this.vmsToBrokerMap = new HashMap<>();
         this.cloudletsToBrokerMap = new HashMap<>();
@@ -115,15 +107,14 @@ public class CloudSimulation implements Runnable {
      */
     private Map<DatacenterBroker, CustomerRegistry> createBrokers() {
         final int totalBrokerAmount = scenario.getCustomers().stream().mapToInt(CustomerRegistry::getAmount).sum();
-        final Map<DatacenterBroker, CustomerRegistry> list = new HashMap<>(totalBrokerAmount);
-        int brokerCount = 0;
-        for (CustomerRegistry cr: scenario.getCustomers()) {
+        final var map = new HashMap<DatacenterBroker, CustomerRegistry>(totalBrokerAmount);
+        for (final CustomerRegistry cr: scenario.getCustomers()) {
             for (int i = 0; i < cr.getAmount(); i++) {
-                list.put(new DatacenterBrokerSimple(cloudsimplus), cr);
+                map.put(new DatacenterBrokerSimple(cloudsimplus), cr);
             }
         }
 
-        return list;
+        return map;
     }
 
     /**
@@ -131,18 +122,18 @@ public class CloudSimulation implements Runnable {
      *
      * @param crMap a Map between a {@link DatacenterBroker} representing a customer in CloudSim Plus
      *           and the {@link CustomerRegistry} object used to create VMs and Cloudlets for such a broker.
-     * @return the a map containing the list of created VMs for each customer (DatacenterBroker).
+     * @return a map containing the list of created VMs for each customer (DatacenterBroker).
      * @see #createBrokers()
      */
     private Map<DatacenterBroker, List<Vm>> createVmListForAllBrokers(
         final Map<DatacenterBroker, CustomerRegistry> crMap)
     {
-        final Map<DatacenterBroker, List<Vm>> vmMap = new HashMap<>(crMap.size());
+        final var vmMap = new HashMap<DatacenterBroker, List<Vm>>(crMap.size());
 
         int createdVms = 0;
-        for (DatacenterBroker broker : crMap.keySet()) {
-            List<Vm> vms = createVmListForOneBroker(broker, crMap.get(broker), createdVms++);
-            vmMap.put(broker, vms);
+        for (var broker : crMap.keySet()) {
+            final var vmList = createVmListForOneBroker(broker, crMap.get(broker), createdVms++);
+            vmMap.put(broker, vmList);
         }
 
         return vmMap;
@@ -154,7 +145,7 @@ public class CloudSimulation implements Runnable {
      * @param broker {@link DatacenterBroker} representing a customer in CloudSim Plus, for who VMs will be created
      * @param cr  {@link CustomerRegistry} object used to create VMs and Cloudlets for such a broker
      * @param createdVms the number of VMs already created
-     * @return the a map containing the list of created VMs for the given customer (DatacenterBroker)
+     * @return a map containing the list of created VMs for the given customer (DatacenterBroker)
      * @see #createBrokers()
      */
     private List<Vm> createVmListForOneBroker(
@@ -163,21 +154,21 @@ public class CloudSimulation implements Runnable {
         final int createdVms) throws RuntimeException
     {
         final int totalVmsAmount = cr.getVms().stream().mapToInt(VmRegistry::getAmount).sum();
-        final List<Vm> list = new ArrayList<>(totalVmsAmount);
+        final var vmList = new ArrayList<Vm>(totalVmsAmount);
         for (VmRegistry vmr : cr.getVms()) {
             for (int i = 0; i < vmr.getAmount(); i++) {
-                list.add(createVm(createdVms+i, broker, vmr));
+                vmList.add(createVm(createdVms+i, broker, vmr));
             }
         }
 
-        return list;
+        return vmList;
     }
 
     private Vm createVm(final int id,
                         final DatacenterBroker broker,
                         final VmRegistry vmr) throws RuntimeException
     {
-        CloudletScheduler scheduler = PolicyLoader.cloudletScheduler(vmr);
+        final var scheduler = PolicyLoader.cloudletScheduler(vmr);
         final Vm vm = new VmSimple(id, vmr.getMips(), vmr.getPes());
         vm
             .setRam(vmr.getRam())
@@ -199,22 +190,22 @@ public class CloudSimulation implements Runnable {
     private Map<DatacenterBroker, List<Cloudlet>> createCloudlets(
         final Map<DatacenterBroker, CustomerRegistry> brokerRegistries)
     {
-        final Map<DatacenterBroker, List<Cloudlet>> map = new HashMap<>(brokerRegistries.size());
+        final var map = new HashMap<DatacenterBroker, List<Cloudlet>>(brokerRegistries.size());
         int createdCloudlets = 0;
-        for (DatacenterBroker broker : brokerRegistries.keySet()) {
+        for (var broker : brokerRegistries.keySet()) {
             final int cloudletsNum =
                 brokerRegistries.get(broker)
                     .getCloudlets()
                     .stream()
                     .mapToInt(CloudletRegistry::getAmount)
                     .sum();
-            List<Cloudlet> cloudlets = new ArrayList<>(cloudletsNum);
+            final var cloudletList = new ArrayList<Cloudlet>(cloudletsNum);
             for (CloudletRegistry up : brokerRegistries.get(broker).getCloudlets()) {
                 for (int i = 0; i < up.getAmount(); i++) {
-                    cloudlets.add(createCloudlet(++createdCloudlets, up, broker));
+                    cloudletList.add(createCloudlet(++createdCloudlets, up, broker));
                 }
             }
-            map.put(broker, cloudlets);
+            map.put(broker, cloudletList);
         }
 
         return map;
@@ -225,11 +216,11 @@ public class CloudSimulation implements Runnable {
         final CloudletRegistry up,
         final DatacenterBroker broker) throws RuntimeException
     {
-        UtilizationModel cpuUtilization = PolicyLoader.utilizationModel(up.getUtilizationModelCpu());
-        UtilizationModel ramUtilization = PolicyLoader.utilizationModel(up.getUtilizationModelRam());
-        UtilizationModel bwUtilization  = PolicyLoader.utilizationModel(up.getUtilizationModelBw());
+        final var cpuUtilization = PolicyLoader.utilizationModel(up.getUtilizationModelCpu());
+        final var ramUtilization = PolicyLoader.utilizationModel(up.getUtilizationModelRam());
+        final var bwUtilization  = PolicyLoader.utilizationModel(up.getUtilizationModelBw());
 
-        final Cloudlet cloudlet = new CloudletSimple(id, up.getLength(), up.getPes());
+        final var cloudlet = new CloudletSimple(id, up.getLength(), up.getPes());
         cloudlet
             .setFileSize(up.getFileSize())
             .setOutputSize(up.getOutputSize())
@@ -267,7 +258,7 @@ public class CloudSimulation implements Runnable {
         String datacenterName;
         int datacenterCount = 0;
         final int datacenterNumber = scenario.getDatacenters().stream().mapToInt(DatacenterRegistry::getAmount).sum();
-        final List<Datacenter> datacenterList = new ArrayList<>(datacenterNumber);
+        final var datacenterList = new ArrayList<Datacenter>(datacenterNumber);
         for (DatacenterRegistry dcr : scenario.getDatacenters()) {
             int hostCount = 0;
             for (int i = 0; i < dcr.getAmount(); i++) {
@@ -277,7 +268,7 @@ public class CloudSimulation implements Runnable {
                 hostCount += hostList.size();
 
                 try {
-                    Datacenter dc = createDataCenter(datacenterName, dcr, hostList);
+                    final var dc = createDataCenter(datacenterName, dcr, hostList);
                     datacenterList.add(dc);
                 } catch (Exception e) {
                     e.printStackTrace(System.out);
@@ -304,7 +295,7 @@ public class CloudSimulation implements Runnable {
     {
         int hostId;
         final int hostNumber = dcr.getHosts().stream().mapToInt(HostRegistry::getAmount).sum();
-        final List<Host> hostList = new ArrayList<>(hostNumber);
+        final var hostList = new ArrayList<Host>(hostNumber);
         for (HostRegistry hr : dcr.getHosts()) {
             for (int i = 0; i < hr.getAmount(); i++) {
                 List<Pe> peList = createHostProcessingElements(hr);
@@ -330,10 +321,10 @@ public class CloudSimulation implements Runnable {
         final List<Host> hostList)
     {
 
-        final List<SanStorage> storageList = createSan(dcr);
-        final VmAllocationPolicy allocationPolicy = PolicyLoader.vmAllocationPolicy(dcr);
+        final var storageList = createSan(dcr);
+        final var allocationPolicy = PolicyLoader.vmAllocationPolicy(dcr);
 
-        Datacenter dc = new DatacenterSimple(cloudsimplus, hostList, allocationPolicy);
+        final var dc = new DatacenterSimple(cloudsimplus, hostList, allocationPolicy);
         dc.setSchedulingInterval(dcr.getSchedulingInterval())
           .setDatacenterStorage(new DatacenterStorage(storageList));
         setDatacenterCharacteristics(dc, dcr);
@@ -341,11 +332,11 @@ public class CloudSimulation implements Runnable {
     }
 
     private Host createHost(final int hostId, final HostRegistry hr, final List<Pe> peList) throws RuntimeException {
-        ResourceProvisioner ramProvisioner = PolicyLoader.newResourceProvisioner(hr);
-        ResourceProvisioner bwProvisioner = PolicyLoader.newResourceProvisioner(hr);
-        VmScheduler vmScheduler = PolicyLoader.vmScheduler(hr.getVmScheduler());
+        final var ramProvisioner = PolicyLoader.newResourceProvisioner(hr);
+        final var bwProvisioner  = PolicyLoader.newResourceProvisioner(hr);
+        final var vmScheduler    = PolicyLoader.vmScheduler(hr.getVmScheduler());
 
-        Host host = new HostSimple(hr.getRam(), hr.getBw(), hr.getStorage(), peList);
+        final var host = new HostSimple(hr.getRam(), hr.getBw(), hr.getStorage(), peList);
         host
             .setRamProvisioner(ramProvisioner)
             .setBwProvisioner(bwProvisioner)
@@ -372,13 +363,13 @@ public class CloudSimulation implements Runnable {
      * @see YamlCloudScenario#getDatacenters()
      */
     private List<SanStorage> createSan(final DatacenterRegistry dcr) throws IllegalArgumentException {
-        final List<SanStorage> list = new ArrayList<>(dcr.getSans().size());
+        final var storageList = new ArrayList<SanStorage>(dcr.getSans().size());
         for (SanStorageRegistry sr : dcr.getSans()) {
-            SanStorage san = new SanStorage(sr.getCapacity(), sr.getBandwidth(), sr.getNetworkLatency());
-            list.add(san);
+            final var san = new SanStorage(sr.getCapacity(), sr.getBandwidth(), sr.getNetworkLatency());
+            storageList.add(san);
         }
 
-        return list;
+        return storageList;
     }
 
     /**
@@ -390,8 +381,7 @@ public class CloudSimulation implements Runnable {
      * @param dcr       The abstract DatacenterRegistry information, obtained from the YAML file,
      *                  to be used to define the Datacenter characteristics.
      */
-    private void setDatacenterCharacteristics(
-        Datacenter dc, final DatacenterRegistry dcr)
+    private void setDatacenterCharacteristics(final Datacenter dc, final DatacenterRegistry dcr)
     {
         dc.getCharacteristics()
             .setArchitecture(dcr.getArchitecture())
@@ -411,12 +401,12 @@ public class CloudSimulation implements Runnable {
      * @return Returns the list of PEs created.
      */
     private List<Pe> createHostProcessingElements(final HostRegistry hr) {
-        final List<Pe> list = new ArrayList<>(hr.getPes());
+        final var peList = new ArrayList<Pe>(hr.getPes());
         for (int i = 0; i < hr.getPes(); i++) {
-            list.add(new PeSimple(hr.getMips(), PolicyLoader.newPeProvisioner(hr)));
+            peList.add(new PeSimple(hr.getMips(), PolicyLoader.newPeProvisioner(hr)));
         }
 
-        return list;
+        return peList;
     }
 
     /**
@@ -437,7 +427,7 @@ public class CloudSimulation implements Runnable {
         this.vmsToBrokerMap = createVmListForAllBrokers(brokers);
         this.cloudletsToBrokerMap = createCloudlets(brokers);
 
-        for (DatacenterBroker broker : brokers.keySet()) {
+        for (final var broker : brokers.keySet()) {
             broker.submitVmList(vmsToBrokerMap.get(broker));
             broker.submitCloudletList(cloudletsToBrokerMap.get(broker));
         }
@@ -445,10 +435,10 @@ public class CloudSimulation implements Runnable {
         cloudsimplus.start();
 
         if(showResults) {
-            for (DatacenterBroker broker : brokers.keySet()) {
-                List<Cloudlet> list = broker.getCloudletFinishedList();
-                list.sort(comparingLong((Cloudlet c) -> c.getVm().getId()).thenComparingLong(Cloudlet::getId));
-                new CloudletsTableBuilder(list)
+            for (final var broker : brokers.keySet()) {
+                final var cloudletList = broker.getCloudletFinishedList();
+                cloudletList.sort(comparingLong((Cloudlet c) -> c.getVm().getId()).thenComparingLong(Cloudlet::getId));
+                new CloudletsTableBuilder(cloudletList)
                     .setTitle(broker.getName())
                     .build();
             }
@@ -607,7 +597,7 @@ public class CloudSimulation implements Runnable {
         return logEnabled;
     }
 
-    public CloudSimulation setLogEnabled(boolean logEnabled) {
+    public CloudSimulation setLogEnabled(final boolean logEnabled) {
         this.logEnabled = logEnabled;
         return this;
     }
@@ -616,7 +606,7 @@ public class CloudSimulation implements Runnable {
         return printScenariosConfiguration;
     }
 
-    public CloudSimulation setPrintScenariosConfiguration(boolean printScenariosConfiguration) {
+    public CloudSimulation setPrintScenariosConfiguration(final boolean printScenariosConfiguration) {
         this.printScenariosConfiguration = printScenariosConfiguration;
         return this;
     }

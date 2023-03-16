@@ -27,7 +27,6 @@ import org.apache.commons.cli.*;
 import org.cloudsimplus.core.CloudSimPlus;
 
 import java.io.FileNotFoundException;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
@@ -62,8 +61,7 @@ public final class Start {
                 return;
             }
 
-            this.reader =
-                new YamlCloudScenarioReader(getFileNameFromCommandLine());
+            this.reader = new YamlCloudScenarioReader(getFileNameFromCommandLine());
             if(reader.getScenarios().isEmpty()) {
                 System.err.println("Your YAML file is empty.\n");
             }
@@ -77,11 +75,10 @@ public final class Start {
         } catch (Exception e){
             System.err.printf("An unexpected error happened: %s\n", e.getMessage());
         }
-
     }
 
     private void showUsageHelp() {
-        HelpFormatter formatter = new HelpFormatter();
+        final var formatter = new HelpFormatter();
         formatter.printHelp(getApplicationStartCmd() +" [options] YamlFilePath", options);
     }
 
@@ -91,7 +88,7 @@ public final class Start {
      */
     private boolean parseCommandLineOptions(String[] args) throws ParseException {
         options = new Options();
-        Option option = new Option("v", "Enables CloudSim Plus Log (disabled by default)");
+        final var option = new Option("v", "Enables CloudSim Plus Log (disabled by default)");
         option.setLongOpt("verbose");
         options.addOption(option);
 
@@ -99,7 +96,7 @@ public final class Start {
         options.addOption("h", "Show usage help");
         options.addOption("c", "Print scenario configuration");
 
-        CommandLineParser parser = new DefaultParser();
+        final var parser = new DefaultParser();
         this.cmd = parser.parse(options, args);
 
         /*
@@ -130,7 +127,7 @@ public final class Start {
     }
 
     private String regexMatch(final String regex, final String text) {
-        final Matcher matcher = Pattern.compile(regex).matcher(text);
+        final var matcher = Pattern.compile(regex).matcher(text);
         if(matcher.find()){
             return matcher.group(1);
         }
@@ -189,6 +186,5 @@ public final class Start {
     private boolean isToPrintScenariosConfiguration() {
         return cmd.hasOption("c");
     }
-
 }
 

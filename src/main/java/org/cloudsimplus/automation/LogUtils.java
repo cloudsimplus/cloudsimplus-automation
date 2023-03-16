@@ -36,7 +36,7 @@ public class LogUtils {
     private static String colSeparator="|\t";
 
     /**
-     * Print a array of objects like a table.
+     * Print an array of objects like a table.
      * @param captions The captions of the table
      * @param dataArray The data to be printed.
      * @see LogUtils#printCaptions(java.lang.String[])

@@ -36,7 +36,6 @@ import org.cloudsimplus.schedulers.cloudlet.CloudletScheduler;
 import org.cloudsimplus.schedulers.vm.VmScheduler;
 import org.cloudsimplus.utilizationmodels.UtilizationModel;
 
-import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
@@ -93,9 +92,9 @@ public class PolicyLoader {
     public static VmScheduler vmScheduler(final String classSuffix) throws RuntimeException {
         try {
             final String className = generateFullClassName(PKG+".schedulers.vm","VmScheduler", classSuffix);
-            Class<VmScheduler> klass = PolicyLoader.<VmScheduler>loadClass(className);
-            Constructor cons = klass.getConstructor(new Class[]{});
-            return (VmScheduler) cons.newInstance();
+            final Class<VmScheduler> klass = PolicyLoader.<VmScheduler>loadClass(className);
+            final var constructor = klass.getConstructor(new Class[]{});
+            return constructor.newInstance();
         } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
             Logger.getLogger(PolicyLoader.class.getName()).log(Level.SEVERE, null, ex);
             throw new RuntimeException(ex);
@@ -121,9 +120,9 @@ public class PolicyLoader {
         final String classPrefix, final String classSufix) throws RuntimeException {
         try {
             final String className = generateFullProvisionerClassName(classPrefix, classSufix);
-            Class<ResourceProvisioner> klass = PolicyLoader.<ResourceProvisioner>loadClass(className);
-            Constructor cons = klass.getConstructor(new Class[]{});
-            return (T)cons.newInstance();
+            final Class<ResourceProvisioner> klass = PolicyLoader.<ResourceProvisioner>loadClass(className);
+            final var constructor = klass.getConstructor(new Class[]{});
+            return (T)constructor.newInstance();
         } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
             Logger.getLogger(PolicyLoader.class.getName()).log(Level.SEVERE, null, ex);
             throw new RuntimeException(ex);
@@ -141,9 +140,9 @@ public class PolicyLoader {
     public static VmAllocationPolicy vmAllocationPolicy(final DatacenterRegistry dcr) throws RuntimeException {
         try {
             final String className = generateFullClassName(PKG+".allocationpolicies","VmAllocationPolicy", dcr.getVmAllocationPolicy());
-            Class<VmAllocationPolicy> klass = PolicyLoader.<VmAllocationPolicy>loadClass(className);
-            Constructor cons = klass.getConstructor(new Class[]{});
-            return (VmAllocationPolicy) cons.newInstance();
+            final Class<VmAllocationPolicy> klass = PolicyLoader.<VmAllocationPolicy>loadClass(className);
+            final var constructor = klass.getConstructor(new Class[]{});
+            return constructor.newInstance();
         } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
             Logger.getLogger(PolicyLoader.class.getName()).log(Level.SEVERE, null, ex);
             throw new RuntimeException(ex);
@@ -153,9 +152,9 @@ public class PolicyLoader {
     public static CloudletScheduler cloudletScheduler(final VmRegistry vmr) throws RuntimeException {
         try {
             final String className = generateFullClassName(PKG+".schedulers.cloudlet","CloudletScheduler", vmr.getCloudletScheduler());
-            Class<CloudletScheduler> klass = PolicyLoader.<CloudletScheduler>loadClass(className);
-            Constructor cons = klass.getConstructor();
-            return (CloudletScheduler) cons.newInstance();
+            final Class<CloudletScheduler> klass = PolicyLoader.<CloudletScheduler>loadClass(className);
+            final var constructor = klass.getConstructor();
+            return constructor.newInstance();
         } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
             Logger.getLogger(PolicyLoader.class.getName()).log(Level.SEVERE, null, ex);
             throw new RuntimeException(ex);
@@ -174,9 +173,9 @@ public class PolicyLoader {
     public static UtilizationModel utilizationModel(final String classSuffix) throws RuntimeException {
         try {
             final String className = generateFullClassName(PKG+".utilizationmodels", "UtilizationModel", classSuffix);
-            Class<UtilizationModel> klass = PolicyLoader.<UtilizationModel>loadClass(className);
-            Constructor cons = klass.getConstructor();
-            return (UtilizationModel) cons.newInstance();
+            final Class<UtilizationModel> klass = PolicyLoader.<UtilizationModel>loadClass(className);
+            final var constructor = klass.getConstructor();
+            return constructor.newInstance();
         } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
             Logger.getLogger(PolicyLoader.class.getName()).log(Level.SEVERE, null, ex);
             throw new RuntimeException(ex);
