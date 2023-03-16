@@ -8,7 +8,6 @@ import org.cloudsimplus.core.CloudSimPlus;
 import org.cloudsimplus.util.ResourceLoader;
 
 import java.io.FileNotFoundException;
-import java.util.List;
 
 /**
  * Starts the example, parsing a YAML file containing
@@ -27,13 +26,13 @@ public class Example1 {
             //Loads the YAML file containing 1 or more simulation scenarios.
             final var reader = new YamlCloudScenarioReader(yamlFilePath);
             //Gets the list or parsed scenarios.
-            final List<YamlCloudScenario> simulationScenarios = reader.getScenarios();
+            final var yamlCloudScenariosList = reader.getScenarios();
             //For each existing scenario, creates and runs it in CloudSim Plus, printing results.
-            for (YamlCloudScenario scenario : simulationScenarios) {
+            for (YamlCloudScenario scenario : yamlCloudScenariosList) {
                 new CloudSimulation(scenario).run();
             }
         } catch (FileNotFoundException | YamlException e) {
-            System.err.println("Error when trying to load the simulation scenario from the YAML file: "+e.getMessage());
+            System.err.println("Error loading the simulation scenario from the YAML file: "+e.getMessage());
         }
     }
 
