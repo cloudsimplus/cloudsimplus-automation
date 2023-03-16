@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.cloudsimplus</groupId>
-    <artifactId>cloudsim-plus-automation</artifactId>
+    <artifactId>cloudsimplus-automation</artifactId>
     <version>8.0.0</version>
     <packaging>jar</packaging>
 
@@ -33,13 +33,13 @@
     </developers>
 
     <scm>
-        <connection>scm:git:git@github.com:manoelcampos/cloudsim-plus-automation.git</connection>
-        <developerConnection>scm:git:git@github.com:manoelcampos/cloudsim-plus-automation.git</developerConnection>
-        <url>git@github.com:manoelcampos/cloudsim-plus-automation.git</url>
+        <connection>scm:git:git@github.com:cloudsimplus/cloudsimplus-automation.git</connection>
+        <developerConnection>scm:git:git@github.com:cloudsimplus/cloudsimplus-automation.git</developerConnection>
+        <url>git@github.com:cloudsimplus/cloudsimplus-automation.git</url>
     </scm>
 
     <issueManagement>
-        <url>https://github.com/manoelcampos/cloudsim-plus-automation/issues</url>
+        <url>https://github.com/cloudsimplus/cloudsimplus-automation/issues</url>
         <system>GitHub Issues</system>
     </issueManagement>
 
