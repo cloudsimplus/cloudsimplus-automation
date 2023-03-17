@@ -9,7 +9,7 @@
 
     <name>CloudSim Plus Automation</name>
     <description>Autonomously builds and runs Cloud Computing simulation environments in CloudSim Plus from an YAML file.</description>
-    <url>https://github.com/manoelcampos/cloudsim-plus-automation</url>
+    <url>https://github.com/cloudsimplus/cloudsimplus-automation</url>
 
     <organization>
         <name>Universidade da Beira Interior (UBI) - Instituto Federal de Educação Ciência e Tecnologia do Tocantins (IFTO)</name>
@@ -274,7 +274,7 @@
     <dependencies>
         <dependency>
             <groupId>org.cloudsimplus</groupId>
-            <artifactId>cloudsim-plus</artifactId>
+            <artifactId>cloudsimplus</artifactId>
             <version>${project.version}</version>
             <scope>compile</scope>
         </dependency>
