@@ -384,9 +384,6 @@ public class CloudSimulation implements Runnable {
     private void setDatacenterCharacteristics(final Datacenter dc, final DatacenterRegistry dcr)
     {
         dc.getCharacteristics()
-            .setArchitecture(dcr.getArchitecture())
-            .setOs(dcr.getOs())
-            .setVmm(dcr.getVmm())
             .setCostPerSecond(dcr.getCostPerSec())
             .setCostPerMem(dcr.getCostPerMem())
             .setCostPerStorage(dcr.getCostPerStorage())

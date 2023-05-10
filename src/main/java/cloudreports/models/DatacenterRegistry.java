@@ -37,9 +37,6 @@ public final class DatacenterRegistry implements Serializable{
     private long id;
     private String name;
     private Integer amount;
-    private String architecture;
-    private String os;
-    private String vmm;
     private double timeZone;
     private String vmAllocationPolicy;
     private boolean vmMigration;
@@ -57,9 +54,6 @@ public final class DatacenterRegistry implements Serializable{
         setAmount(1);
         sans = new ArrayList<>();
         hosts = new ArrayList<>();
-        setArchitecture("x86");
-        setOs("Linux");
-        setVmm("Xen");
         setSchedulingInterval(0);
     }
 
@@ -97,60 +91,6 @@ public final class DatacenterRegistry implements Serializable{
      */
     public void setName(String name) {
         this.name = name;
-    }
-
-    /**
-     * Gets the datacenter's architecture.
-     *
-     * @return the datacenter's architecture.
-     */
-    public String getArchitecture() {
-        return architecture;
-    }
-
-    /**
-     * Sets the datacenter's architecture.
-     *
-     * @param   architecture    the datacenter's architecture.
-     */
-    public void setArchitecture(String architecture) {
-        this.architecture = architecture;
-    }
-
-    /**
-     * Gets the datacenter's operating system.
-     *
-     * @return the datacenter's operating system.
-     */
-    public String getOs() {
-        return os;
-    }
-
-    /**
-     * Sets the datacenter's operating system.
-     *
-     * @param   os  the datacenter's operating system.
-     */
-    public void setOs(String os) {
-        this.os = os;
-    }
-
-    /**
-     * Gets the datacenter's hypervisor.
-     *
-     * @return the datacenter's hypervisor.
-     */
-    public String getVmm() {
-        return vmm;
-    }
-
-    /**
-     * Sets the datacenter's hypervisor.
-     *
-     * @param   vmm the datacenter's hypervisor.
-     */
-    public void setVmm(String vmm) {
-        this.vmm = vmm;
     }
 
     /**
@@ -391,9 +331,6 @@ public final class DatacenterRegistry implements Serializable{
     @Override
     public String toString() {
         StringBuilder s = new StringBuilder("Name="+getName()+"\n");
-        s.append("Architecture=").append(getArchitecture()).append("\n");
-        s.append("Operating System=").append(getOs()).append("\n");
-        s.append("Hypervisor=").append(getVmm()).append("\n");
         s.append("Allocation Policy ID=").append(getVmAllocationPolicy()).append("\n");
         s.append("Time Zone (GMT)=").append(getTimeZone()).append("\n");
         s.append("VM Migrations=").append(isVmMigration()).append("\n");
