@@ -90,7 +90,7 @@ on Linux/macOS
 on Windows
 
 ```bash
-./mvnw.cmd clean install
+mvnw.cmd clean install
 ```
 
 ## 3. Using the tool at the command line 
