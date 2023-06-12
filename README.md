@@ -79,10 +79,18 @@ This work contributes to:
 ## 2. Requirements
 
 In order to build the jar file to run the tool, you need JDK 17+ installed.
-You can use any IDE of your choice or run maven at the command line:
+You can use any IDE of your choice or open a terminal at the project root directory and type one of the following commands:
+
+on Linux/macOS
 
 ```bash
-mvn clean install
+./mvnw clean install
+```
+
+on Windows
+
+```bash
+./mvnw.cmd clean install
 ```
 
 ## 3. Using the command line tool 
