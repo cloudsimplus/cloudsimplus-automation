@@ -76,7 +76,7 @@ This work contributes to:
 - use a human-readable file format to specify cloud simulation scenarios and speed up such a simulation process phase;
 - allow reuse, extension and sharing of simulations scenarios.
 
-## 2. Requirements
+## 2. Build the Project
 
 In order to build the jar file to run the tool, you need JDK 17+ installed.
 You can use any IDE of your choice or open a terminal at the project root directory and type one of the following commands:
@@ -93,7 +93,7 @@ on Windows
 ./mvnw.cmd clean install
 ```
 
-## 3. Using the command line tool 
+## 3. Using the tool at the command line 
 
 You can simply download the [jar file from the latest release](https://github.com/cloudsimplus/cloudsimplus-automation/releases/latest) and run it in a terminal
 by issuing the following command (check the correct version number of the jar file):
@@ -104,7 +104,7 @@ java -jar cloudsimplus-automation-8.0.0-with-dependencies.jar PathToSimulationSc
 
 Execute the tool without any parameter to see the usage help.
 
-## 4. Using it as a maven dependency into your own project
+## 4. Using the tool as a maven dependency into your own project
 
 You can build your own applications on top of CloudSim Plus Automation to automate the creation cloud computing simulations.
 This way, your applications will be able to read simulation scenarios from YAML files, build and execute them on CloudSim Plus.
