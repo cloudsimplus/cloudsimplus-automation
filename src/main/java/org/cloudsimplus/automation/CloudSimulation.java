@@ -41,11 +41,13 @@ import org.cloudsimplus.resources.SanStorage;
 import org.cloudsimplus.util.Log;
 import org.cloudsimplus.vms.Vm;
 import org.cloudsimplus.vms.VmSimple;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static java.util.Comparator.comparingLong;
@@ -57,6 +59,7 @@ import static java.util.stream.Collectors.toList;
  */
 public class CloudSimulation implements Runnable {
     private final YamlCloudScenario scenario;
+    @SuppressWarnings("NullAway.Init") // set when the simulation starts in run()
     private CloudSimPlus cloudsimplus;
     private List<Datacenter> datacenters;
     private boolean showResults;
@@ -240,7 +243,7 @@ public class CloudSimulation implements Runnable {
      * @return the VM with the given ID or {@link Vm#NULL} if not found.
      */
     private Vm findVm(final DatacenterBroker broker, final int vmId) {
-        return vmsToBrokerMap.get(broker).stream().filter(vm -> vm.getId() == vmId).findFirst().orElse(Vm.NULL);
+        return Objects.requireNonNull(vmsToBrokerMap.get(broker), "Broker not found").stream().filter(vm -> vm.getId() == vmId).findFirst().orElse(Vm.NULL);
     }
 
     /**
@@ -546,10 +549,10 @@ public class CloudSimulation implements Runnable {
     /**
      * Gets the list of Virtual Machines ({@link Vm}) for each customer ({@link DatacenterBroker})
      * created in CloudSim Plus.
-     * @return
+     * @return the broker's VM list or null if the broker is unknown
      * @see #getVms()
      */
-    public List<Vm> getVms(DatacenterBroker broker){
+    public @Nullable List<Vm> getVms(DatacenterBroker broker){
         return vmsToBrokerMap.get(broker);
     }
 
@@ -565,10 +568,10 @@ public class CloudSimulation implements Runnable {
     /**
      * Gets the list of applications ({@link Cloudlet}s) for each customer ({@link DatacenterBroker})
      * created in CloudSim Plus.
-     * @return
+     * @return the broker's Cloudlet list or null if the broker is unknown
      * @see #getCloudlets()
      */
-    public List<Cloudlet> getCloudlets(DatacenterBroker broker){
+    public @Nullable List<Cloudlet> getCloudlets(DatacenterBroker broker){
         return cloudletsToBrokerMap.get(broker);
     }
 

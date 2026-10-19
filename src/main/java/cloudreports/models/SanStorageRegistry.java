@@ -30,7 +30,7 @@ import java.io.Serializable;
  */
 public final class SanStorageRegistry implements Serializable {
     private long id;
-    private String name;
+    private String name = "";
     private long capacity;
     private double bandwidth;
     private double networkLatency;

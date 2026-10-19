@@ -35,9 +35,9 @@ public final class CloudletRegistry implements Serializable{
     private long fileSize;
     private long outputSize;
     private int pes;
-    private String utilizationModelCpu;
-    private String utilizationModelRam;
-    private String utilizationModelBw;
+    private String utilizationModelCpu = "";
+    private String utilizationModelRam = "";
+    private String utilizationModelBw = "";
     private double submissionDelay;
 
     public CloudletRegistry() {
