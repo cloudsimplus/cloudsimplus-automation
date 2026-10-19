@@ -39,8 +39,8 @@ public final class VmRegistry implements Serializable{
     private int ram;
     private long bw;
     private int priority;
-    private String vmm;
-    private String cloudletScheduler;
+    private String vmm = "";
+    private String cloudletScheduler = "";
     private int amount;
 
     public VmRegistry() {

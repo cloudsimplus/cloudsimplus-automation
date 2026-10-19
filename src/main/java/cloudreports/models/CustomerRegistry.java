@@ -37,7 +37,7 @@ import java.util.List;
  */
 public final class CustomerRegistry implements Serializable{
     private long id;
-    private String name;
+    private String name = "";
     private Integer amount;
     private List<VmRegistry> vms;
     private List<CloudletRegistry> cloudlets;

@@ -37,8 +37,10 @@ import java.util.regex.Pattern;
  * @see YamlCloudScenarioReader
  */
 public final class Start {
-    private Options options;
+    private final Options options = new Options();
+    @SuppressWarnings("NullAway.Init") // set in the constructor after parsing the command line
     private YamlCloudScenarioReader reader;
+    @SuppressWarnings("NullAway.Init") // set by parseCommandLineOptions(), called from the constructor
     private CommandLine cmd;
 
     /**
@@ -87,7 +89,6 @@ public final class Start {
      * @param args the command line options
      */
     private boolean parseCommandLineOptions(String[] args) throws ParseException {
-        options = new Options();
         final var option = new Option("v", "Enables CloudSim Plus Log (disabled by default)");
         option.setLongOpt("verbose");
         options.addOption(option);

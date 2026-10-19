@@ -43,11 +43,11 @@ public final class HostRegistry implements Serializable {
     private double staticPowerPercent;
     private int ram;
     private long bw;
-    private String ramProvisioner;
-    private String bwProvisioner;
-    private String peProvisioner;
-    private String vmScheduler;
-    private String powerModel;
+    private String ramProvisioner = "";
+    private String bwProvisioner = "";
+    private String peProvisioner = "";
+    private String vmScheduler = "";
+    private String powerModel = "";
     private int amount;
     private long storage;
 
@@ -335,7 +335,7 @@ public final class HostRegistry implements Serializable {
     @Override
     public int hashCode() {
         int hash = 3;
-        hash = 97 * hash + (int) (this.id ^ (this.id >>> 32));
+        hash = 97 * hash + Integer.hashCode(this.id);
         return hash;
     }
 

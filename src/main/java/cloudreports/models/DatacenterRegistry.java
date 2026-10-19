@@ -35,10 +35,10 @@ import java.util.List;
  */
 public final class DatacenterRegistry implements Serializable{
     private long id;
-    private String name;
+    private String name = "";
     private Integer amount;
     private double timeZone;
-    private String vmAllocationPolicy;
+    private String vmAllocationPolicy = "";
     private boolean vmMigration;
     private List<HostRegistry> hosts;
     private double costPerSec;
