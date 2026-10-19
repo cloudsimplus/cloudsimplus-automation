@@ -146,7 +146,7 @@
                 <version>3.14.0</version>
                 <configuration>
                     <showDeprecation>true</showDeprecation>
-                    <release>17</release>
+                    <release>25</release>
                     <annotationProcessorPaths>
                         <path>
                             <!--
@@ -178,8 +178,6 @@
                     <compilerArgs>
                         <!-- Error Prone and NullAway settings (see the comments in annotationProcessorPaths above). -->
                         <arg>-XDcompilePolicy=simple</arg>
-                        <!-- Required by Error Prone on JDK 21 -->
-                        <arg>-XDaddTypeAnnotationsToSymbol=true</arg>
                         <arg>--should-stop=ifError=FLOW</arg>
                         <arg>-Xplugin:ErrorProne ${errorprone.args} -Xep:NullAway:ERROR -XepOpt:NullAway:OnlyNullMarked=true</arg>
                     </compilerArgs>
@@ -311,6 +309,26 @@
         <errorprone.args>-XepDisableWarningsInGeneratedCode -XepExcludedPaths:.*/target/generated-sources/.* -Xep:StringConcatToTextBlock:OFF</errorprone.args>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+
+    <repositories>
+        <repository>
+            <!--
+            Maven Central repository for SNAPSHOT versions, enabling the use of CloudSim Plus
+            SNAPSHOT versions (such as 9.0.0-SNAPSHOT) before they are released.
+            Final versions are still downloaded from Maven Central, since releases are disabled here.
+            https://central.sonatype.org/publish/publish-portal-snapshots/
+            -->
+            <name>Central Portal Snapshots</name>
+            <id>central-portal-snapshots</id>
+            <url>https://central.sonatype.com/repository/maven-snapshots/</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
 
     <dependencies>
         <dependency>
