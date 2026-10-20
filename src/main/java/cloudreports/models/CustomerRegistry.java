@@ -27,14 +27,12 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-/**
- * A customer registry stores information about a specific customer.
- * It contains the list of virtual machines owned by the customer as well as
- * its resources utilization profile.
- *
- * @author      Thiago T. Sá
- * @since       1.0
- */
+/// A customer registry stores information about a specific customer.
+/// It contains the list of virtual machines owned by the customer as well as
+/// its resources utilization profile.
+///
+/// @author      Thiago T. Sá
+/// @since       1.0
 public final class CustomerRegistry implements Serializable{
     private long id;
     private String name = "";
@@ -48,12 +46,10 @@ public final class CustomerRegistry implements Serializable{
         setAmount(1);
     }
 
-    /**
-     * Creates a new customer registry with the given name.
-     *
-     * @param   name    the name of the customer registry.
-     * @since           1.0
-     */
+    /// Creates a new customer registry with the given name.
+    ///
+    /// @param   name    the name of the customer registry.
+    /// @since           1.0
     public CustomerRegistry(String name) {
         this();
         this.name = name;
@@ -66,74 +62,58 @@ public final class CustomerRegistry implements Serializable{
         this.cloudlets = new LinkedList<>();
     }
 
-    /**
-     * Gets the customer's id.
-     *
-     * @return the customer's id.
-     */
+    /// Gets the customer's id.
+    ///
+    /// @return the customer's id.
     public long getId() {
         return id;
     }
 
-    /**
-     * Sets the customer's id.
-     *
-     * @param   id  the customer's id.
-     */
+    /// Sets the customer's id.
+    ///
+    /// @param   id  the customer's id.
     public void setId(long id) {
         this.id = id;
     }
 
-    /**
-     * Gets the customer's name.
-     *
-     * @return the customer's name.
-     */
+    /// Gets the customer's name.
+    ///
+    /// @return the customer's name.
     public String getName() {
         return name;
     }
 
-    /**
-     * Sets the customer's name.
-     *
-     * @param   name    the customer's name.
-     */
+    /// Sets the customer's name.
+    ///
+    /// @param   name    the customer's name.
     public void setName(String name) {
         this.name = name;
     }
 
-    /**
-     * Gets the list of {@link Vm}s owned by this customer.
-     *
-     * @return
-     */
+    /// Gets the list of [Vm]s owned by this customer.
+    ///
+    /// @return
     public List<VmRegistry> getVms() {
         return vms;
     }
 
-    /**
-     * Sets the list of {@link Vm}s owned by this customer.
-     *
-     * @param   vms    the customer's virtual machines list to set.
-     */
+    /// Sets the list of [Vm]s owned by this customer.
+    ///
+    /// @param   vms    the customer's virtual machines list to set.
     public void setVms(List<VmRegistry> vms) {
         this.vms = vms;
     }
 
-    /**
-     * Gets the list of {@link Cloudlet}'s owned by this customer.
-     *
-     * @return
-     */
+    /// Gets the list of [Cloudlet]'s owned by this customer.
+    ///
+    /// @return
     public List<CloudletRegistry> getCloudlets() {
         return cloudlets;
     }
 
-    /**
-     * Sets the list of {@link Cloudlet}'s owned by this customer.
-     *
-     * @param   cloudlets    the customer's cloudlets list to set.
-     */
+    /// Sets the list of [Cloudlet]'s owned by this customer.
+    ///
+    /// @param   cloudlets    the customer's cloudlets list to set.
     public void setCloudlets(List<CloudletRegistry> cloudlets) {
         this.cloudlets = cloudlets;
     }
@@ -170,16 +150,12 @@ public final class CustomerRegistry implements Serializable{
         return s.toString();
     }
 
-    /**
-     * @return the amount
-     */
+    /// @return the amount
     public Integer getAmount() {
         return amount;
     }
 
-    /**
-     * @param amount the amount to set
-     */
+    /// @param amount the amount to set
     public void setAmount(Integer amount) {
         this.amount = amount;
     }

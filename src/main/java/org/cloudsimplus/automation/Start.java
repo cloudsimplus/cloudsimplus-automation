@@ -29,13 +29,11 @@ import org.cloudsimplus.core.CloudSimPlus;
 import java.io.FileNotFoundException;
 import java.util.regex.Pattern;
 
-/**
- * Starts the tool by loading a Cloud Computing simulation scenario from an YAML file given by command line.
- * This is the bootstrap class that starts the tool and parses command line arguments.
- *
- * @author Manoel Campos da Silva Filho
- * @see YamlCloudScenarioReader
- */
+/// Starts the tool by loading a Cloud Computing simulation scenario from an YAML file given by command line.
+/// This is the bootstrap class that starts the tool and parses command line arguments.
+///
+/// @author Manoel Campos da Silva Filho
+/// @see YamlCloudScenarioReader
 public final class Start {
     private final Options options = new Options();
     @SuppressWarnings("NullAway.Init") // set in the constructor after parsing the command line
@@ -43,20 +41,16 @@ public final class Start {
     @SuppressWarnings("NullAway.Init") // set by parseCommandLineOptions(), called from the constructor
     private CommandLine cmd;
 
-    /**
-     * Executes the command line interface of the applications.
-     *
-     * @param args command line arguments.
-     */
+    /// Executes the command line interface of the applications.
+    ///
+    /// @param args command line arguments.
     public static void main(String[] args) {
         new Start(args);
     }
 
-    /**
-     * Default constructor that parses command line parameters
-     * and actually execute the tool.
-     * @param args command line parameters (see {@link #main(String[])})
-     */
+    /// Default constructor that parses command line parameters
+    /// and actually execute the tool.
+    /// @param args command line parameters (see [#main(String\[\])])
     private Start(final String[] args){
         try {
             if(!parseCommandLineOptions(args)){
@@ -84,10 +78,8 @@ public final class Start {
         formatter.printHelp(getApplicationStartCmd() +" [options] YamlFilePath", options);
     }
 
-    /**
-     * Parses options given by command line.
-     * @param args the command line options
-     */
+    /// Parses options given by command line.
+    /// @param args the command line options
     private boolean parseCommandLineOptions(String[] args) throws ParseException {
         final var option = new Option("v", "Enables CloudSim Plus Log (disabled by default)");
         option.setLongOpt("verbose");
@@ -112,14 +104,12 @@ public final class Start {
         return true;
     }
 
-    /**
-     * Gets the command used to launch the application.
-     * If the application was launched from the jar file, returns
-     * a command like "java -jar name-of-the-jar-file".
-     * If it was launched directly from the class file,
-     * returns a command like "java class-file".
-     * @return
-     */
+    /// Gets the command used to launch the application.
+    /// If the application was launched from the jar file, returns
+    /// a command like "java -jar name-of-the-jar-file".
+    /// If it was launched directly from the class file,
+    /// returns a command like "java class-file".
+    /// @return
     private String getApplicationStartCmd() {
         final String fullClassFilePath = getFullClassFilePath();
         final String jarRegex = ".*\\/(.*\\.jar).*\\/";
@@ -136,19 +126,15 @@ public final class Start {
         return "";
     }
 
-    /**
-     * Gets the full file path of this class, which may include the
-     * path of a jar if the class is being run from a jar package.
-     * @return
-     */
+    /// Gets the full file path of this class, which may include the
+    /// path of a jar if the class is being run from a jar package.
+    /// @return
     private String getFullClassFilePath() {
         final String classFileName = '/' + Start.class.getName().replace('.', '/') + ".class";
         return Start.class.getResource(classFileName).getFile();
     }
 
-    /**
-     * Builds and run Cloud Computing simulation scenarios loaded from the YAML file.
-     */
+    /// Builds and run Cloud Computing simulation scenarios loaded from the YAML file.
     public void build() {
         System.out.printf(
             "Starting %d Simulation Scenario(s) from file %s in CloudSim Plus %s\n",
@@ -165,21 +151,17 @@ public final class Start {
         }
     }
 
-    /**
-     * Gets the file name from the command line arguments,
-     * which is the first argument remained after the parsing.
-     *
-     * @return
-     */
+    /// Gets the file name from the command line arguments,
+    /// which is the first argument remained after the parsing.
+    ///
+    /// @return
     private String getFileNameFromCommandLine() {
         return cmd.getArgs().length > 0 ? cmd.getArgs()[0] : "";
     }
 
-    /**
-     * Checks if CloudSim Plus Log has to be enabled.
-     *
-     * @return
-     */
+    /// Checks if CloudSim Plus Log has to be enabled.
+    ///
+    /// @return
     private boolean isToEnableLog() {
         return cmd.hasOption("v");
     }

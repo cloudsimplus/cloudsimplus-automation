@@ -42,37 +42,29 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- * Dynamically creates instances of classes such as {@link VmScheduler}, {@link VmAllocationPolicy},
- * {@link CloudletScheduler}, {@link ResourceProvisioner} and others from the class name of
- * the object to be instantiated.
- *
- * @author Manoel Campos da Silva Filho
- */
+/// Dynamically creates instances of classes such as [VmScheduler], [VmAllocationPolicy],
+/// [CloudletScheduler], [ResourceProvisioner] and others from the class name of
+/// the object to be instantiated.
+///
+/// @author Manoel Campos da Silva Filho
 public class PolicyLoader {
-    /**
-     * Map of already loaded class, which are stored
-     * to speedup getting a class from its name.
-     * This way, after a class is get from the first time,
-     * it isn't used reflection anymore when a class with the same
-     * name is requested again.
-     * Each key is a full class name and each value is the class itself.
-     */
+    /// Map of already loaded class, which are stored
+    /// to speedup getting a class from its name.
+    /// This way, after a class is get from the first time,
+    /// it isn't used reflection anymore when a class with the same
+    /// name is requested again.
+    /// Each key is a full class name and each value is the class itself.
     private static final Map<String, Class> map = new HashMap<>();
 
-    /**
-     * The base CloudSim package name.
-     */
+    /// The base CloudSim package name.
     private static final String PKG = "org.cloudsimplus";
 
-    /**
-     * Try to get a class corresponding to its full name from
-     * the map of already loaded classes.
-     * If the class was not loaded yet, try to load
-     * and return it.
-     * @param fullClassName the full qualified name of the class (including package name)
-     * @return the loaded class
-     */
+    /// Try to get a class corresponding to its full name from
+    /// the map of already loaded classes.
+    /// If the class was not loaded yet, try to load
+    /// and return it.
+    /// @param fullClassName the full qualified name of the class (including package name)
+    /// @return the loaded class
     private static <T> Class<T> loadClass(final String fullClassName){
         Class<T> klass = map.get(fullClassName);
         if(klass == null){
@@ -101,21 +93,19 @@ public class PolicyLoader {
         }
     }
 
-    /**
-     * Gets an instance of a resource provisioner with a given
-     * class name information.
-     *
-     * @param classPrefix The class prefix for the provisioner.
-     * If you want to instantiate the provisioner class BwProvisionerSimple,
-     * the provisioner prefix is "Bw"
-     * @param classSufix The class suffix of the provisioner.
-     * If you want to instantiate the provisioner class BwProvisionerSimple,
-     * the provisioner suffix is just "Simple"
-     * @return A new instance of the provisioner with the given name.
-     * For instance, if the class suffix is "Simple",
-     * returns an instance the ResourceProvisionerSimple class.
-     * @throws RuntimeException
-     */
+    /// Gets an instance of a resource provisioner with a given
+    /// class name information.
+    ///
+    /// @param classPrefix The class prefix for the provisioner.
+    /// If you want to instantiate the provisioner class BwProvisionerSimple,
+    /// the provisioner prefix is "Bw"
+    /// @param classSufix The class suffix of the provisioner.
+    /// If you want to instantiate the provisioner class BwProvisionerSimple,
+    /// the provisioner suffix is just "Simple"
+    /// @return A new instance of the provisioner with the given name.
+    /// For instance, if the class suffix is "Simple",
+    /// returns an instance the ResourceProvisionerSimple class.
+    /// @throws RuntimeException
     private static <T extends ResourceProvisioner> T resourceProvisioner(
         final String classPrefix, final String classSufix) throws RuntimeException {
         try {

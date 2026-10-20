@@ -53,10 +53,8 @@ import java.util.stream.Collectors;
 import static java.util.Comparator.comparingLong;
 import static java.util.stream.Collectors.toList;
 
-/**
- * Represents a simulation created in CloudSim Plus.
- * @author Manoel Campos da Silva Filho
- */
+/// Represents a simulation created in CloudSim Plus.
+/// @author Manoel Campos da Silva Filho
 public class CloudSimulation implements Runnable {
     private final YamlCloudScenario scenario;
     @SuppressWarnings("NullAway.Init") // set when the simulation starts in run()
@@ -70,25 +68,21 @@ public class CloudSimulation implements Runnable {
     private Map<DatacenterBroker, List<Vm>> vmsToBrokerMap;
     private Map<DatacenterBroker, List<Cloudlet>> cloudletsToBrokerMap;
 
-    /**
-     * Instantiates a CloudSimulation object to enable building
-     * and running {@link YamlCloudScenario Cloud Simulation Scenario}
-     * in CloudSim Plus.
-     *
-     * @param scenario the {@link YamlCloudScenario} read from an YAML file
-     */
+    /// Instantiates a CloudSimulation object to enable building
+    /// and running [Cloud Simulation Scenario][YamlCloudScenario]
+    /// in CloudSim Plus.
+    ///
+    /// @param scenario the [YamlCloudScenario] read from an YAML file
     public CloudSimulation(YamlCloudScenario scenario) {
         this(scenario, "");
     }
 
-    /**
-     * Builds a {@link YamlCloudScenario Cloud Simulation Scenario} read from an YAML file
-     * in CloudSim Plus.
-     * @param scenario the {@link YamlCloudScenario} read from an YAML file
-     * @param label A label to be used to identify the running
-     *              simulation scenario. Commonly this can be the name
-     *              of the loaded YAML file.
-     */
+    /// Builds a [Cloud Simulation Scenario][YamlCloudScenario] read from an YAML file
+    /// in CloudSim Plus.
+    /// @param scenario the [YamlCloudScenario] read from an YAML file
+    /// @param label A label to be used to identify the running
+    /// simulation scenario. Commonly this can be the name
+    /// of the loaded YAML file.
     public CloudSimulation(YamlCloudScenario scenario, final String label) {
         this.scenario = scenario;
         this.showResults = true;
@@ -101,13 +95,11 @@ public class CloudSimulation implements Runnable {
         this.cloudletsToBrokerMap = new HashMap<>();
     }
 
-    /**
-     * Creates a map containing the abstract customer information ({@link CustomerRegistry})
-     * used to create each concrete CloudSim customer ({@link DatacenterBroker}).
-     *
-     * @return Returns the map created.
-     * @see YamlCloudScenario#getCustomers()
-     */
+    /// Creates a map containing the abstract customer information ([CustomerRegistry])
+    /// used to create each concrete CloudSim customer ([DatacenterBroker]).
+    ///
+    /// @return Returns the map created.
+    /// @see YamlCloudScenario#getCustomers()
     private Map<DatacenterBroker, CustomerRegistry> createBrokers() {
         final int totalBrokerAmount = scenario.getCustomers().stream().mapToInt(CustomerRegistry::getAmount).sum();
         final var map = new HashMap<DatacenterBroker, CustomerRegistry>(totalBrokerAmount);
@@ -120,14 +112,12 @@ public class CloudSimulation implements Runnable {
         return map;
     }
 
-    /**
-     * Creates the list of VMs in CloudSim Plus for each customer represented by a {@link DatacenterBroker}.
-     *
-     * @param crMap a Map between a {@link DatacenterBroker} representing a customer in CloudSim Plus
-     *           and the {@link CustomerRegistry} object used to create VMs and Cloudlets for such a broker.
-     * @return a map containing the list of created VMs for each customer (DatacenterBroker).
-     * @see #createBrokers()
-     */
+    /// Creates the list of VMs in CloudSim Plus for each customer represented by a [DatacenterBroker].
+    ///
+    /// @param crMap a Map between a [DatacenterBroker] representing a customer in CloudSim Plus
+    /// and the [CustomerRegistry] object used to create VMs and Cloudlets for such a broker.
+    /// @return a map containing the list of created VMs for each customer (DatacenterBroker).
+    /// @see #createBrokers()
     private Map<DatacenterBroker, List<Vm>> createVmListForAllBrokers(
         final Map<DatacenterBroker, CustomerRegistry> crMap)
     {
@@ -142,15 +132,13 @@ public class CloudSimulation implements Runnable {
         return vmMap;
     }
 
-    /**
-     * Creates the list of VMs in CloudSim Plus for a given customer represented by a {@link DatacenterBroker}.
-     *
-     * @param broker {@link DatacenterBroker} representing a customer in CloudSim Plus, for who VMs will be created
-     * @param cr  {@link CustomerRegistry} object used to create VMs and Cloudlets for such a broker
-     * @param createdVms the number of VMs already created
-     * @return a map containing the list of created VMs for the given customer (DatacenterBroker)
-     * @see #createBrokers()
-     */
+    /// Creates the list of VMs in CloudSim Plus for a given customer represented by a [DatacenterBroker].
+    ///
+    /// @param broker [DatacenterBroker] representing a customer in CloudSim Plus, for who VMs will be created
+    /// @param cr  [CustomerRegistry] object used to create VMs and Cloudlets for such a broker
+    /// @param createdVms the number of VMs already created
+    /// @return a map containing the list of created VMs for the given customer (DatacenterBroker)
+    /// @see #createBrokers()
     private List<Vm> createVmListForOneBroker(
         final DatacenterBroker broker,
         final CustomerRegistry cr,
@@ -182,14 +170,12 @@ public class CloudSimulation implements Runnable {
         return vm;
     }
 
-    /**
-     * Creates a map that stores the cloudlet list for each customer (broker).
-     *
-     * @param brokerRegistries the map containing the abstract customer information
-     *                         ({@link CustomerRegistry}) obtained from the YAML file, for each
-     *                         concrete customer created ({@link DatacenterBroker}).
-     * @return the map of Cloudlets created.
-     */
+    /// Creates a map that stores the cloudlet list for each customer (broker).
+    ///
+    /// @param brokerRegistries the map containing the abstract customer information
+    /// ([CustomerRegistry]) obtained from the YAML file, for each
+    /// concrete customer created ([DatacenterBroker]).
+    /// @return the map of Cloudlets created.
     private Map<DatacenterBroker, List<Cloudlet>> createCloudlets(
         final Map<DatacenterBroker, CustomerRegistry> brokerRegistries)
     {
@@ -234,29 +220,25 @@ public class CloudSimulation implements Runnable {
         return cloudlet;
     }
 
-    /**
-     * Searches for a VM, with the specified id, at the broker (that represents
-     * the customer).
-     *
-     * @param broker The broker (customer) where to search for the VM
-     * @param vmId   The desired VM to be located.
-     * @return the VM with the given ID or {@link Vm#NULL} if not found.
-     */
+    /// Searches for a VM, with the specified id, at the broker (that represents
+    /// the customer).
+    ///
+    /// @param broker The broker (customer) where to search for the VM
+    /// @param vmId   The desired VM to be located.
+    /// @return the VM with the given ID or [Vm#NULL] if not found.
     private Vm findVm(final DatacenterBroker broker, final int vmId) {
         return Objects.requireNonNull(vmsToBrokerMap.get(broker), "Broker not found").stream().filter(vm -> vm.getId() == vmId).findFirst().orElse(Vm.NULL);
     }
 
-    /**
-     * Creates the concrete Datacenter list from the abstract
-     * DatacenterRegistry list.
-     *
-     * @return Returns the list of created CloudSim datacenters
-     * @throws IllegalArgumentException Throws when the method,
-     *                                  starting from the information at YAML file,
-     *                                  sets invalid parameters for CloudSim Datacenter objects
-     *                                  to be created.
-     * @see YamlCloudScenario#getDatacenters()
-     */
+    /// Creates the concrete Datacenter list from the abstract
+    /// DatacenterRegistry list.
+    ///
+    /// @return Returns the list of created CloudSim datacenters
+    /// @throws IllegalArgumentException Throws when the method,
+    /// starting from the information at YAML file,
+    /// sets invalid parameters for CloudSim Datacenter objects
+    /// to be created.
+    /// @see YamlCloudScenario#getDatacenters()
     private List<Datacenter> createDatacenters() throws IllegalArgumentException {
         String datacenterName;
         int datacenterCount = 0;
@@ -282,17 +264,15 @@ public class CloudSimulation implements Runnable {
         return datacenterList;
     }
 
-    /**
-     * Creates the concrete host list from the abstract DatacenterRegistry
-     * object.
-     *
-     * @param dcr       A specific abstract datacenter information
-     *                  get from the datacenterRegistries list at the YAML file.
-     * @param initialHostId the ID for the first Host to be created
-     * @return the list of created hosts from the specified datacenterRegistry.
-     * @throws RuntimeException
-     * @see YamlCloudScenario#getDatacenters()
-     */
+    /// Creates the concrete host list from the abstract DatacenterRegistry
+    /// object.
+    ///
+    /// @param dcr       A specific abstract datacenter information
+    /// get from the datacenterRegistries list at the YAML file.
+    /// @param initialHostId the ID for the first Host to be created
+    /// @return the list of created hosts from the specified datacenterRegistry.
+    /// @throws RuntimeException
+    /// @see YamlCloudScenario#getDatacenters()
     private List<Host> createHosts(
         final DatacenterRegistry dcr, int initialHostId) throws RuntimeException
     {
@@ -352,19 +332,17 @@ public class CloudSimulation implements Runnable {
         return hr.getId() != 0 ? hr.getId() : currentHostCount;
     }
 
-    /**
-     * Creates a CloudSim StorageSystem Area Network (SAN) from an abstract DatacenterRegistry
-     * information, get from a YAML specification file.
-     *
-     * @param dcr A specific DatacenterRegistry information
-     *            to be used to create the SANs.
-     * @return Returns the SANs created list.
-     * @throws IllegalArgumentException Throws when the method,
-     *                                  starting from the information at YAML file,
-     *                                  sets invalid parameters for CloudSim SAN objects
-     *                                  to be created.
-     * @see YamlCloudScenario#getDatacenters()
-     */
+    /// Creates a CloudSim StorageSystem Area Network (SAN) from an abstract DatacenterRegistry
+    /// information, get from a YAML specification file.
+    ///
+    /// @param dcr A specific DatacenterRegistry information
+    /// to be used to create the SANs.
+    /// @return Returns the SANs created list.
+    /// @throws IllegalArgumentException Throws when the method,
+    /// starting from the information at YAML file,
+    /// sets invalid parameters for CloudSim SAN objects
+    /// to be created.
+    /// @see YamlCloudScenario#getDatacenters()
     private List<SanStorage> createSan(final DatacenterRegistry dcr) throws IllegalArgumentException {
         final var storageList = new ArrayList<SanStorage>(dcr.getSans().size());
         for (SanStorageRegistry sr : dcr.getSans()) {
@@ -375,15 +353,13 @@ public class CloudSimulation implements Runnable {
         return storageList;
     }
 
-    /**
-     * Sets the attributes of the DatacenterCharacteristics inside the Datacenter.
-     * It represents that characteristics of one CloudSim Datacenter,
-     * including the list of hosts of the Datacenter.
-     *
-     * @param dc the Datacenter to set its characteristics
-     * @param dcr       The abstract DatacenterRegistry information, obtained from the YAML file,
-     *                  to be used to define the Datacenter characteristics.
-     */
+    /// Sets the attributes of the DatacenterCharacteristics inside the Datacenter.
+    /// It represents that characteristics of one CloudSim Datacenter,
+    /// including the list of hosts of the Datacenter.
+    ///
+    /// @param dc the Datacenter to set its characteristics
+    /// @param dcr       The abstract DatacenterRegistry information, obtained from the YAML file,
+    /// to be used to define the Datacenter characteristics.
     private void setDatacenterCharacteristics(final Datacenter dc, final DatacenterRegistry dcr)
     {
         dc.getCharacteristics()
@@ -393,13 +369,11 @@ public class CloudSimulation implements Runnable {
             .setCostPerBw(dcr.getCostPerBw());
     }
 
-    /**
-     * Creates a list of PEs (Processing Elements, i.e. CPUs/Cores)
-     * for a host or VM.
-     *
-     * @param hr The abstract Host information obtained from the YAML file.
-     * @return Returns the list of PEs created.
-     */
+    /// Creates a list of PEs (Processing Elements, i.e. CPUs/Cores)
+    /// for a host or VM.
+    ///
+    /// @param hr The abstract Host information obtained from the YAML file.
+    /// @return Returns the list of PEs created.
     private List<Pe> createHostProcessingElements(final HostRegistry hr) {
         final var peList = new ArrayList<Pe>(hr.getPes());
         for (int i = 0; i < hr.getPes(); i++) {
@@ -409,9 +383,7 @@ public class CloudSimulation implements Runnable {
         return peList;
     }
 
-    /**
-     * Builds and runs the simulation scenario in CloudSim Plus.
-     */
+    /// Builds and runs the simulation scenario in CloudSim Plus.
     @Override
     public void run() {
         final double startTime = System.currentTimeMillis();
@@ -506,30 +478,24 @@ public class CloudSimulation implements Runnable {
     private int getNumCloudletsForCustomer(CustomerRegistry customer) {
         return customer.getCloudlets().stream().mapToInt(cloudlet -> cloudlet.getAmount()).sum();
     }
-    /**
-     * Gets the <a href="http://cloudsimplus.org">CloudSim Plus</a> instance used to run the simulation.
-     *
-     * @return
-     */
+    /// Gets the [CloudSim Plus](http://cloudsimplus.org) instance used to run the simulation.
+    ///
+    /// @return
     public CloudSimPlus getCloudSimPlus() {
         return cloudsimplus;
     }
 
-    /**
-     * Gets the list of {@link Datacenter}s created in CloudSim Plus, obtained from the
-     * {@link DatacenterRegistry}.
-     *
-     * @return
-     */
+    /// Gets the list of [Datacenter]s created in CloudSim Plus, obtained from the
+    /// [DatacenterRegistry].
+    ///
+    /// @return
     public List<Datacenter> getDatacenters() {
         return datacenters;
     }
 
-    /**
-     * Gets the list of all {@link Host}s created in CloudSim Plus for all {@link Datacenter}s.
-     *
-     * @return
-     */
+    /// Gets the list of all [Host]s created in CloudSim Plus for all [Datacenter]s.
+    ///
+    /// @return
     public List<Host> getHosts() {
         return datacenters.stream()
             .map(Datacenter::getHostList)
@@ -537,49 +503,39 @@ public class CloudSimulation implements Runnable {
             .collect(Collectors.toList());
     }
 
-    /**
-     * Gets the list of {@link DatacenterBroker}s created in CloudSim Plus,
-     * each one representing a customer obtained from a {@link CustomerRegistry}.
-     * @return
-     */
+    /// Gets the list of [DatacenterBroker]s created in CloudSim Plus,
+    /// each one representing a customer obtained from a [CustomerRegistry].
+    /// @return
     public List<DatacenterBroker> getBrokers() {
         return new ArrayList<>(brokers.keySet());
     }
 
-    /**
-     * Gets the list of Virtual Machines ({@link Vm}) for each customer ({@link DatacenterBroker})
-     * created in CloudSim Plus.
-     * @return the broker's VM list or null if the broker is unknown
-     * @see #getVms()
-     */
+    /// Gets the list of Virtual Machines ([Vm]) for each customer ([DatacenterBroker])
+    /// created in CloudSim Plus.
+    /// @return the broker's VM list or null if the broker is unknown
+    /// @see #getVms()
     public @Nullable List<Vm> getVms(DatacenterBroker broker){
         return vmsToBrokerMap.get(broker);
     }
 
-    /**
-     * Gets the list of all Virtual Machines ({@link Vm} created in CloudSim Plus.
-     * @return
-     * @see #getVms(DatacenterBroker)
-     */
+    /// Gets the list of all Virtual Machines ([Vm] created in CloudSim Plus.
+    /// @return
+    /// @see #getVms(DatacenterBroker)
     public List<Vm> getVms(){
         return vmsToBrokerMap.values().stream().flatMap(List::stream).collect(toList());
     }
 
-    /**
-     * Gets the list of applications ({@link Cloudlet}s) for each customer ({@link DatacenterBroker})
-     * created in CloudSim Plus.
-     * @return the broker's Cloudlet list or null if the broker is unknown
-     * @see #getCloudlets()
-     */
+    /// Gets the list of applications ([Cloudlet]s) for each customer ([DatacenterBroker])
+    /// created in CloudSim Plus.
+    /// @return the broker's Cloudlet list or null if the broker is unknown
+    /// @see #getCloudlets()
     public @Nullable List<Cloudlet> getCloudlets(DatacenterBroker broker){
         return cloudletsToBrokerMap.get(broker);
     }
 
-    /**
-     * Gets the list of all applications ({@link Cloudlet}s) created in CloudSim Plus.
-     * @return
-     * @see #getCloudlets(DatacenterBroker)
-     */
+    /// Gets the list of all applications ([Cloudlet]s) created in CloudSim Plus.
+    /// @return
+    /// @see #getCloudlets(DatacenterBroker)
     public List<Cloudlet> getCloudlets(){
         return cloudletsToBrokerMap.values().stream().flatMap(List::stream).collect(toList());
     }

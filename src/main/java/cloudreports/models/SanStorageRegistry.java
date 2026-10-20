@@ -21,13 +21,11 @@ package cloudreports.models;
 
 import java.io.Serializable;
 
-/**
- * A SAN registry stores basic information about a storage area network owned
- * by a datacenter.
- *
- * @author      Thiago T. Sá
- * @since       1.0
- */
+/// A SAN registry stores basic information about a storage area network owned
+/// by a datacenter.
+///
+/// @author      Thiago T. Sá
+/// @since       1.0
 public final class SanStorageRegistry implements Serializable {
     private long id;
     private String name = "";
@@ -38,92 +36,72 @@ public final class SanStorageRegistry implements Serializable {
     public SanStorageRegistry() {
     }
 
-    /**
-     * Gets the SAN's id.
-     *
-     * @return the SAN's id.
-     */
+    /// Gets the SAN's id.
+    ///
+    /// @return the SAN's id.
     public long getId() {
         return id;
     }
 
-    /**
-     * Sets the SAN's id.
-     *
-     * @param   id  the SAN's id.
-     */
+    /// Sets the SAN's id.
+    ///
+    /// @param   id  the SAN's id.
     public void setId(long id) {
         this.id = id;
     }
 
-    /**
-     * Gets the SAN's capacity.
-     *
-     * @return the SAN's capacity.
-     */
+    /// Gets the SAN's capacity.
+    ///
+    /// @return the SAN's capacity.
     public long getCapacity() {
         return capacity;
     }
 
-    /**
-     * Sets the SAN's capacity.
-     *
-     * @param   capacity    the SAN's capacity.
-     */
+    /// Sets the SAN's capacity.
+    ///
+    /// @param   capacity    the SAN's capacity.
     public void setCapacity(long capacity) {
         this.capacity = capacity;
     }
 
-    /**
-     * Gets the SAN's bandwidth.
-     *
-     * @return the SAN's bandwidth.
-     */
+    /// Gets the SAN's bandwidth.
+    ///
+    /// @return the SAN's bandwidth.
     public double getBandwidth() {
         return bandwidth;
     }
 
-    /**
-     * Sets the SAN's bandwidth.
-     *
-     * @param   bandwidth   the SAN's bandwidth.
-     */
+    /// Sets the SAN's bandwidth.
+    ///
+    /// @param   bandwidth   the SAN's bandwidth.
     public void setBandwidth(double bandwidth) {
         this.bandwidth = bandwidth;
     }
 
-    /**
-     * Gets the SAN's latency.
-     *
-     * @return the SAN's latency.
-     */
+    /// Gets the SAN's latency.
+    ///
+    /// @return the SAN's latency.
     public double getNetworkLatency() {
         return networkLatency;
     }
 
-    /**
-     * Sets the SAN's latency.
-     *
-     * @param   networkLatency  the SAN's latency.
-     */
+    /// Sets the SAN's latency.
+    ///
+    /// @param   networkLatency  the SAN's latency.
     public void setNetworkLatency(double networkLatency) {
         this.networkLatency = networkLatency;
     }
 
-    /**
-     * Gets the SAN's name.
-     *
-     * @return the SAN's name.
-     */
+    /// Gets the SAN's name.
+    ///
+    /// @return the SAN's name.
     public String getName() {
         return name;
     }
 
-    /**
-     * Sets the SAN's name.
-     *
-     * @param   name    the SAN's name.
-     */
+    /// Sets the SAN's name.
+    ///
+    /// @param   name    the SAN's name.
     public void setName(String name) {
         this.name = name;
     }

@@ -33,34 +33,29 @@ import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Reads Cloud Computing simulation scenarios
- * from an YAML file and stores them into a {@link #getScenarios() List} of
- * {@link YamlCloudScenario} objects.
- * These {@link YamlCloudScenario} are built using <a href="http://cloudsimplus.org">CloudSim Plus</a>.
- *
- * <p>To create simulation scenarios from an YAML file,
- * you have to use the class constructor that will try
- * to read the given file.
- * The scenarios read will be available in the {@link #getScenarios() scenarios} attribute.
- * Then, to build and run each simulation scenario in CloudSim Plus,
- * instantiate a {@link CloudSimulation} passing a {@link YamlCloudScenario} to it.
- * </p>
- *
- * @author Manoel Campos da Silva Filho
- * @see YamlCloudScenario
- */
+/// Reads Cloud Computing simulation scenarios
+/// from an YAML file and stores them into a [List][#getScenarios()] of
+/// [YamlCloudScenario] objects.
+/// These [YamlCloudScenario] are built using [CloudSim Plus](http://cloudsimplus.org).
+///
+/// To create simulation scenarios from an YAML file,
+/// you have to use the class constructor that will try
+/// to read the given file.
+/// The scenarios read will be available in the [scenarios][#getScenarios()] attribute.
+/// Then, to build and run each simulation scenario in CloudSim Plus,
+/// instantiate a [CloudSimulation] passing a [YamlCloudScenario] to it.
+///
+/// @author Manoel Campos da Silva Filho
+/// @see YamlCloudScenario
 public class YamlCloudScenarioReader {
     private final File file;
     private final List<YamlCloudScenario> scenarios;
 
-    /**
-     * Instantiates a YamlCloudScenarioReader and
-     * reads the YAML file containing the data to create Cloud Computing simulation scenarios.
-     * Then, the List of simulation scenarios can be accessed using {@link #getScenarios()}.
-     *
-     * @param filePath the path of the YAML file to read
-     */
+    /// Instantiates a YamlCloudScenarioReader and
+    /// reads the YAML file containing the data to create Cloud Computing simulation scenarios.
+    /// Then, the List of simulation scenarios can be accessed using [#getScenarios()].
+    ///
+    /// @param filePath the path of the YAML file to read
     public YamlCloudScenarioReader(final String filePath) throws IllegalArgumentException, FileNotFoundException, YamlException {
         this.file = new File(filePath);
 
@@ -71,13 +66,11 @@ public class YamlCloudScenarioReader {
         this.scenarios = readYamlFile();
     }
 
-    /**
-     * Reads the YAML file containing the data to creat Cloud Computing simulation scenarios.
-     *
-     * @return a List of simulation scenarios specified inside the YAML file.
-     * @throws FileNotFoundException when the YAML file is not found.
-     * @throws YamlException         when there is any error parsing the YAML file.
-     */
+    /// Reads the YAML file containing the data to creat Cloud Computing simulation scenarios.
+    ///
+    /// @return a List of simulation scenarios specified inside the YAML file.
+    /// @throws FileNotFoundException when the YAML file is not found.
+    /// @throws YamlException         when there is any error parsing the YAML file.
     private List<YamlCloudScenario> readYamlFile() throws FileNotFoundException, YamlException {
         final var scenariosList = new ArrayList<YamlCloudScenario>();
         final var reader = createYamlReader();
@@ -90,13 +83,11 @@ public class YamlCloudScenarioReader {
         return scenariosList;
     }
 
-    /**
-     * Creates an {@link YamlReader} to read an YAML file and instantiate
-     * java objects for the entries inside the file.
-     *
-     * @return the {@link YamlReader} to enable reading the YAML file
-     * @throws FileNotFoundException
-     */
+    /// Creates an [YamlReader] to read an YAML file and instantiate
+    /// java objects for the entries inside the file.
+    ///
+    /// @return the [YamlReader] to enable reading the YAML file
+    /// @throws FileNotFoundException
     private YamlReader createYamlReader() throws FileNotFoundException {
         final var reader = new YamlReader(new FileReader(file));
         final YamlConfig cfg = reader.getConfig();
@@ -112,18 +103,14 @@ public class YamlCloudScenarioReader {
         return reader;
     }
 
-    /**
-     * Gets the YAML {@link File} to read.
-     * @return
-     */
+    /// Gets the YAML [File] to read.
+    /// @return
     public File getFile() {
         return file;
     }
 
-    /**
-     * Gets the List of Cloud Simulation scenarios loaded from the {@link #getFile() YAML file}.
-     * @return
-     */
+    /// Gets the List of Cloud Simulation scenarios loaded from the [YAML file][#getFile()].
+    /// @return
     public List<YamlCloudScenario> getScenarios() {
         return scenarios;
     }
