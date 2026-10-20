@@ -40,4 +40,4 @@ Flow: `Start` (CLI, commons-cli) -> `YamlCloudScenarioReader` -> list of `YamlCl
 ## Conventions
 
 - `.editorconfig`: 4-space indentation for Java/XML, LF line endings, UTF-8.
-- The `paper/` dir and the `cloudsim-version` branch relate to the older CloudSim 3/4 version of the tool (no longer supported). Don't use them as a reference for the current YAML format.
+- The `paper/` dir and the `cloudsim-version` tag relate to the older CloudSim 3/4 version of the tool (no longer supported). Don't use them as a reference for the current YAML format.

@@ -148,5 +148,5 @@ The YAML structure has changed since there too, making it simpler and matching t
 
 If you are looking for the **CloudSim Automation**, 
 which is the version compatible with [CloudSim 4](https://github.com/Cloudslab/cloudsim), 
-it is available at [cloudsim-version](https://github.com/cloudsimplus/cloudsimplus-automation/tree/cloudsim-version) branch. 
+it is available at [cloudsim-version](https://github.com/cloudsimplus/cloudsimplus-automation/tree/cloudsim-version) tag. 
 However, that version is not supported anymore.
