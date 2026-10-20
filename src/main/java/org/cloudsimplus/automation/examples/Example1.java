@@ -31,13 +31,11 @@ import org.cloudsimplus.util.ResourceLoader;
 
 import java.io.FileNotFoundException;
 
-/**
- * Starts the example, parsing a YAML file containing
- * the simulation scenario, building and running it
- * in CloudSim Plus.
- *
- * @author Manoel Campos da Silva Filho
- */
+/// Starts the example, parsing a YAML file containing
+/// the simulation scenario, building and running it
+/// in CloudSim Plus.
+///
+/// @author Manoel Campos da Silva Filho
 public class Example1 {
     private Example1(){
         System.out.printf("Starting %s on %s%n", getClass().getSimpleName(), CloudSimPlus.VERSION);

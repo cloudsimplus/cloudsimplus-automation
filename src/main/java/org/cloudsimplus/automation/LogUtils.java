@@ -27,20 +27,16 @@
 package org.cloudsimplus.automation;
 
 
-/**
- * Useful methods to print log information to the terminal.
- *
- * @author Manoel Campos da Silva Filho
- */
+/// Useful methods to print log information to the terminal.
+///
+/// @author Manoel Campos da Silva Filho
 public class LogUtils {
     private static String colSeparator="|\t";
 
-    /**
-     * Print an array of objects like a table.
-     * @param captions The captions of the table
-     * @param dataArray The data to be printed.
-     * @see LogUtils#printCaptions(java.lang.String[])
-     */
+    /// Print an array of objects like a table.
+    /// @param captions The captions of the table
+    /// @param dataArray The data to be printed.
+    /// @see LogUtils#printCaptions(java.lang.String[])
     public static void printLine(String[] captions, Object[] dataArray, String colSeparator) {
         String s;
         String fmt;
@@ -63,11 +59,9 @@ public class LogUtils {
         printLine(captions, dataArray, colSeparator);
     }
 
-    /**
-     * Print the captions of a table to be presented at the terminal.
-     * @param captions Captions of the table
-     * @see LogUtils#printCaptions(java.lang.String[])
-     */
+    /// Print the captions of a table to be presented at the terminal.
+    /// @param captions Captions of the table
+    /// @see LogUtils#printCaptions(java.lang.String[])
     public static void printCaptions(String[] captions, String colSeparator) {
         for (String caption : captions) {
             System.out.print(caption + colSeparator);
@@ -79,16 +73,12 @@ public class LogUtils {
         printCaptions(captions, colSeparator);
     }
 
-    /**
-     * @return the colSeparator
-     */
+    /// @return the colSeparator
     public static String getColSeparator() {
         return colSeparator;
     }
 
-    /**
-     * @param aColSeparator the colSeparator to set
-     */
+    /// @param aColSeparator the colSeparator to set
     public static void setColSeparator(String aColSeparator) {
         colSeparator = aColSeparator;
     }

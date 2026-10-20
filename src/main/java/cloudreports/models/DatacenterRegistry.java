@@ -25,14 +25,12 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * A datacenter registry stores information about a specific datacenter.
- * It contains the list of hosts owned by the datacenter, cost values and
- * other general specifications.
- *
- * @author      Thiago T. Sá
- * @since       1.0
- */
+/// A datacenter registry stores information about a specific datacenter.
+/// It contains the list of hosts owned by the datacenter, cost values and
+/// other general specifications.
+///
+/// @author      Thiago T. Sá
+/// @since       1.0
 public final class DatacenterRegistry implements Serializable{
     private long id;
     private String name = "";
@@ -57,258 +55,202 @@ public final class DatacenterRegistry implements Serializable{
         setSchedulingInterval(0);
     }
 
-    /**
-     * Gets the datacenter's id.
-     *
-     * @return the datacenter's id.
-     */
+    /// Gets the datacenter's id.
+    ///
+    /// @return the datacenter's id.
     public long getId() {
         return id;
     }
 
-    /**
-     * Sets the datacenter's id.
-     *
-     * @param   id  the datacenter's id.
-     */
+    /// Sets the datacenter's id.
+    ///
+    /// @param   id  the datacenter's id.
     public void setId(long id) {
         this.id = id;
     }
 
-    /**
-     * Gets the datacenter's name.
-     *
-     * @return the datacenter's name.
-     */
+    /// Gets the datacenter's name.
+    ///
+    /// @return the datacenter's name.
     public String getName() {
         return name;
     }
 
-    /**
-     * Sets the datacenter's name.
-     *
-     * @param   name    the datacenter's name.
-     */
+    /// Sets the datacenter's name.
+    ///
+    /// @param   name    the datacenter's name.
     public void setName(String name) {
         this.name = name;
     }
 
-    /**
-     * Gets the datacenter's time zone.
-     *
-     * @return the datacenter's time zone.
-     */
+    /// Gets the datacenter's time zone.
+    ///
+    /// @return the datacenter's time zone.
     public double getTimeZone() {
         return timeZone;
     }
 
-    /**
-     * Sets the datacenter's time zone.
-     *
-     * @param   timeZone    the datacenter's time zone.
-     */
+    /// Sets the datacenter's time zone.
+    ///
+    /// @param   timeZone    the datacenter's time zone.
     public void setTimeZone(double timeZone) {
         this.timeZone = timeZone;
     }
 
-    /**
-     * Gets the class name suffix for Datacenter's {@link VmAllocationPolicy}.
-     *
-     * @return
-     */
+    /// Gets the class name suffix for Datacenter's [VmAllocationPolicy].
+    ///
+    /// @return
     public String getVmAllocationPolicy() {
         return vmAllocationPolicy;
     }
 
-    /**
-     * Sets the datacenter's allocation policy.
-     *
-     * @param   vmAllocationPolicy   the datacenter's allocation policy.
-     */
+    /// Sets the datacenter's allocation policy.
+    ///
+    /// @param   vmAllocationPolicy   the datacenter's allocation policy.
     public void setVmAllocationPolicy(String vmAllocationPolicy) {
         this.vmAllocationPolicy = vmAllocationPolicy;
     }
 
-    /**
-     * Checks if virtual machines migrations are enabled.
-     *
-     * @return  <code>true</code> if virtual machines migrations are enabled;
-     *          <code>false</code> otherwise.
-     */
+    /// Checks if virtual machines migrations are enabled.
+    ///
+    /// @return  `true` if virtual machines migrations are enabled;
+    /// `false` otherwise.
     public boolean isVmMigration() {
         return vmMigration;
     }
 
-    /**
-     * Enables/disables virtual machines migrations.
-     *
-     * @param   vmMigration indicates if virtual machines migrations are enabled
-     *                      or not
-     */
+    /// Enables/disables virtual machines migrations.
+    ///
+    /// @param   vmMigration indicates if virtual machines migrations are enabled
+    /// or not
     public void setVmMigration(boolean vmMigration) {
         this.vmMigration = vmMigration;
     }
 
-    /**
-     * Gets the datacenter's hosts list.
-     *
-     * @return the datacenter's host list.
-     */
+    /// Gets the datacenter's hosts list.
+    ///
+    /// @return the datacenter's host list.
     public List<HostRegistry> getHosts() {
         return hosts;
     }
 
-    /**
-     * Sets the datacenter's hosts list.
-     *
-     * @param   hosts    the datacenter's host list.
-     */
+    /// Sets the datacenter's hosts list.
+    ///
+    /// @param   hosts    the datacenter's host list.
     public void setHosts(List<HostRegistry> hosts) {
         this.hosts = hosts;
     }
 
-    /**
-     * Gets the datacenter's cost by second of processing.
-     *
-     * @return the datacenter's cost by second of processing.
-     */
+    /// Gets the datacenter's cost by second of processing.
+    ///
+    /// @return the datacenter's cost by second of processing.
     public double getCostPerSec() {
         return costPerSec;
     }
 
-    /**
-     * Sets the datacenter's cost by second of processing.
-     *
-     * @param   costPerSec  the datacenter's cost by second of processing.
-     */
+    /// Sets the datacenter's cost by second of processing.
+    ///
+    /// @param   costPerSec  the datacenter's cost by second of processing.
     public void setCostPerSec(double costPerSec) {
         this.costPerSec = costPerSec;
     }
 
-    /**
-     * Gets the datacenter's cost by RAM usage.
-     *
-     * @return the datacenter's cost by RAM usage.
-     */
+    /// Gets the datacenter's cost by RAM usage.
+    ///
+    /// @return the datacenter's cost by RAM usage.
     public double getCostPerMem() {
         return costPerMem;
     }
 
-    /**
-     * Sets the datacenter's cost by RAM usage.
-     *
-     * @param   costPerMem  the datacenter's cost by RAM usage.
-     */
+    /// Sets the datacenter's cost by RAM usage.
+    ///
+    /// @param   costPerMem  the datacenter's cost by RAM usage.
     public void setCostPerMem(double costPerMem) {
         this.costPerMem = costPerMem;
     }
 
-    /**
-     * Gets the datacenter's cost by storage usage.
-     *
-     * @return the datacenter's cost by storage usage.
-     */
+    /// Gets the datacenter's cost by storage usage.
+    ///
+    /// @return the datacenter's cost by storage usage.
     public double getCostPerStorage() {
         return costPerStorage;
     }
 
-    /**
-     * Sets the datacenter's cost by storage usage.
-     *
-     * @param   costPerStorage  the datacenter's cost by storage usage.
-     */
+    /// Sets the datacenter's cost by storage usage.
+    ///
+    /// @param   costPerStorage  the datacenter's cost by storage usage.
     public void setCostPerStorage(double costPerStorage) {
         this.costPerStorage = costPerStorage;
     }
 
-    /**
-     * Gets the datacenter's cost by bandwidth usage.
-     *
-     * @return the datacenter's cost by bandwidth usage.
-     */
+    /// Gets the datacenter's cost by bandwidth usage.
+    ///
+    /// @return the datacenter's cost by bandwidth usage.
     public double getCostPerBw() {
         return costPerBw;
     }
 
-    /**
-     * Sets the datacenter's cost by bandwidth usage.
-     *
-     * @param   costPerBw   the datacenter's cost by bandwidth usage.
-     */
+    /// Sets the datacenter's cost by bandwidth usage.
+    ///
+    /// @param   costPerBw   the datacenter's cost by bandwidth usage.
     public void setCostPerBw(double costPerBw) {
         this.costPerBw = costPerBw;
     }
 
-    /**
-     * Gets the datacenter's SAN list.
-     *
-     * @return the datacenter's SAN list.
-     */
+    /// Gets the datacenter's SAN list.
+    ///
+    /// @return the datacenter's SAN list.
     public List<SanStorageRegistry> getSans() {
         return sans;
     }
 
-    /**
-     * Sets the datacenter's SAN list.
-     *
-     * @param   sans the datacenter's SAN list.
-     */
+    /// Sets the datacenter's SAN list.
+    ///
+    /// @param   sans the datacenter's SAN list.
     public void setSans(List<SanStorageRegistry> sans) {
         this.sans = sans;
     }
 
-    /**
-     * Gets the datacenter's scheduling interval.
-     *
-     * @return the datacenter's scheduling interval.
-     */
+    /// Gets the datacenter's scheduling interval.
+    ///
+    /// @return the datacenter's scheduling interval.
     public double getSchedulingInterval() {
         return schedulingInterval;
     }
 
-    /**
-     * Sets the datacenter's scheduling interval.
-     *
-     * @param   schedulingInterval  the datacenter's scheduling interval.
-     */
+    /// Sets the datacenter's scheduling interval.
+    ///
+    /// @param   schedulingInterval  the datacenter's scheduling interval.
     public void setSchedulingInterval(double schedulingInterval) {
         this.schedulingInterval = schedulingInterval;
     }
 
-    /**
-     * Gets the datacenter's upper utilization threshold.
-     *
-     * @return the datacenter's upper utilization threshold.
-     */
+    /// Gets the datacenter's upper utilization threshold.
+    ///
+    /// @return the datacenter's upper utilization threshold.
     public double getUpperUtilizationThreshold() {
         return upperUtilizationThreshold;
     }
 
-    /**
-     * Sets the datacenter's upper utilization threshold.
-     *
-     * @param   upperUtilizationThreshold   the datacenter's upper utilization
-     *                                      threshold.
-     */
+    /// Sets the datacenter's upper utilization threshold.
+    ///
+    /// @param   upperUtilizationThreshold   the datacenter's upper utilization
+    /// threshold.
     public void setUpperUtilizationThreshold(double upperUtilizationThreshold) {
         this.upperUtilizationThreshold = upperUtilizationThreshold;
     }
 
-    /**
-     * Gets the datacenter's lower utilization threshold.
-     *
-     * @return the datacenter's lower utilization threshold.
-     */
+    /// Gets the datacenter's lower utilization threshold.
+    ///
+    /// @return the datacenter's lower utilization threshold.
     public double getLowerUtilizationThreshold() {
         return lowerUtilizationThreshold;
     }
 
-    /**
-     * Sets the datacenter's lower utilization threshold.
-     *
-     * @param lowerUtilizationThreshold the datacenter's lower utilization
-     *                                  threshold.
-     */
+    /// Sets the datacenter's lower utilization threshold.
+    ///
+    /// @param lowerUtilizationThreshold the datacenter's lower utilization
+    /// threshold.
     public void setLowerUtilizationThreshold(double lowerUtilizationThreshold) {
         this.lowerUtilizationThreshold = lowerUtilizationThreshold;
     }
@@ -357,16 +299,12 @@ public final class DatacenterRegistry implements Serializable{
         return s.toString();
     }
 
-    /**
-     * @return the amount
-     */
+    /// @return the amount
     public Integer getAmount() {
         return amount;
     }
 
-    /**
-     * @param amount the amount to set
-     */
+    /// @param amount the amount to set
     public void setAmount(Integer amount) {
         this.amount = amount;
     }

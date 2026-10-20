@@ -24,13 +24,11 @@ import org.cloudsimplus.vms.Vm;
 
 import java.io.Serializable;
 
-/**
- * A virtual machine registry stores information about a specific virtual
- * machine configuration.
- *
- * @author      Thiago T. Sá
- * @since       1.0
- */
+/// A virtual machine registry stores information about a specific virtual
+/// machine configuration.
+///
+/// @author      Thiago T. Sá
+/// @since       1.0
 public final class VmRegistry implements Serializable{
     private long id;
     private long size;
@@ -47,182 +45,142 @@ public final class VmRegistry implements Serializable{
         setAmount(1);
     }
 
-    /**
-     * Gets the virtual machine's id.
-     *
-     * @return the virtual machine's id.
-     */
+    /// Gets the virtual machine's id.
+    ///
+    /// @return the virtual machine's id.
     public long getId() {
         return id;
     }
 
-    /**
-     * Sets the virtual machine's id.
-     *
-     * @param   id  the virtual machine's id.
-     */
+    /// Sets the virtual machine's id.
+    ///
+    /// @param   id  the virtual machine's id.
     public void setId(long id) {
         this.id = id;
     }
 
-    /**
-     * Gets the virtual machine's image size.
-     *
-     * @return the virtual machine's image size.
-     */
+    /// Gets the virtual machine's image size.
+    ///
+    /// @return the virtual machine's image size.
     public long getSize() {
         return size;
     }
 
-    /**
-     * Sets the virtual machine's image size.
-     *
-     * @param   size    the virtual machine's image size.
-     */
+    /// Sets the virtual machine's image size.
+    ///
+    /// @param   size    the virtual machine's image size.
     public void setSize(long size) {
         this.size = size;
     }
 
-    /**
-     * Gets the virtual machine's number of processing elements.
-     *
-     * @return the virtual machine's number of processing elements.
-     */
+    /// Gets the virtual machine's number of processing elements.
+    ///
+    /// @return the virtual machine's number of processing elements.
     public int getPes() {
         return pes;
     }
 
-    /**
-     * Sets the virtual machine's number of processing elements.
-     *
-     * @param   pes   the virtual machine's number of processing elements.
-     */
+    /// Sets the virtual machine's number of processing elements.
+    ///
+    /// @param   pes   the virtual machine's number of processing elements.
     public void setPes(int pes) {
         this.pes = pes;
     }
 
-    /**
-     * Gets the virtual machine's required mips.
-     *
-     * @return the virtual machine's required mips.
-     */
+    /// Gets the virtual machine's required mips.
+    ///
+    /// @return the virtual machine's required mips.
     public double getMips() {
         return mips;
     }
 
-    /**
-     * Sets the virtual machine's required mips.
-     *
-     * @param   mips    the virtual machine's required mips.
-     */
+    /// Sets the virtual machine's required mips.
+    ///
+    /// @param   mips    the virtual machine's required mips.
     public void setMips(double mips) {
         this.mips = mips;
     }
 
-    /**
-     * Gets the virtual machine's amount of RAM.
-     *
-     * @return the virtual machine's amount of RAM.
-     */
+    /// Gets the virtual machine's amount of RAM.
+    ///
+    /// @return the virtual machine's amount of RAM.
     public int getRam() {
         return ram;
     }
 
-    /**
-     * Sets the virtual machine's amount of RAM.
-     *
-     * @param   ram the virtual machine's amount of RAM.
-     */
+    /// Sets the virtual machine's amount of RAM.
+    ///
+    /// @param   ram the virtual machine's amount of RAM.
     public void setRam(int ram) {
         this.ram = ram;
     }
 
-    /**
-     * Gets the virtual machine's amount of bandwidth.
-     *
-     * @return the virtual machine's amount of bandwidth.
-     */
+    /// Gets the virtual machine's amount of bandwidth.
+    ///
+    /// @return the virtual machine's amount of bandwidth.
     public long getBw() {
         return bw;
     }
 
-    /**
-     * Sets the virtual machine's amount of bandwidth.
-     *
-     * @param   bw  the virtual machine's amount of bandwidth.
-     */
+    /// Sets the virtual machine's amount of bandwidth.
+    ///
+    /// @param   bw  the virtual machine's amount of bandwidth.
     public void setBw(long bw) {
         this.bw = bw;
     }
 
-    /**
-     * Gets the virtual machine's priority.
-     *
-     * @return the virtual machine's priority.
-     */
+    /// Gets the virtual machine's priority.
+    ///
+    /// @return the virtual machine's priority.
     public int getPriority() {
         return priority;
     }
 
-    /**
-     * Sets the virtual machine's priority.
-     *
-     * @param   priority    the virtual machine's priority.
-     */
+    /// Sets the virtual machine's priority.
+    ///
+    /// @param   priority    the virtual machine's priority.
     public void setPriority(int priority) {
         this.priority = priority;
     }
 
-    /**
-     * Gets the virtual machine's hypervisor.
-     *
-     * @return the virtual machine's hypervisor.
-     */
+    /// Gets the virtual machine's hypervisor.
+    ///
+    /// @return the virtual machine's hypervisor.
     public String getVmm() {
         return vmm;
     }
 
-    /**
-     * Sets the virtual machine's hypervisor.
-     *
-     * @param   vmm the virtual machine's hypervisor.
-     */
+    /// Sets the virtual machine's hypervisor.
+    ///
+    /// @param   vmm the virtual machine's hypervisor.
     public void setVmm(String vmm) {
         this.vmm = vmm;
     }
 
-    /**
-     * Gets the amount of virtual machines with this configuration.
-     *
-     * @return
-     */
+    /// Gets the amount of virtual machines with this configuration.
+    ///
+    /// @return
     public int getAmount() {
         return amount;
     }
 
-    /**
-     * Sets the amount of virtual machines with this configuration.
-     *
-     * @param   amount  the amount of virtual machines with this configuration.
-     */
+    /// Sets the amount of virtual machines with this configuration.
+    ///
+    /// @param   amount  the amount of virtual machines with this configuration.
     public void setAmount(int amount) {
         this.amount = amount;
     }
 
-    /**
-     * Gets the class name suffix of the {@link Vm}'s {@link CloudletScheduler}.
-     *
-     * @return
-     */
+    /// Gets the class name suffix of the [Vm]'s [CloudletScheduler].
+    ///
+    /// @return
     public String getCloudletScheduler() {
         return cloudletScheduler;
     }
 
-    /**
-     * Sets the class name suffix of the {@link Vm}'s {@link CloudletScheduler}.
-     *
-     * @param   cloudletScheduler   the class name suffix to set
-     */
+    /// Sets the class name suffix of the [Vm]'s [CloudletScheduler].
+    ///
+    /// @param   cloudletScheduler   the class name suffix to set
     public void setCloudletScheduler(String cloudletScheduler) {
         this.cloudletScheduler = cloudletScheduler;
     }
