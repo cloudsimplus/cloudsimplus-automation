@@ -13,7 +13,6 @@ datacenters:
         vmScheduler: TimeShared
         ramProvisioner: Simple
         bwProvisioner: Simple
-        peProvisioner: Simple
 customers:
   - !customer
     vms:

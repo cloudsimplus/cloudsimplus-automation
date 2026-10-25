@@ -4,9 +4,6 @@ datacenters:
     name:
     amount: 2
     vmAllocationPolicy: Simple
-    architecture: x86
-    os: Linux
-    vmm: Xen
     upperUtilizationThreshold: 0.8
     lowerUtilizationThreshold: 0.2
     vmMigration: enabled
@@ -35,7 +32,6 @@ datacenters:
         powerModel: Linear
         ramProvisioner: Simple
         bwProvisioner: Simple
-        peProvisioner: Simple
 customers:
   - !customer
     name:

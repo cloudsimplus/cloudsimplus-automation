@@ -30,7 +30,6 @@ import cloudreports.models.DatacenterRegistry;
 import cloudreports.models.HostRegistry;
 import cloudreports.models.VmRegistry;
 import org.cloudsimplus.allocationpolicies.VmAllocationPolicy;
-import org.cloudsimplus.provisioners.PeProvisioner;
 import org.cloudsimplus.provisioners.ResourceProvisioner;
 import org.cloudsimplus.schedulers.cloudlet.CloudletScheduler;
 import org.cloudsimplus.schedulers.vm.VmScheduler;
@@ -121,10 +120,6 @@ public class PolicyLoader {
 
     public static ResourceProvisioner newResourceProvisioner(final HostRegistry hr) throws RuntimeException {
         return resourceProvisioner("", hr.getBwProvisioner());
-    }
-
-    public static PeProvisioner newPeProvisioner(final HostRegistry hr) throws RuntimeException {
-        return resourceProvisioner("Pe", hr.getPeProvisioner());
     }
 
     public static VmAllocationPolicy vmAllocationPolicy(final DatacenterRegistry dcr) throws RuntimeException {
