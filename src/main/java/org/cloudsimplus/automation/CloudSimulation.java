@@ -159,7 +159,7 @@ public class CloudSimulation implements Runnable {
                         final VmRegistry vmr) throws RuntimeException
     {
         final var scheduler = PolicyLoader.cloudletScheduler(vmr);
-        final Vm vm = new VmSimple(id, new CoreCapacity(vmr.getPes(), vmr.getMips()));
+        final Vm vm = VmSimple.of(id, new CoreCapacity(vmr.getPes(), vmr.getMips()));
         vm
             .setRam(vmr.getRam())
             .setBw(vmr.getBw())
@@ -208,7 +208,7 @@ public class CloudSimulation implements Runnable {
         final var ramUtilization = PolicyLoader.utilizationModel(up.getUtilizationModelRam());
         final var bwUtilization  = PolicyLoader.utilizationModel(up.getUtilizationModelBw());
 
-        final var cloudlet = new CloudletSimple(id, up.getLength(), up.getPes());
+        final var cloudlet = CloudletSimple.of(id, up.getLength(), up.getPes());
         cloudlet
             .setFileSize(up.getFileSize())
             .setOutputSize(up.getOutputSize())
@@ -306,7 +306,7 @@ public class CloudSimulation implements Runnable {
         final var storageList = createSan(dcr);
         final var allocationPolicy = PolicyLoader.vmPlacementPolicy(dcr);
 
-        final var dc = new DatacenterSimple(cloudsimplus, hostList, allocationPolicy);
+        final var dc = DatacenterSimple.of(cloudsimplus, hostList, allocationPolicy);
         dc.setSchedulingInterval(dcr.getSchedulingInterval())
           .setDatacenterStorage(new DatacenterStorage(storageList));
         setDatacenterCharacteristics(dc, dcr);
@@ -318,7 +318,7 @@ public class CloudSimulation implements Runnable {
         final var bwAllocator  = PolicyLoader.newResourceAllocator(hr);
         final var vmScheduler    = PolicyLoader.vmScheduler(hr.getVmScheduler());
 
-        final var host = new HostSimple(hr.getRam(), hr.getBw(), hr.getStorage(), cpuCapacity);
+        final var host = HostSimple.of(hr.getRam(), hr.getBw(), hr.getStorage(), cpuCapacity);
         host
             .setRamAllocator(ramAllocator)
             .setBwAllocator(bwAllocator)
