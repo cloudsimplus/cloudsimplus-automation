@@ -22,7 +22,7 @@ Check a complete example in some files such as the [CloudEnvironment1.yml](Cloud
 datacenters:
   - !datacenter
     amount: 1
-    vmAllocationPolicy: Simple
+    vmPlacementPolicy: Simple
     hosts:
       - !host
         amount: 8
@@ -32,8 +32,8 @@ datacenters:
         pes: 4
         mips: 50000
         vmScheduler: TimeShared
-        ramProvisioner: Simple
-        bwProvisioner: Simple
+        ramAllocator: Simple
+        bwAllocator: Simple
 customers:
   - !customer
     amount: 4
@@ -139,7 +139,7 @@ try {
 ## 5. Published Paper
 
 For more information, read the paper published on the [Springer Lecture Notes in Computer Science Volume 8662](https://doi.org/10.1007/978-3-319-11167-4_34). Realize the paper is related to an older version of the tool, which is compatible with CloudSim 3. 
-The YAML structure has changed since there too, making it simpler and matching the name of entries with CloudSim and CloudSim Plus classes (such as VmAllocationPolicy, VmScheduler, CloudletScheduler). See the last section for more information.
+The YAML structure has changed since there too, making it simpler and matching the name of entries with CloudSim and CloudSim Plus classes (such as VmPlacementPolicy, VmScheduler, CloudletScheduler). See the last section for more information.
 
 **If you are using this work for publishing a paper, please cite our paper above.**
 

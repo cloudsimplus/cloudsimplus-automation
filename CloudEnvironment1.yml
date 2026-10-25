@@ -1,7 +1,7 @@
 datacenters:
   - !datacenter
     amount: 1
-    vmAllocationPolicy: Simple
+    vmPlacementPolicy: Simple
     vmMigration: enabled
     costPerSec: 0.1
     costPerMem: 0.05
@@ -21,8 +21,8 @@ datacenters:
         pes: 4
         mips: 50000
         vmScheduler: TimeShared
-        ramProvisioner: Simple
-        bwProvisioner: Simple
+        ramAllocator: Simple
+        bwAllocator: Simple
 customers:
   - !customer
     amount: 2
