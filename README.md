@@ -34,7 +34,6 @@ datacenters:
         vmScheduler: TimeShared
         ramProvisioner: Simple
         bwProvisioner: Simple
-        peProvisioner: Simple
 customers:
   - !customer
     amount: 4

@@ -25,6 +25,7 @@ package org.cloudsimplus.automation;
 import ch.qos.logback.classic.Level;
 import cloudreports.models.*;
 import org.cloudsimplus.brokers.DatacenterBroker;
+import org.cloudsimplus.resources.CoreCapacity;
 import org.cloudsimplus.brokers.DatacenterBrokerSimple;
 import org.cloudsimplus.builders.tables.CloudletsTableBuilder;
 import org.cloudsimplus.cloudlets.Cloudlet;
@@ -35,8 +36,6 @@ import org.cloudsimplus.datacenters.DatacenterSimple;
 import org.cloudsimplus.hosts.Host;
 import org.cloudsimplus.hosts.HostSimple;
 import org.cloudsimplus.resources.DatacenterStorage;
-import org.cloudsimplus.resources.Pe;
-import org.cloudsimplus.resources.PeSimple;
 import org.cloudsimplus.resources.SanStorage;
 import org.cloudsimplus.util.Log;
 import org.cloudsimplus.vms.Vm;
@@ -160,7 +159,7 @@ public class CloudSimulation implements Runnable {
                         final VmRegistry vmr) throws RuntimeException
     {
         final var scheduler = PolicyLoader.cloudletScheduler(vmr);
-        final Vm vm = new VmSimple(id, vmr.getMips(), vmr.getPes());
+        final Vm vm = new VmSimple(id, new CoreCapacity(vmr.getPes(), vmr.getMips()));
         vm
             .setRam(vmr.getRam())
             .setBw(vmr.getBw())
@@ -281,9 +280,9 @@ public class CloudSimulation implements Runnable {
         final var hostList = new ArrayList<Host>(hostNumber);
         for (HostRegistry hr : dcr.getHosts()) {
             for (int i = 0; i < hr.getAmount(); i++) {
-                List<Pe> peList = createHostProcessingElements(hr);
+                final var cpuCapacity = new CoreCapacity(hr.getPes(), hr.getMips());
                 hostId = generateHostId(hr, ++initialHostId);
-                hostList.add(createHost(hostId, hr, peList));
+                hostList.add(createHost(hostId, hr, cpuCapacity));
             }
         }
 
@@ -314,12 +313,12 @@ public class CloudSimulation implements Runnable {
         return dc;
     }
 
-    private Host createHost(final int hostId, final HostRegistry hr, final List<Pe> peList) throws RuntimeException {
+    private Host createHost(final int hostId, final HostRegistry hr, final CoreCapacity cpuCapacity) throws RuntimeException {
         final var ramProvisioner = PolicyLoader.newResourceProvisioner(hr);
         final var bwProvisioner  = PolicyLoader.newResourceProvisioner(hr);
         final var vmScheduler    = PolicyLoader.vmScheduler(hr.getVmScheduler());
 
-        final var host = new HostSimple(hr.getRam(), hr.getBw(), hr.getStorage(), peList);
+        final var host = new HostSimple(hr.getRam(), hr.getBw(), hr.getStorage(), cpuCapacity);
         host
             .setRamProvisioner(ramProvisioner)
             .setBwProvisioner(bwProvisioner)
@@ -367,20 +366,6 @@ public class CloudSimulation implements Runnable {
             .setCostPerMem(dcr.getCostPerMem())
             .setCostPerStorage(dcr.getCostPerStorage())
             .setCostPerBw(dcr.getCostPerBw());
-    }
-
-    /// Creates a list of PEs (Processing Elements, i.e. CPUs/Cores)
-    /// for a host or VM.
-    ///
-    /// @param hr The abstract Host information obtained from the YAML file.
-    /// @return Returns the list of PEs created.
-    private List<Pe> createHostProcessingElements(final HostRegistry hr) {
-        final var peList = new ArrayList<Pe>(hr.getPes());
-        for (int i = 0; i < hr.getPes(); i++) {
-            peList.add(new PeSimple(hr.getMips(), PolicyLoader.newPeProvisioner(hr)));
-        }
-
-        return peList;
     }
 
     /// Builds and runs the simulation scenario in CloudSim Plus.

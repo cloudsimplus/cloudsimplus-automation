@@ -20,7 +20,6 @@
 package cloudreports.models;
 
 import org.cloudsimplus.power.models.PowerModel;
-import org.cloudsimplus.provisioners.PeProvisioner;
 import org.cloudsimplus.provisioners.ResourceProvisioner;
 import org.cloudsimplus.resources.Bandwidth;
 import org.cloudsimplus.schedulers.vm.VmScheduler;
@@ -43,7 +42,6 @@ public final class HostRegistry implements Serializable {
     private long bw;
     private String ramProvisioner = "";
     private String bwProvisioner = "";
-    private String peProvisioner = "";
     private String vmScheduler = "";
     private String powerModel = "";
     private int amount;
@@ -207,20 +205,6 @@ public final class HostRegistry implements Serializable {
     }
 
 
-    /// Gets the name suffix of the class for the Host's [PeProvisioner].
-    ///
-    /// @return
-    public String getPeProvisioner() {
-        return peProvisioner;
-    }
-
-    /// Sets the name suffix of the class for the Host's [PeProvisioner].
-    ///
-    /// @param   peProvisioner  the host's processing elements provisioner class name suffix to set.
-    public void setPeProvisioner(String peProvisioner) {
-        this.peProvisioner = peProvisioner;
-    }
-
     /// Gets the amount of hosts with this configuration.
     ///
     /// @return the amount of hosts with this configuration.
@@ -284,9 +268,8 @@ public final class HostRegistry implements Serializable {
         StringBuilder s = new StringBuilder("Host Id="+getId()+"\n");
         s.append("Amount="+getAmount()+"\n");
         s.append("VM Scheduling ="+ getVmScheduler()+"\n");
-        s.append("Processing Elements="+ getPes()+"\n");
-        s.append("MIPS/PE="+ getMips()+"\n");
-        s.append("PE Provisioner ="+ getPeProvisioner()+"\n");
+        s.append("CPU Cores="+ getPes()+"\n");
+        s.append("MIPS/Core="+ getMips()+"\n");
         s.append("Maximum Power="+getMaxPower()+"\n");
         s.append("Static Power Percent="+getStaticPowerPercent()+"\n");
         s.append("Power Model ="+ getPowerModel()+"\n");
