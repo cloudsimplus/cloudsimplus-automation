@@ -1,6 +1,6 @@
 datacenters:
   - !datacenter
-    vmAllocationPolicy: FirstFit
+    vmPlacementPolicy: FirstFit
     vmMigration: disable
     hosts:
       - !host
@@ -11,8 +11,8 @@ datacenters:
         pes: 8
         mips: 50000
         vmScheduler: TimeShared
-        ramProvisioner: Simple
-        bwProvisioner: Simple
+        ramAllocator: Simple
+        bwAllocator: Simple
 customers:
   - !customer
     vms:

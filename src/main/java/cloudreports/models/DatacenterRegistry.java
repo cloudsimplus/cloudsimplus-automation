@@ -19,7 +19,7 @@
 
 package cloudreports.models;
 
-import org.cloudsimplus.allocationpolicies.VmAllocationPolicy;
+import org.cloudsimplus.placementpolicies.VmPlacementPolicy;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -36,7 +36,7 @@ public final class DatacenterRegistry implements Serializable{
     private String name = "";
     private Integer amount;
     private double timeZone;
-    private String vmAllocationPolicy = "";
+    private String vmPlacementPolicy = "";
     private boolean vmMigration;
     private List<HostRegistry> hosts;
     private double costPerSec;
@@ -97,18 +97,18 @@ public final class DatacenterRegistry implements Serializable{
         this.timeZone = timeZone;
     }
 
-    /// Gets the class name suffix for Datacenter's [VmAllocationPolicy].
+    /// Gets the class name suffix for Datacenter's [VmPlacementPolicy].
     ///
     /// @return
-    public String getVmAllocationPolicy() {
-        return vmAllocationPolicy;
+    public String getVmPlacementPolicy() {
+        return vmPlacementPolicy;
     }
 
-    /// Sets the datacenter's allocation policy.
+    /// Sets the datacenter's VM placement policy.
     ///
-    /// @param   vmAllocationPolicy   the datacenter's allocation policy.
-    public void setVmAllocationPolicy(String vmAllocationPolicy) {
-        this.vmAllocationPolicy = vmAllocationPolicy;
+    /// @param   vmPlacementPolicy   the datacenter's VM placement policy.
+    public void setVmPlacementPolicy(String vmPlacementPolicy) {
+        this.vmPlacementPolicy = vmPlacementPolicy;
     }
 
     /// Checks if virtual machines migrations are enabled.
@@ -273,7 +273,7 @@ public final class DatacenterRegistry implements Serializable{
     @Override
     public String toString() {
         StringBuilder s = new StringBuilder("Name="+getName()+"\n");
-        s.append("Allocation Policy ID=").append(getVmAllocationPolicy()).append("\n");
+        s.append("Placement Policy ID=").append(getVmPlacementPolicy()).append("\n");
         s.append("Time Zone (GMT)=").append(getTimeZone()).append("\n");
         s.append("VM Migrations=").append(isVmMigration()).append("\n");
         s.append("Upper Utilization threshold=").append(getUpperUtilizationThreshold()).append("\n");

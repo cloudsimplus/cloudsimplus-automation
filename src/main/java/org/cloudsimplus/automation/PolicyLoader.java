@@ -29,8 +29,8 @@ package org.cloudsimplus.automation;
 import cloudreports.models.DatacenterRegistry;
 import cloudreports.models.HostRegistry;
 import cloudreports.models.VmRegistry;
-import org.cloudsimplus.allocationpolicies.VmAllocationPolicy;
-import org.cloudsimplus.provisioners.ResourceProvisioner;
+import org.cloudsimplus.placementpolicies.VmPlacementPolicy;
+import org.cloudsimplus.allocators.ResourceAllocator;
 import org.cloudsimplus.schedulers.cloudlet.CloudletScheduler;
 import org.cloudsimplus.schedulers.vm.VmScheduler;
 import org.cloudsimplus.utilizationmodels.UtilizationModel;
@@ -41,8 +41,8 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/// Dynamically creates instances of classes such as [VmScheduler], [VmAllocationPolicy],
-/// [CloudletScheduler], [ResourceProvisioner] and others from the class name of
+/// Dynamically creates instances of classes such as [VmScheduler], [VmPlacementPolicy],
+/// [CloudletScheduler], [ResourceAllocator] and others from the class name of
 /// the object to be instantiated.
 ///
 /// @author Manoel Campos da Silva Filho
@@ -92,24 +92,24 @@ public class PolicyLoader {
         }
     }
 
-    /// Gets an instance of a resource provisioner with a given
+    /// Gets an instance of a resource allocator with a given
     /// class name information.
     ///
-    /// @param classPrefix The class prefix for the provisioner.
-    /// If you want to instantiate the provisioner class BwProvisionerSimple,
-    /// the provisioner prefix is "Bw"
-    /// @param classSufix The class suffix of the provisioner.
-    /// If you want to instantiate the provisioner class BwProvisionerSimple,
-    /// the provisioner suffix is just "Simple"
-    /// @return A new instance of the provisioner with the given name.
+    /// @param classPrefix The class prefix for the allocator.
+    /// If you want to instantiate the allocator class BwAllocatorSimple,
+    /// the allocator prefix is "Bw"
+    /// @param classSufix The class suffix of the allocator.
+    /// If you want to instantiate the allocator class BwAllocatorSimple,
+    /// the allocator suffix is just "Simple"
+    /// @return A new instance of the allocator with the given name.
     /// For instance, if the class suffix is "Simple",
-    /// returns an instance the ResourceProvisionerSimple class.
+    /// returns an instance the ResourceAllocatorSimple class.
     /// @throws RuntimeException
-    private static <T extends ResourceProvisioner> T resourceProvisioner(
+    private static <T extends ResourceAllocator> T resourceAllocator(
         final String classPrefix, final String classSufix) throws RuntimeException {
         try {
-            final String className = generateFullProvisionerClassName(classPrefix, classSufix);
-            final Class<ResourceProvisioner> klass = PolicyLoader.<ResourceProvisioner>loadClass(className);
+            final String className = generateFullAllocatorClassName(classPrefix, classSufix);
+            final Class<ResourceAllocator> klass = PolicyLoader.<ResourceAllocator>loadClass(className);
             final var constructor = klass.getConstructor(new Class[]{});
             return (T)constructor.newInstance();
         } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
@@ -118,14 +118,14 @@ public class PolicyLoader {
         }
     }
 
-    public static ResourceProvisioner newResourceProvisioner(final HostRegistry hr) throws RuntimeException {
-        return resourceProvisioner("", hr.getBwProvisioner());
+    public static ResourceAllocator newResourceAllocator(final HostRegistry hr) throws RuntimeException {
+        return resourceAllocator("", hr.getBwAllocator());
     }
 
-    public static VmAllocationPolicy vmAllocationPolicy(final DatacenterRegistry dcr) throws RuntimeException {
+    public static VmPlacementPolicy vmPlacementPolicy(final DatacenterRegistry dcr) throws RuntimeException {
         try {
-            final String className = generateFullClassName(PKG+".allocationpolicies","VmAllocationPolicy", dcr.getVmAllocationPolicy());
-            final Class<VmAllocationPolicy> klass = PolicyLoader.<VmAllocationPolicy>loadClass(className);
+            final String className = generateFullClassName(PKG+".placementpolicies","VmPlacementPolicy", dcr.getVmPlacementPolicy());
+            final Class<VmPlacementPolicy> klass = PolicyLoader.<VmPlacementPolicy>loadClass(className);
             final var constructor = klass.getConstructor(new Class[]{});
             return constructor.newInstance();
         } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
@@ -150,9 +150,9 @@ public class PolicyLoader {
         return String.format("%s.%s%s", packageName, classPrefix, classSuffix);
     }
 
-    private static String generateFullProvisionerClassName(String classPrefix, String classSuffix) {
-        classPrefix = (classPrefix.isEmpty() ? "ResourceProvisioner" : classPrefix+"Provisioner");
-        return generateFullClassName(PKG+".provisioners", classPrefix, classSuffix);
+    private static String generateFullAllocatorClassName(String classPrefix, String classSuffix) {
+        classPrefix = (classPrefix.isEmpty() ? "ResourceAllocator" : classPrefix+"Allocator");
+        return generateFullClassName(PKG+".allocators", classPrefix, classSuffix);
     }
 
     public static UtilizationModel utilizationModel(final String classSuffix) throws RuntimeException {

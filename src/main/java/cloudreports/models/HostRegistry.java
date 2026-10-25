@@ -20,7 +20,7 @@
 package cloudreports.models;
 
 import org.cloudsimplus.power.models.PowerModel;
-import org.cloudsimplus.provisioners.ResourceProvisioner;
+import org.cloudsimplus.allocators.ResourceAllocator;
 import org.cloudsimplus.resources.Bandwidth;
 import org.cloudsimplus.schedulers.vm.VmScheduler;
 
@@ -40,8 +40,8 @@ public final class HostRegistry implements Serializable {
     private double staticPowerPercent;
     private int ram;
     private long bw;
-    private String ramProvisioner = "";
-    private String bwProvisioner = "";
+    private String ramAllocator = "";
+    private String bwAllocator = "";
     private String vmScheduler = "";
     private String powerModel = "";
     private int amount;
@@ -176,32 +176,32 @@ public final class HostRegistry implements Serializable {
         this.bw = bw;
     }
 
-    /// Gets the name suffix of the class for the host's RAM [ResourceProvisioner].
+    /// Gets the name suffix of the class for the host's RAM [ResourceAllocator].
     ///
     /// @return
-    public String getRamProvisioner() {
-        return ramProvisioner;
+    public String getRamAllocator() {
+        return ramAllocator;
     }
 
-    /// Sets the name suffix of the class for the host's RAM [ResourceProvisioner].
+    /// Sets the name suffix of the class for the host's RAM [ResourceAllocator].
     ///
-    /// @param   ramProvisioner the host's RAM provisioner class name suffix to set.
-    public void setRamProvisioner(String ramProvisioner) {
-        this.ramProvisioner = ramProvisioner;
+    /// @param   ramAllocator the host's RAM allocator class name suffix to set.
+    public void setRamAllocator(String ramAllocator) {
+        this.ramAllocator = ramAllocator;
     }
 
-    /// Gets the name suffix of the class for Host's [Bandwidth] [ResourceProvisioner].
+    /// Gets the name suffix of the class for Host's [Bandwidth] [ResourceAllocator].
     ///
     /// @return
-    public String getBwProvisioner() {
-        return bwProvisioner;
+    public String getBwAllocator() {
+        return bwAllocator;
     }
 
-    /// Sets the name suffix of the class for Host's [Bandwidth] [ResourceProvisioner].
+    /// Sets the name suffix of the class for Host's [Bandwidth] [ResourceAllocator].
     ///
-    /// @param bwProvisioner    the host's bandwidth provisioner class name suffix to set.
-    public void setBwProvisioner(String bwProvisioner) {
-        this.bwProvisioner = bwProvisioner;
+    /// @param bwAllocator    the host's bandwidth allocator class name suffix to set.
+    public void setBwAllocator(String bwAllocator) {
+        this.bwAllocator = bwAllocator;
     }
 
 
@@ -274,9 +274,9 @@ public final class HostRegistry implements Serializable {
         s.append("Static Power Percent="+getStaticPowerPercent()+"\n");
         s.append("Power Model ="+ getPowerModel()+"\n");
         s.append("RAM="+getRam()+"\n");
-        s.append("RAM Provisioner ="+ getRamProvisioner()+"\n");
+        s.append("RAM Allocator ="+ getRamAllocator()+"\n");
         s.append("Bandwidth="+getBw()+"\n");
-        s.append("Bandwidth Provisioner ="+ getBwProvisioner()+"\n");
+        s.append("Bandwidth Allocator ="+ getBwAllocator()+"\n");
         s.append("Storage="+getStorage()+"\n");
 
         return s.toString();

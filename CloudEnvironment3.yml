@@ -3,7 +3,7 @@ datacenters:
   - !datacenter
     name: datacenter1
     amount: 1
-    vmAllocationPolicy: Simple
+    vmPlacementPolicy: Simple
     upperUtilizationThreshold: 0.8
     lowerUtilizationThreshold: 0.2
     vmMigration: enabled
@@ -36,8 +36,8 @@ datacenters:
         mips: 100000
         vmScheduler: TimeShared
         powerModel: Linear
-        ramProvisioner: Simple
-        bwProvisioner: Simple
+        ramAllocator: Simple
+        bwAllocator: Simple
       - !host
         amount: 4
         ram: 1000000
@@ -49,12 +49,12 @@ datacenters:
         mips: 50000
         vmScheduler: TimeShared
         powerModel: Linear
-        ramProvisioner: Simple
-        bwProvisioner: Simple
+        ramAllocator: Simple
+        bwAllocator: Simple
   - !datacenter
     name: 
     amount: 2
-    vmAllocationPolicy: Simple
+    vmPlacementPolicy: Simple
     upperUtilizationThreshold: 0.8
     lowerUtilizationThreshold: 0.2
     vmMigration: enabled
@@ -87,8 +87,8 @@ datacenters:
         mips: 200000
         vmScheduler: TimeShared
         powerModel: Linear
-        ramProvisioner: Simple
-        bwProvisioner: Simple
+        ramAllocator: Simple
+        bwAllocator: Simple
       - !host
         amount: 4
         ram: 2000000
@@ -100,8 +100,8 @@ datacenters:
         mips: 400000
         vmScheduler: TimeShared
         powerModel: Linear
-        ramProvisioner: Simple
-        bwProvisioner: Simple
+        ramAllocator: Simple
+        bwAllocator: Simple
 customers:
   - !customer
     name: Customer1

@@ -4,7 +4,7 @@
 #since it's used a CloudletSchedulerSpaceShared.
 datacenters:
   - !datacenter
-    vmAllocationPolicy: Simple
+    vmPlacementPolicy: Simple
     vmMigration: disable
     hosts:
       - !host
@@ -15,8 +15,8 @@ datacenters:
         pes: 8
         mips: 50000
         vmScheduler: TimeShared
-        ramProvisioner: Simple
-        bwProvisioner: Simple
+        ramAllocator: Simple
+        bwAllocator: Simple
 customers:
   - !customer
     vms:

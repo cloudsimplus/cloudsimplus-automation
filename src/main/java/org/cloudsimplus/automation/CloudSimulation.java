@@ -304,7 +304,7 @@ public class CloudSimulation implements Runnable {
     {
 
         final var storageList = createSan(dcr);
-        final var allocationPolicy = PolicyLoader.vmAllocationPolicy(dcr);
+        final var allocationPolicy = PolicyLoader.vmPlacementPolicy(dcr);
 
         final var dc = new DatacenterSimple(cloudsimplus, hostList, allocationPolicy);
         dc.setSchedulingInterval(dcr.getSchedulingInterval())
@@ -314,14 +314,14 @@ public class CloudSimulation implements Runnable {
     }
 
     private Host createHost(final int hostId, final HostRegistry hr, final CoreCapacity cpuCapacity) throws RuntimeException {
-        final var ramProvisioner = PolicyLoader.newResourceProvisioner(hr);
-        final var bwProvisioner  = PolicyLoader.newResourceProvisioner(hr);
+        final var ramAllocator = PolicyLoader.newResourceAllocator(hr);
+        final var bwAllocator  = PolicyLoader.newResourceAllocator(hr);
         final var vmScheduler    = PolicyLoader.vmScheduler(hr.getVmScheduler());
 
         final var host = new HostSimple(hr.getRam(), hr.getBw(), hr.getStorage(), cpuCapacity);
         host
-            .setRamProvisioner(ramProvisioner)
-            .setBwProvisioner(bwProvisioner)
+            .setRamAllocator(ramAllocator)
+            .setBwAllocator(bwAllocator)
             .setVmScheduler(vmScheduler)
             .setId(hostId);
         return host;
